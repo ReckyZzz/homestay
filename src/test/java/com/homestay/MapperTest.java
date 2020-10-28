@@ -21,7 +21,7 @@ public class MapperTest {
     RoomMapper roomMapper;
     @Autowired
     OrderMapper orderMapper;
-    @Test
+    /*@Test
     public void testUser(){
         //User user = userMapper.getUserByInfo("admin","123456");
         User user = userMapper.getUserById(1);
@@ -67,5 +67,12 @@ public class MapperTest {
         else{
             System.out.println("failure");
         }
+    }*/
+    @Test
+    public void testInsert(){
+        User user = new User();
+        user.setUserName("123456");user.setUserPwd("123456");
+        int result = userMapper.insertUser(user);
+        System.out.println(result);
     }
 }

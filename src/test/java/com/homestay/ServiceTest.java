@@ -15,8 +15,8 @@ public class ServiceTest {
     @Autowired
     UserService userService;
 
-    @Test
-    public void testUser(){
+    /*@Test
+    public void testLogIn(){
         User user = userService.logIn("admin","123456");
         if(user!=null){
             System.out.println(user.getUserId());
@@ -26,5 +26,12 @@ public class ServiceTest {
         else{
             System.out.println("failure");
         }
+    }*/
+    @Test
+    public void testInsert(){
+        User user = new User();
+        user.setUserName("15912364094");user.setUserPwd("123456");
+        int result = userService.register(user);
+        System.out.println(result);
     }
 }

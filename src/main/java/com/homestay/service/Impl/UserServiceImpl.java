@@ -19,4 +19,12 @@ public class UserServiceImpl implements UserService {
     public User logIn(String name, String password) {
         return userMapper.getUserByInfo(name,password);
     }
+
+    @Override
+    public Integer register(User user){
+        if(user.getUserName()!=null && user.getUserPwd()!=null)
+            return userMapper.insertUser(user);
+        else
+            return 0;
+    }
 }
