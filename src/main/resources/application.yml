@@ -1,0 +1,14 @@
+
+spring:
+  datasource:
+    name: test
+    url: jdbc:mysql://localhost:3306/mydatabase?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.homestay.entity
+  configuration:
+    map-underscore-to-camel-case: true
