@@ -9,4 +9,9 @@
     <select id="getUserByInfo" resultType="com.homestay.entity.User">
         SELECT * FROM tb_user WHERE user_name=#{username} AND user_pwd=#{password}
     </select>
+    <insert id="insertUser" parameterType="com.homestay.entity.User"
+            keyColumn="user_id" keyProperty="userId">
+        INSERT INTO tb_user(user_name,user_pwd,user_type,gender,email)
+        VALUES (#{userName},#{userPwd},#{userType},#{gender},#{email})
+    </insert>
 </mapper>
