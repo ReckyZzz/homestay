@@ -1,0 +1,26 @@
+.navbar{
+    color: rgb(3,187,122);
+}
+.nav_top{
+    margin-left: 1%;
+    font-weight: bold;
+    padding-bottom: 1%;
+}
+.nav_bottom{
+    margin-left: 1%;
+    font-weight: bold;
+    text-align: center;
+}
+.search{
+    border-style: solid;
+    border-top-width: 0px;
+    border-right-width: 0px;
+    border-bottom-width: 1px;
+    border-left-width: 0px;
+}
+img{
+    display: inline-block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+}
