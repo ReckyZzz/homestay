@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
-@RestController("/user")
+//@RestController("/user")
 public class CommonController {
 
     @Resource
     private UserService userService;
 
-    @PostMapping("/login")
+    //@PostMapping("/login")
     public CommonResponse<User> login(User user) {
         User u = userService.logIn(user.getUserName(), user.getUserPwd());
         if (u != null) {

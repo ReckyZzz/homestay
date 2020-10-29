@@ -4,7 +4,6 @@ public class User {
     private Integer userId;
     private Integer userType;
     private Integer gender;
-    private String email;
     private String userName;
     private String userPwd;
 
@@ -46,13 +45,5 @@ public class User {
 
     public void setGender(Integer gender) {
         this.gender = gender;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 }

@@ -11,7 +11,7 @@
     </select>
     <insert id="insertUser" parameterType="com.homestay.entity.User"
             keyColumn="user_id" keyProperty="userId">
-        INSERT INTO tb_user(user_name,user_pwd,user_type,gender,email)
-        VALUES (#{userName},#{userPwd},#{userType},#{gender},#{email})
+        INSERT INTO tb_user(user_name,user_pwd,user_type,gender)
+        VALUES (#{userName},#{userPwd},#{userType},#{gender})
     </insert>
 </mapper>

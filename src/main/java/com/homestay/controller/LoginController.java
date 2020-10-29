@@ -14,16 +14,21 @@ public class LoginController {
     @Autowired
     UserService userService;
 
-    @RequestMapping("/login")
-    public String show(){
+    @RequestMapping("/test")
+    public String test(){
+        return "index";
+    }
+
+    @RequestMapping("/log")
+    public String test2(){
         return "login";
     }
 
-    @RequestMapping(value = "/loginIn",method = RequestMethod.POST)
-    public String login(String name,String password){
-        User userBean = userService.logIn(name,password);
-        if(userBean!=null){
-            return "success";
+    @RequestMapping(value = "/logIn",method = RequestMethod.POST)
+    public String login(String username,String password){
+        User user = userService.logIn(username,password);
+        if(user!=null){
+            return "index";
         }else {
             return "error";
         }
