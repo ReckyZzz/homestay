@@ -5,7 +5,11 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface UserMapper {
-    User getUserById(Integer id);
+    User getUserByUsername(String username);
     User getUserByInfo(String username,String password);
-    Integer insertUser(User user);
+    int insertUser(User user);
+    int getUserIdByUsername(String username);
+    int resetPasswordById(int userId,String newPwd);
+    String getPasswordByUsername(String username);
+
 }

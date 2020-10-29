@@ -4,5 +4,6 @@ import com.homestay.entity.User;
 
 public interface UserService {
     User logIn(String name, String password);
-    Integer register(User user);
+    int register(User user);
+    int resetPassword(String username,String newPwd);
 }

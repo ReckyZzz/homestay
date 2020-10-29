@@ -21,23 +21,27 @@ public class MapperTest {
     RoomMapper roomMapper;
     @Autowired
     OrderMapper orderMapper;
-    /*@Test
+    @Test
     public void testUser(){
-        //User user = userMapper.getUserByInfo("admin","123456");
-        User user = userMapper.getUserById(1);
-        if(user!=null){
+        //User user = userMapper.getUserByUsername("admin@qq.com");
+        /*if(user!=null){
             System.out.println(user.getUserId());
             System.out.println(user.getUserName());
             System.out.println(user.getUserPwd());
             System.out.println(user.getUserType());
             System.out.println(user.getGender());
-            System.out.println(user.getEmail());
+        }*/
+        //int id = userMapper.getUserIdByUsername("admin@qq.com");
+        //String password = userMapper.getPasswordByUsername("admin@qq.com");
+        int num = userMapper.resetPasswordById(1,"1234567");
+        if(num != 0){
+            System.out.println(num);
         }
         else{
             System.out.println("failure");
         }
     }
-    @Test
+    /*@Test
     public void testRoom(){
         Room room = roomMapper.getRoomByRoomId(1);
         if(room!=null){

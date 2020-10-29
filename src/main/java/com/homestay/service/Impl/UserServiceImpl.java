@@ -21,10 +21,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer register(User user){
+    public int register(User user){
         if(user.getUserName()!=null && user.getUserPwd()!=null)
             return userMapper.insertUser(user);
         else
             return 0;
+    }
+
+    @Override
+    public int resetPassword(String username,String newPwd){
+
+        return 0;
     }
 }

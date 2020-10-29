@@ -9,9 +9,21 @@
     <select id="getUserByInfo" resultType="com.homestay.entity.User">
         SELECT * FROM tb_user WHERE user_name=#{username} AND user_pwd=#{password}
     </select>
+    <select id="getUserByUsername" resultType="com.homestay.entity.User">
+        SELECT * FROM tb_user WHERE user_name=#{username}
+    </select>
+    <select id="getUserIdByUsername" resultType="java.lang.Integer">
+        SELECT user_id FROM tb_user WHERE user_name=#{username}
+    </select>
+    <select id="getPasswordByUsername" resultType="java.lang.String">
+        SELECT user_pwd FROM tb_user WHERE user_name=#{username}
+    </select>
     <insert id="insertUser" parameterType="com.homestay.entity.User"
             keyColumn="user_id" keyProperty="userId">
         INSERT INTO tb_user(user_name,user_pwd,user_type,gender)
         VALUES (#{userName},#{userPwd},#{userType},#{gender})
     </insert>
+    <update id="resetPasswordById">
+        UPDATE tb_user set user_pwd=#{newPwd} WHERE user_id=#{userId}
+    </update>
 </mapper>
