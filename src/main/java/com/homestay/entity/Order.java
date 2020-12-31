@@ -10,6 +10,7 @@ public class Order {
     private Integer lastDays;
     private Date createDate;
     private Float money;
+    private Integer delFlag;
 
     public Integer getOrderId() {
         return orderId;
@@ -65,5 +66,13 @@ public class Order {
 
     public void setMoney(Float money) {
         this.money = money;
+    }
+
+    public Integer getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Integer delFlag) {
+        this.delFlag = delFlag;
     }
 }

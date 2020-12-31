@@ -6,6 +6,7 @@ public class User {
     private Integer gender;
     private String userName;
     private String userPwd;
+    private Integer delFlag;
 
     public Integer getUserId() {
         return userId;
@@ -45,5 +46,13 @@ public class User {
 
     public void setGender(Integer gender) {
         this.gender = gender;
+    }
+
+    public Integer getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Integer delFlag) {
+        this.delFlag = delFlag;
     }
 }

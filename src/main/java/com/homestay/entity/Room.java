@@ -7,6 +7,7 @@ public class Room {
     private String description;
     private Float roomPrice;
     private Integer isAvailable;
+    private Integer delFlag;
 
     public Integer getRoomId() {
         return roomId;
@@ -54,6 +55,14 @@ public class Room {
 
     public void setIsAvailable(Integer isAvailable) {
         this.isAvailable = isAvailable;
+    }
+
+    public Integer getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Integer delFlag) {
+        this.delFlag = delFlag;
     }
 
 }

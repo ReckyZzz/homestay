@@ -4,26 +4,35 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.homestay.mapper.UserMapper">
     <select id="getUserById" resultType="com.homestay.entity.User">
-        SELECT * FROM tb_user WHERE user_id=#{id}
+        SELECT * FROM tb_user WHERE user_id=#{id} AND del_flag = 0
     </select>
     <select id="getUserByInfo" resultType="com.homestay.entity.User">
-        SELECT * FROM tb_user WHERE user_name=#{username} AND user_pwd=#{password}
+        SELECT * FROM tb_user WHERE user_name=#{username} AND user_pwd=#{password} AND del_flag = 0
     </select>
     <select id="getUserByUsername" resultType="com.homestay.entity.User">
-        SELECT * FROM tb_user WHERE user_name=#{username}
+        SELECT * FROM tb_user WHERE user_name=#{username} AND del_flag = 0
     </select>
     <select id="getUserIdByUsername" resultType="java.lang.Integer">
-        SELECT user_id FROM tb_user WHERE user_name=#{username}
+        SELECT user_id FROM tb_user WHERE user_name=#{username} AND del_flag = 0
     </select>
     <select id="getPasswordByUsername" resultType="java.lang.String">
-        SELECT user_pwd FROM tb_user WHERE user_name=#{username}
+        SELECT user_pwd FROM tb_user WHERE user_name=#{username} AND del_flag = 0
     </select>
     <insert id="insertUser" parameterType="com.homestay.entity.User"
             keyColumn="user_id" keyProperty="userId">
-        INSERT INTO tb_user(user_name,user_pwd,user_type,gender)
-        VALUES (#{userName},#{userPwd},#{userType},#{gender})
+        INSERT INTO tb_user(user_name,user_pwd,user_type,gender,del_flag)
+        VALUES (#{userName},#{userPwd},#{userType},#{gender},#{delFlag})
     </insert>
+    <update id="deleteUserByUsername">
+        UPDATE tb_user set del_flag=1 WHERE user_name=#{username}
+    </update>
+    <update id="resetUserByUsername">
+        UPDATE tb_user set del_flag=0 WHERE user_name=#{username}
+    </update>
     <update id="resetPasswordById">
-        UPDATE tb_user set user_pwd=#{newPwd} WHERE user_id=#{userId}
+        UPDATE tb_user set user_pwd=#{newPwd} WHERE user_id=#{userId} AND del_flag = 0
+    </update>
+    <update id="resetPasswordByUsername">
+        UPDATE tb_user set user_pwd=#{newPwd} WHERE user_name=#{username} AND del_flag = 0
     </update>
 </mapper>
