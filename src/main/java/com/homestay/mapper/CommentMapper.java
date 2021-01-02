@@ -1,7 +1,7 @@
 package com.homestay.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import com.homestay.entity.Comment;
+import com.homestay.pojo.Comment;
 
 @Mapper
 public interface CommentMapper {

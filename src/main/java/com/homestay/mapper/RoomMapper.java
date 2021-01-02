@@ -1,6 +1,6 @@
 package com.homestay.mapper;
 
-import com.homestay.entity.Room;
+import com.homestay.pojo.Room;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

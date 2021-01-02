@@ -9,10 +9,10 @@ spring:
   resources:
     static-locations: classpath:/static/
   mvc:
-    static-path-pattern: /static/**
+    static-path-pattern: /**
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.homestay.entity
+  type-aliases-package: com.homestay.pojo
   configuration:
     map-underscore-to-camel-case: true

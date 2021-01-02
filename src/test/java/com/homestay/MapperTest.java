@@ -1,33 +1,27 @@
 package com.homestay;
 
-import com.homestay.entity.Comment;
-import com.homestay.entity.User;
 import com.homestay.mapper.CommentMapper;
 import com.homestay.mapper.UserMapper;
 import com.homestay.mapper.RoomMapper;
-import com.homestay.entity.Room;
 import com.homestay.mapper.OrderMapper;
-import com.homestay.entity.Order;
+import com.homestay.pojo.Comment;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import javax.annotation.Resource;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class MapperTest {
-    @Autowired
+    @Resource
     UserMapper userMapper;
-    @Autowired
+    @Resource
     RoomMapper roomMapper;
-    @Autowired
+    @Resource
     OrderMapper orderMapper;
-    @Autowired
+    @Resource
     CommentMapper commentMapper;
     /*@Test
     public void testUser(){
@@ -92,8 +86,8 @@ public class MapperTest {
         else{
             System.out.println("failure");
         }
-    }
-    /*@Test
+    }*/
+    @Test
     public void testComment(){
         commentMapper.deleteCommentByUserId(1);
         commentMapper.resetCommentByUserId(1);
@@ -108,5 +102,5 @@ public class MapperTest {
         if(comment == null){
             System.out.println("评论不存在");
         }
-    }*/
+    }
 }

@@ -1,4 +1,4 @@
-package com.homestay.entity;
+package com.homestay.pojo;
 
 public class User {
     private Integer userId;
