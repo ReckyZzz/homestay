@@ -13,15 +13,11 @@ import javax.servlet.http.HttpSession;
 
 @Service
 public class UserServiceImpl implements UserService {
-
-    public UserServiceImpl(){
-    }
-
     @Resource
     private UserMapper userMapper;
 
     @Override
-    public CommonResponse<User> logIn(User user) {
+    public CommonResponse<User> login(User user) {
         HttpSession session = SessionUtil.getSession();
         SessionUtil.removeSession();
         User userInfo = userMapper.getUserByUsername(user.getUserName());
@@ -61,8 +57,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CommonResponse<User> resetPassword(String username,String newPwd){
-        userMapper.resetPasswordByUsername(username,EncryptUtil.getEncodedString(newPwd));
+        int result = userMapper.resetPasswordByUsername(username,EncryptUtil.getEncodedString(newPwd));
         User user = userMapper.getUserByUsername(username);
-        return new CommonResponse<>(0,"重置密码成功",user);
+        if(result == 1)
+            return new CommonResponse<>(0,"重置密码成功",user);
+        return new CommonResponse<>(1,"重置密码失败",null);
     }
 }

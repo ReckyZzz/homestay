@@ -3,15 +3,20 @@ package com.homestay.mapper;
 import com.homestay.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface UserMapper {
     User getUserByUsername(String username);
-    User getUserByInfo(String username,String password);
+    User getUserById(int id);
     int insertUser(User user);
-    int getUserIdByUsername(String username);
-    int resetPasswordById(int userId,String newPwd);
     int resetPasswordByUsername(String username,String newPwd);
     int deleteUserByUsername(String username);
+    int deleteUserById(int id);
     int resetUserByUsername(String username);
+    int resetUserById(int id);
+    int updateUser(User user);
     String getPasswordByUsername(String username);
+    List<User> list();
+    List<User> getUsersByUsername(String username);
 }

@@ -3,20 +3,20 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.homestay.mapper.UserMapper">
-    <select id="getUserById" resultType="com.homestay.pojo.User">
-        SELECT * FROM tb_user WHERE user_id=#{id} AND del_flag = 0
-    </select>
-    <select id="getUserByInfo" resultType="com.homestay.pojo.User">
-        SELECT * FROM tb_user WHERE user_name=#{username} AND user_pwd=#{password} AND del_flag = 0
-    </select>
     <select id="getUserByUsername" resultType="com.homestay.pojo.User">
         SELECT * FROM tb_user WHERE user_name=#{username} AND del_flag = 0
     </select>
-    <select id="getUserIdByUsername" resultType="java.lang.Integer">
-        SELECT user_id FROM tb_user WHERE user_name=#{username} AND del_flag = 0
+    <select id="getUserById" resultType="com.homestay.pojo.User">
+        SELECT * FROM tb_user WHERE user_id=#{id} AND del_flag = 0
     </select>
     <select id="getPasswordByUsername" resultType="java.lang.String">
         SELECT user_pwd FROM tb_user WHERE user_name=#{username} AND del_flag = 0
+    </select>
+    <select id="getUsersByUsername" resultType="com.homestay.pojo.User">
+        SELECT * FROM tb_user WHERE user_name LIKE '%${username}%' AND del_flag = 0
+    </select>
+    <select id="list" resultType="com.homestay.pojo.User">
+        SELECT * FROM tb_user WHERE del_flag = 0
     </select>
 
     <!--插入时有默认值时使用默认值-->
@@ -45,15 +45,22 @@
     </insert>
 
     <update id="deleteUserByUsername">
-        UPDATE tb_user set del_flag=1 WHERE user_name=#{username}
+        UPDATE tb_user SET del_flag=1 WHERE user_name=#{username}
+    </update>
+    <update id="deleteUserById">
+        UPDATE tb_user SET del_flag=1 WHERE user_id=#{id}
     </update>
     <update id="resetUserByUsername">
-        UPDATE tb_user set del_flag=0 WHERE user_name=#{username}
+        UPDATE tb_user SET del_flag=0 WHERE user_name=#{username}
     </update>
-    <update id="resetPasswordById">
-        UPDATE tb_user set user_pwd=#{newPwd} WHERE user_id=#{userId} AND del_flag = 0
+    <update id="resetUserById">
+        UPDATE tb_user SET del_flag=0 WHERE user_id=#{id}
     </update>
     <update id="resetPasswordByUsername">
-        UPDATE tb_user set user_pwd=#{newPwd} WHERE user_name=#{username} AND del_flag = 0
+        UPDATE tb_user SET user_pwd=#{newPwd} WHERE user_name=#{username} AND del_flag = 0
+    </update>
+    <update id="updateUser">
+        UPDATE tb_user SET user_name=#{userName},user_pwd=#{userPwd},user_type=#{userType},gender=#{gender}
+        WHERE user_id=#{userId}
     </update>
 </mapper>

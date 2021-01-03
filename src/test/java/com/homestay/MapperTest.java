@@ -5,12 +5,14 @@ import com.homestay.mapper.UserMapper;
 import com.homestay.mapper.RoomMapper;
 import com.homestay.mapper.OrderMapper;
 import com.homestay.pojo.Comment;
+import com.homestay.pojo.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -23,9 +25,13 @@ public class MapperTest {
     OrderMapper orderMapper;
     @Resource
     CommentMapper commentMapper;
-    /*@Test
+    @Test
     public void testUser(){
-        User user = userMapper.getUserByUsername("admin@qq.com");
+        User user = new User();
+        int result = 0;
+
+        //testGet
+        /*user = userMapper.getUserByUsername("admin@qq.com");
         if(user!=null){
             System.out.println(user.getUserId());
             System.out.println(user.getUserName());
@@ -36,22 +42,30 @@ public class MapperTest {
         }
         if(user == null){
             System.out.println("用户不存在");
-        }
-        //int id = userMapper.getUserIdByUsername("admin@qq.com");
-        //int num = userMapper.resetPasswordById(1,"1234567");
-        //int num = userMapper.resetPasswordByUsername("244373762@qq.com","z4122262");
+        }*/
+
+        //testReset
+        /*//int num = userMapper.resetPasswordByUsername("244373762@qq.com","z4122262");
         int num = userMapper.resetUserByUsername("admin@qq.com");
-        System.out.println(num);
+        System.out.println(num);*/
+
         //testInsert
-        User user = new User();
-        user.setUserName("123456");user.setUserPwd("123456");user.setUserType(0);
-        user.setGender(0);user.setDelFlag(0);
-        int result = userMapper.insertUser(user);
+        user.setUserName("123456");user.setUserPwd("123456");
+        result = userMapper.insertUser(user);
         System.out.println(result);
+
         //testDelete
-        int result = userMapper.deleteUserByUsername("admin@qq.com");
-        System.out.println(result);
-    }*/
+        /*result = userMapper.deleteUserByUsername("admin@qq.com");
+        System.out.println(result);/*
+         */
+
+        //testGet
+        //List<User> users = userMapper.getUsersByUsername("15912364094");
+        /*List<User> users = userMapper.list();
+        for(User u:users){
+            System.out.println(u.getUserName());
+        }*/
+    }
     /*@Test
     public void testRoom(){
         Room room = roomMapper.getRoomByRoomId(1);
@@ -87,7 +101,7 @@ public class MapperTest {
             System.out.println("failure");
         }
     }*/
-    @Test
+    /*@Test
     public void testComment(){
         commentMapper.deleteCommentByUserId(1);
         commentMapper.resetCommentByUserId(1);
@@ -102,5 +116,5 @@ public class MapperTest {
         if(comment == null){
             System.out.println("评论不存在");
         }
-    }
+    }*/
 }
