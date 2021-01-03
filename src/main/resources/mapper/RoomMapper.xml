@@ -6,5 +6,41 @@
     <select id="getRoomByRoomId" resultType="com.homestay.pojo.Room">
         SELECT * FROM tb_room WHERE room_id=#{roomId} AND del_flag=0
     </select>
+    <select id="list" resultType="com.homestay.pojo.Room">
+        SELECT * FROM tb_room WHERE del_flag=0
+    </select>
+    <select id="getRoomByOwner" resultType="com.homestay.pojo.Room">
+        SELECT * FROM tb_room WHERE room_owner=#{ownerId} AND del_flag=0
+    </select>
 
+    <!--插入时有默认值时使用默认值-->
+    <sql id="roomColumns">
+        <trim suffixOverrides=",">
+            <if test="roomOwner != null">room_owner,</if>
+            <if test="roomName != null">room_name,</if>
+            <if test="description != null">description,</if>
+            <if test="roomPrice != null">room_price,</if>
+            <if test="isAvailable != null">is_available</if>
+        </trim>
+    </sql>
+    <sql id="roomValues">
+        <trim suffixOverrides=",">
+            <if test="roomOwner != null">#{roomOwner},</if>
+            <if test="roomName != null">#{roomName},</if>
+            <if test="description != null">#{description},</if>
+            <if test="roomPrice != null">#{roomPrice},</if>
+            <if test="isAvailable != null">#{isAvailable}</if>
+        </trim>
+    </sql>
+    <insert id="insertRoom" parameterType="com.homestay.pojo.Room"
+            keyColumn="room_id" keyProperty="roomId">
+        INSERT INTO tb_room(<include refid="roomColumns"/>)
+        VALUES (<include refid="roomValues"/>)
+    </insert>
+
+    <update id="updateRoom">
+        UPDATE tb_room SET room_owner=#{roomOwner},room_name=#{roomName},description=#{description},
+        room_price=#{roomPrice},is_available=#{isAvailable}
+        WHERE room_id=#{roomId}
+    </update>
 </mapper>

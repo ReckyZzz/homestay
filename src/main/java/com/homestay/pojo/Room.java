@@ -5,7 +5,7 @@ public class Room {
     private String roomName;
     private Integer roomOwner;
     private String description;
-    private Float roomPrice;
+    private double roomPrice;
     private Integer isAvailable;
     private Integer delFlag;
 
@@ -41,11 +41,11 @@ public class Room {
         this.description = description;
     }
 
-    public Float getRoomPrice() {
+    public double getRoomPrice() {
         return roomPrice;
     }
 
-    public void setRoomPrice(Float roomPrice) {
+    public void setRoomPrice(double roomPrice) {
         this.roomPrice = roomPrice;
     }
 

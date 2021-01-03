@@ -1,6 +1,7 @@
 package com.homestay;
 
 import com.github.pagehelper.PageInfo;
+import com.homestay.pojo.Room;
 import com.homestay.pojo.User;
 import com.homestay.response.CommonResponse;
 import com.homestay.service.AdminService;
@@ -48,32 +49,51 @@ public class ServiceTest {
     @Test
     public void testAdmin(){
         User user = new User();
-        //update
+        Room room = new Room();
+        //updateUser
         /*user.setUserId(10);user.setUserName("159123640945");user.setUserType(1);user.setGender(1);
         adminService.updateUser(user);*/
 
-        //add
+        //addUser
         /*for(int i=0;i<10;i++){
             user.setUserName("123456" + i);
             user.setUserPwd("123456");
             userService.register(user);
         }*/
 
-        //delete
+        //deleteUser
         /*List<Integer> ids = new ArrayList<>();
         ids.add(1);ids.add(2);ids.add(10);ids.add(13);
         adminService.deleteUser(ids);*/
 
-        //reset
+        //resetUser
         /*List<Integer> ids = new ArrayList<>();
         ids.add(1);ids.add(2);ids.add(10);ids.add(13);
         adminService.resetUser(ids);*/
 
-        //get
+        //getUser
         /*CommonResponse<PageInfo<User>> response = adminService.getUsers(2,5);
         PageInfo<User> pageInfos = response.getData();
         for(User u:pageInfos.getList()){
             System.out.println(u.getUserName());
         }*/
+
+        //getRoom
+        /*CommonResponse<PageInfo<Room>> response = adminService.getRooms(1,4);
+        PageInfo<Room> pageInfos= response.getData();
+        for(Room r:pageInfos.getList()){
+            System.out.println(r.getRoomName());
+        }*/
+
+        //updateRoom
+        /*room.setRoomId(1);room.setDescription("你加撒大声地");
+        adminService.updateRoom(room);*/
+
+        //adRoom
+        for(int i=0;i<10;i++) {
+            user.setUserName("123456" + i);
+            user.setUserPwd("123456");
+            userService.register(user);
+        }
     }
 }

@@ -9,7 +9,7 @@ public class Order {
     private Integer roomId;
     private Integer lastDays;
     private Date createDate;
-    private Float money;
+    private double money;
     private Integer delFlag;
 
     public Integer getOrderId() {
@@ -60,11 +60,11 @@ public class Order {
         this.createDate = createDate;
     }
 
-    public Float getMoney() {
+    public double getMoney() {
         return money;
     }
 
-    public void setMoney(Float money) {
+    public void setMoney(double money) {
         this.money = money;
     }
 

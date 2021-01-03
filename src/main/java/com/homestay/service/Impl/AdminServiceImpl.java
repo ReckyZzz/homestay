@@ -2,7 +2,9 @@ package com.homestay.service.Impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.homestay.mapper.RoomMapper;
 import com.homestay.mapper.UserMapper;
+import com.homestay.pojo.Room;
 import com.homestay.pojo.User;
 import com.homestay.response.CommonResponse;
 import com.homestay.service.AdminService;
@@ -17,6 +19,8 @@ import java.util.List;
 public class AdminServiceImpl implements AdminService {
     @Resource
     UserMapper userMapper;
+    @Resource
+    RoomMapper roomMapper;
 
     @Override
     public CommonResponse<User> login(User admin) {
@@ -48,26 +52,64 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public CommonResponse<PageInfo<Room>> getRooms(Integer pageNum, Integer pageSize){
+        PageHelper.startPage(pageNum,pageSize);
+        List<Room> rooms = roomMapper.list();
+        PageInfo<Room> pageInfo = new PageInfo<>(rooms);
+        return new CommonResponse<>(0,"查询成功",pageInfo);
+    }
+
+    @Override
     public User updateUser(User user){
         if(user.getUserId() != null){
             User oldUser = userMapper.getUserById(user.getUserId());
             if(oldUser == null){
                 return null;
             }
-            if(user.getUserName() != oldUser.getUserName()){
+            if(user.getUserName() != null && user.getUserName() != oldUser.getUserName()){
                 oldUser.setUserName(user.getUserName());
             }
             if(user.getUserPwd() != null){
                 oldUser.setUserPwd(EncryptUtil.getEncodedString(user.getUserPwd()));
             }
-            if(user.getGender() != oldUser.getGender()){
+            if(user.getGender() != null && user.getGender() != oldUser.getGender()){
                 oldUser.setGender(user.getGender());
             }
-            if(user.getUserType() != oldUser.getUserType()){
+            if(user.getUserType() != null && user.getUserType() != oldUser.getUserType()){
                 oldUser.setUserType(user.getUserType());
             }
             userMapper.updateUser(oldUser);
             return oldUser;
+        }
+        return null;
+    }
+
+    @Override
+    public Room updateRoom(Room room){
+        if(room.getRoomId() != null){
+            Room oldRoom = roomMapper.getRoomByRoomId(room.getRoomId());
+            if(oldRoom == null){
+                return null;
+            }
+            if(room.getRoomOwner() != null && room.getRoomOwner() != oldRoom.getRoomOwner()){
+                User roomOwner = userMapper.getUserById(room.getRoomOwner());
+                if(roomOwner.getUserType() == 1)
+                    oldRoom.setRoomOwner(room.getRoomOwner());
+            }
+            if(room.getRoomName() != null && room.getRoomName() != oldRoom.getRoomName()){
+                oldRoom.setRoomName(room.getRoomName());
+            }
+            if(room.getDescription() != null && room.getDescription() != oldRoom.getDescription()){
+                oldRoom.setDescription(room.getDescription());
+            }
+            if(room.getRoomPrice() != 0 && room.getRoomPrice() != oldRoom.getRoomPrice()){
+                oldRoom.setRoomPrice(room.getRoomPrice());
+            }
+            if(room.getIsAvailable() != null && room.getIsAvailable() != oldRoom.getIsAvailable()){
+                oldRoom.setIsAvailable(room.getIsAvailable());
+            }
+            roomMapper.updateRoom(oldRoom);
+            return oldRoom;
         }
         return null;
     }
@@ -79,6 +121,13 @@ public class AdminServiceImpl implements AdminService {
         user.setUserPwd(EncryptUtil.getEncodedString(user.getUserPwd()));
         userMapper.insertUser(user);
         return user;
+    }
+
+    @Override
+    public Room addRoom(Room room){
+        if(roomMapper.getRoomByRoomId(room.getRoomId()) != null)
+            return null;
+        return room;
     }
 
     @Override
