@@ -2,6 +2,7 @@ package com.homestay.controller;
 
 import cn.hutool.json.JSONUtil;
 import com.github.pagehelper.PageInfo;
+import com.homestay.pojo.Order;
 import com.homestay.pojo.Room;
 import com.homestay.pojo.User;
 import com.homestay.response.CommonResponse;
@@ -53,6 +54,12 @@ public class AdminController {
     @RequestMapping(value = "/getRoomInfo",method = RequestMethod.GET)
     public CommonResponse<PageInfo<Room>> getRooms(Integer pageNum, Integer pageSize){
         return adminService.getRooms(pageNum,pageSize);
+    }
+
+    //获取订单列表
+    @RequestMapping(value = "/getOrderInfo",method = RequestMethod.GET)
+    public CommonResponse<PageInfo<Order>> getOrders(Integer pageNum, Integer pageSize){
+        return adminService.getOrders(pageNum,pageSize);
     }
 
     //更新用户信息

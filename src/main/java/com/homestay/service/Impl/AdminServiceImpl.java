@@ -2,12 +2,15 @@ package com.homestay.service.Impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.homestay.mapper.OrderMapper;
 import com.homestay.mapper.RoomMapper;
 import com.homestay.mapper.UserMapper;
+import com.homestay.pojo.Order;
 import com.homestay.pojo.Room;
 import com.homestay.pojo.User;
 import com.homestay.response.CommonResponse;
 import com.homestay.service.AdminService;
+import com.homestay.service.OrderService;
 import com.homestay.service.RoomService;
 import com.homestay.util.EncryptUtil;
 import com.homestay.util.SessionUtil;
@@ -24,6 +27,10 @@ public class AdminServiceImpl implements AdminService {
     RoomMapper roomMapper;
     @Resource
     RoomService roomService;
+    @Resource
+    OrderMapper orderMapper;
+    @Resource
+    OrderService orderService;
 
     @Override
     public CommonResponse<User> login(User admin) {
@@ -59,6 +66,14 @@ public class AdminServiceImpl implements AdminService {
         PageHelper.startPage(pageNum,pageSize);
         List<Room> rooms = roomMapper.list();
         PageInfo<Room> pageInfo = new PageInfo<>(rooms);
+        return new CommonResponse<>(0,"查询成功",pageInfo);
+    }
+
+    @Override
+    public CommonResponse<PageInfo<Order>> getOrders(Integer pageNum, Integer pageSize){
+        PageHelper.startPage(pageNum,pageSize);
+        List<Order> orders = orderMapper.list();
+        PageInfo<Order> pageInfo = new PageInfo<>(orders);
         return new CommonResponse<>(0,"查询成功",pageInfo);
     }
 
@@ -117,6 +132,41 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public Order updateOrder(Order order){
+        if(order.getOrderId() != null){
+            Order oldOrder = orderMapper.getOrderByOrderId(order.getOrderId());
+            if(oldOrder == null){
+                return null;
+            }
+            if(order.getUserId() != null && order.getUserId() != oldOrder.getUserId()){
+                oldOrder.setUserId(oldOrder.getUserId());
+            }
+            if(order.getOwnerId() != null && order.getOrderId() != oldOrder.getOrderId()
+                    && orderService.isValidOrder(order)){
+                oldOrder.setOwnerId(order.getOwnerId());
+            }
+            if(order.getRoomId() != null && order.getRoomId() != order.getRoomId()){
+                oldOrder.setRoomId(order.getRoomId());
+            }
+            if(order.getLastDays() != null && order.getLastDays() != oldOrder.getLastDays()){
+                oldOrder.setLastDays(order.getLastDays());
+            }
+            if(order.getCreateDate() != null && order.getCreateDate() != oldOrder.getCreateDate()){
+                oldOrder.setCreateDate(order.getCreateDate());
+            }
+            if(order.getLiveDate() != null && order.getLiveDate() != oldOrder.getLiveDate()){
+                oldOrder.setLiveDate(order.getLiveDate());
+            }
+            if(order.getMoney() != 0 && order.getMoney() != oldOrder.getMoney()){
+                oldOrder.setMoney(order.getMoney());
+            }
+            orderMapper.updateOrder(oldOrder);
+            return oldOrder;
+        }
+        return null;
+    }
+
+    @Override
     public User addUser(User user){
         if(userMapper.getUserById(user.getUserId()) != null)
             return null;
@@ -134,6 +184,14 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public Order addOrder(Order order){
+        if(orderMapper.getOrderByOrderId(order.getOrderId()) != null)
+            return null;
+        orderMapper.insertOrder(order);
+        return order;
+    }
+
+    @Override
     public void deleteUser(List<Integer> ids){
         for(int id:ids){
             userMapper.deleteUserById(id);
@@ -148,6 +206,13 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public void deleteOrder(List<Integer> ids){
+        for(int id:ids){
+            orderMapper.deleteOrderById(id);
+        }
+    }
+
+    @Override
     public void resetUser(List<Integer> ids){
         for(int id:ids){
             userMapper.resetUserById(id);
@@ -158,6 +223,13 @@ public class AdminServiceImpl implements AdminService {
     public void resetRoom(List<Integer> ids){
         for(int id:ids){
             roomMapper.resetRoomById(id);
+        }
+    }
+
+    @Override
+    public void resetOrder(List<Integer> ids){
+        for(int id:ids){
+            orderMapper.resetOrderById(id);
         }
     }
 }

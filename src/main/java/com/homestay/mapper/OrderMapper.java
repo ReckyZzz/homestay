@@ -3,9 +3,17 @@ package com.homestay.mapper;
 import com.homestay.pojo.Order;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface OrderMapper {
     Order getOrderByOrderId(int orderId);
-    int deleteOrderByUserId(int userId);
-    int resetOrderByUserId(int userId);
+    List<Order> getOrderByUser(int uerId);
+    List<Order> getOrderByOwner(int ownerId);
+    List<Order> getOrderByRoom(int roomId);
+    List<Order> list();
+    int insertOrder(Order order);
+    int updateOrder(Order order);
+    int deleteOrderById(int id);
+    int resetOrderById(int id);
 }

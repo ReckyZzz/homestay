@@ -5,6 +5,7 @@ import com.homestay.mapper.UserMapper;
 import com.homestay.mapper.RoomMapper;
 import com.homestay.mapper.OrderMapper;
 import com.homestay.pojo.Comment;
+import com.homestay.pojo.Order;
 import com.homestay.pojo.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -84,8 +86,8 @@ public class MapperTest {
     /*@Test
     public void testOrder(){
         //testDelete
-        orderMapper.deleteOrderByUserId(1);
-        orderMapper.resetOrderByUserId(1);
+        orderMapper.deleteOrderById(1);
+        orderMapper.resetOrderById(1);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Order order = orderMapper.getOrderByOrderId(1);
         if(order!=null){

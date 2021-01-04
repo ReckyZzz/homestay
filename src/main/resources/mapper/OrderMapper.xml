@@ -6,11 +6,59 @@
     <select id="getOrderByOrderId" resultType="com.homestay.pojo.Order">
         SELECT * FROM tb_order WHERE order_id=#{orderId} AND del_flag=0
     </select>
+    <select id="getOrderByUser" resultType="com.homestay.pojo.Order">
+        SELECT * FROM tb_order WHERE user_id=#{userId} AND del_flag=0
+    </select>
+    <select id="getOrderByOwner" resultType="com.homestay.pojo.Order">
+        SELECT * FROM tb_order WHERE owner_id=#{ownerId} AND del_flag=0
+    </select>
+    <select id="list" resultType="com.homestay.pojo.Order">
+        SELECT * FROM tb_order WHERE del_flag=0
+    </select>
+    <select id="getOrderByRoom" resultType="com.homestay.pojo.Order">
+        SELECT * FROM tb_order WHERE room_id=#{roomId} AND del_flag=0
+    </select>
 
-    <update id="deleteOrderByUserId">
-        UPDATE tb_order SET del_flag=1
+    <!--插入时有默认值时使用默认值-->
+    <sql id="orderColumns">
+        <trim suffixOverrides=",">
+            <if test="orderId != null">order_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="ownerId != null">owner_id,</if>
+            <if test="roomId != null">room_id,</if>
+            <if test="lastDays != null">last_days</if>
+            <if test="createDate != null">create_date</if>
+            <if test="liveDate != null">live_date</if>
+            <if test="money != null">money</if>
+        </trim>
+    </sql>
+    <sql id="orderValues">
+        <trim suffixOverrides=",">
+            <if test="orderId != null">#{orderId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="ownerId != null">#{ownerId},</if>
+            <if test="roomId != null">#{roomId},</if>
+            <if test="lastDays != null">#{lastDays}</if>
+            <if test="createDate != null">#{createDate}</if>
+            <if test="liveDate != null">#{liveDate}</if>
+            <if test="money != null">#{money}</if>
+        </trim>
+    </sql>
+    <insert id="insertOrder" parameterType="com.homestay.pojo.Order"
+            keyColumn="order_id" keyProperty="orderId">
+        INSERT INTO tb_room(<include refid="orderColumns"/>)
+        VALUES (<include refid="orderValues"/>)
+    </insert>
+
+    <update id="updateOrder">
+        UPDATE tb_order SET user_id=#{userId},owner_id=#{ownerId},room_id=#{roomId},last_days=#{lastDays},
+        create_date=#{createDate},live_date=#{liveDate},money=#{money}
+        WHERE order_id=#{orderId}
     </update>
-    <update id="resetOrderByUserId">
-        UPDATE tb_order SET del_flag=0
+    <update id="deleteOrderById">
+        UPDATE tb_order SET del_flag=1 WHERE order_id=#{id}
+    </update>
+    <update id="resetOrderById">
+        UPDATE tb_order SET del_flag=0 WHERE order_id=#{id}
     </update>
 </mapper>

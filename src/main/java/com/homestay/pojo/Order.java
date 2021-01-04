@@ -9,6 +9,7 @@ public class Order {
     private Integer roomId;
     private Integer lastDays;
     private Date createDate;
+    private Date liveDate;
     private double money;
     private Integer delFlag;
 
@@ -58,6 +59,14 @@ public class Order {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public Date getLiveDate() {
+        return liveDate;
+    }
+
+    public void setLiveDate(Date liveDate) {
+        this.liveDate = liveDate;
     }
 
     public double getMoney() {

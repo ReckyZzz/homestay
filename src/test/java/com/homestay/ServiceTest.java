@@ -1,6 +1,7 @@
 package com.homestay;
 
 import com.github.pagehelper.PageInfo;
+import com.homestay.pojo.Order;
 import com.homestay.pojo.Room;
 import com.homestay.pojo.User;
 import com.homestay.response.CommonResponse;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,6 +89,14 @@ public class ServiceTest {
         for(Room r:pageInfos.getList()){
             System.out.println(r.getRoomName());
         }*/
+
+        //getOrder
+        CommonResponse<PageInfo<Order>> response = adminService.getOrders(1,2);
+        PageInfo<Order> pageInfos= response.getData();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for(Order o:pageInfos.getList()){
+            System.out.println(format.format(o.getCreateDate()));
+        }
 
         //updateRoom
         /*room.setRoomId(1);room.setDescription("你加撒大声地");
