@@ -8,8 +8,11 @@ import java.util.List;
 @Mapper
 public interface RoomMapper {
     Room getRoomByRoomId(int roomId);
+    Room getRoomByName(String name);
     List<Room> getRoomByOwner(int ownerId);
     int insertRoom(Room room);
     int updateRoom(Room room);
+    int deleteRoomById(int id);
+    int resetRoomById(int id);
     List<Room> list();
 }

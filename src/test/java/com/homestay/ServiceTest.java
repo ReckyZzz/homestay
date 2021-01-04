@@ -5,6 +5,7 @@ import com.homestay.pojo.Room;
 import com.homestay.pojo.User;
 import com.homestay.response.CommonResponse;
 import com.homestay.service.AdminService;
+import com.homestay.service.RoomService;
 import com.homestay.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +23,8 @@ public class ServiceTest {
     UserService userService;
     @Resource
     AdminService adminService;
+    @Resource
+    RoomService roomService;
 
     @Test
     public void testUser(){
@@ -79,7 +82,7 @@ public class ServiceTest {
         }*/
 
         //getRoom
-        /*CommonResponse<PageInfo<Room>> response = adminService.getRooms(1,4);
+        /*CommonResponse<PageInfo<Room>> response = adminService.getRooms(1,6);
         PageInfo<Room> pageInfos= response.getData();
         for(Room r:pageInfos.getList()){
             System.out.println(r.getRoomName());
@@ -89,11 +92,24 @@ public class ServiceTest {
         /*room.setRoomId(1);room.setDescription("你加撒大声地");
         adminService.updateRoom(room);*/
 
+        //deleteRoom
+        /*List<Integer> ids = new ArrayList<>();
+        ids.add(1);ids.add(2);ids.add(6);
+        adminService.deleteRoom(ids);*/
+
+        //resetRoom
+        /*List<Integer> ids = new ArrayList<>();
+        ids.add(1);ids.add(2);ids.add(6);
+        adminService.resetRoom(ids);*/
+    }
+
+    @Test
+    public void testRoom(){
+        Room room = new Room();
         //adRoom
-        for(int i=0;i<10;i++) {
-            user.setUserName("123456" + i);
-            user.setUserPwd("123456");
-            userService.register(user);
-        }
+        room.setRoomOwner(2);room.setRoomName("测试");
+        CommonResponse<Room> response = roomService.addRoom(room);
+        System.out.println(response.getMessage());
+
     }
 }

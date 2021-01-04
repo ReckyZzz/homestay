@@ -8,6 +8,7 @@ import com.homestay.pojo.Room;
 import com.homestay.pojo.User;
 import com.homestay.response.CommonResponse;
 import com.homestay.service.AdminService;
+import com.homestay.service.RoomService;
 import com.homestay.util.EncryptUtil;
 import com.homestay.util.SessionUtil;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,8 @@ public class AdminServiceImpl implements AdminService {
     UserMapper userMapper;
     @Resource
     RoomMapper roomMapper;
+    @Resource
+    RoomService roomService;
 
     @Override
     public CommonResponse<User> login(User admin) {
@@ -91,10 +94,9 @@ public class AdminServiceImpl implements AdminService {
             if(oldRoom == null){
                 return null;
             }
-            if(room.getRoomOwner() != null && room.getRoomOwner() != oldRoom.getRoomOwner()){
-                User roomOwner = userMapper.getUserById(room.getRoomOwner());
-                if(roomOwner.getUserType() == 1)
-                    oldRoom.setRoomOwner(room.getRoomOwner());
+            if(room.getRoomOwner() != null && room.getRoomOwner() != oldRoom.getRoomOwner()
+                    && roomService.isValidRoom(room)){
+                oldRoom.setRoomOwner(room.getRoomOwner());
             }
             if(room.getRoomName() != null && room.getRoomName() != oldRoom.getRoomName()){
                 oldRoom.setRoomName(room.getRoomName());
@@ -127,6 +129,7 @@ public class AdminServiceImpl implements AdminService {
     public Room addRoom(Room room){
         if(roomMapper.getRoomByRoomId(room.getRoomId()) != null)
             return null;
+        roomMapper.insertRoom(room);
         return room;
     }
 
@@ -138,9 +141,23 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public void deleteRoom(List<Integer> ids){
+        for(int id:ids){
+            roomMapper.deleteRoomById(id);
+        }
+    }
+
+    @Override
     public void resetUser(List<Integer> ids){
         for(int id:ids){
             userMapper.resetUserById(id);
+        }
+    }
+
+    @Override
+    public void resetRoom(List<Integer> ids){
+        for(int id:ids){
+            roomMapper.resetRoomById(id);
         }
     }
 }

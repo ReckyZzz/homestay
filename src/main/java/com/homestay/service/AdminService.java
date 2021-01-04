@@ -16,5 +16,7 @@ public interface AdminService {
     User addUser(User user);
     Room addRoom(Room room);
     void deleteUser(List<Integer> ids);
+    void deleteRoom(List<Integer> ids);
     void resetUser(List<Integer> ids);
+    void resetRoom(List<Integer> ids);
 }

@@ -1,6 +1,8 @@
 package com.homestay.controller;
 
+import cn.hutool.json.JSONUtil;
 import com.github.pagehelper.PageInfo;
+import com.homestay.pojo.Room;
 import com.homestay.pojo.User;
 import com.homestay.response.CommonResponse;
 import com.homestay.service.AdminService;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -46,6 +49,12 @@ public class AdminController {
         return adminService.getUsers(pageNum,pageSize);
     }
 
+    //获取房间列表
+    @RequestMapping(value = "/getRoomInfo",method = RequestMethod.GET)
+    public CommonResponse<PageInfo<Room>> getRooms(Integer pageNum, Integer pageSize){
+        return adminService.getRooms(pageNum,pageSize);
+    }
+
     //更新用户信息
     @RequestMapping(value = "/updateUserInfo",method = RequestMethod.POST)
     public CommonResponse<User> updateUser(User user){
@@ -56,6 +65,16 @@ public class AdminController {
         return new CommonResponse<>(1,"不存在的用户",null);
     }
 
+    //更新房间信息
+    @RequestMapping(value = "/updateRoomInfo",method = RequestMethod.POST)
+    public CommonResponse<Room> updateRoom(Room room){
+        room = adminService.updateRoom(room);
+        if(room != null){
+            return new CommonResponse<>(0,"修改成功",room);
+        }
+        return new CommonResponse<>(1,"不存在的房间",null);
+    }
+
     //添加用户
     @RequestMapping(value = "/addUser",method = RequestMethod.POST)
     public CommonResponse<User> addUser(User user){
@@ -64,5 +83,47 @@ public class AdminController {
             return new CommonResponse<>(0,"添加成功",user);
         }
         return new CommonResponse<>(1,"用户已存在",null);
+    }
+
+    //添加房间
+    @RequestMapping(value = "/addRoom",method = RequestMethod.POST)
+    public CommonResponse<Room> addRoom(Room room){
+        room = adminService.addRoom(room);
+        if(room != null){
+            return new CommonResponse<>(0,"添加成功",room);
+        }
+        return new CommonResponse<>(1,"房间已存在",null);
+    }
+
+    //批量删除用户
+    @RequestMapping(value = "/deleteUsers",method = RequestMethod.GET)
+    public CommonResponse<Object> deleteUsers(String userIds){
+        List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(userIds),Integer.class);
+        adminService.deleteUser(ids);
+        return new CommonResponse<>(0,"删除成功",null);
+    }
+
+    //批量删除房间
+    @RequestMapping(value = "/deleteRooms",method = RequestMethod.GET)
+    public CommonResponse<Object> deleteRooms(String roomIds){
+        List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(roomIds),Integer.class);
+        adminService.deleteRoom(ids);
+        return new CommonResponse<>(0,"删除成功",null);
+    }
+
+    //批量还原用户
+    @RequestMapping(value = "/resetUsers",method = RequestMethod.GET)
+    public CommonResponse<Object> resetUsers(String userIds){
+        List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(userIds),Integer.class);
+        adminService.resetUser(ids);
+        return new CommonResponse<>(0,"还原成功",null);
+    }
+
+    //批量还原房间
+    @RequestMapping(value = "resetRooms",method = RequestMethod.GET)
+    public CommonResponse<Object> resetRooms(String roomIds){
+        List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(roomIds),Integer.class);
+        adminService.resetRoom(ids);
+        return new CommonResponse<>(0,"还原成功",null);
     }
 }
