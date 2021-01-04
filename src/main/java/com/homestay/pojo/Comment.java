@@ -1,34 +1,34 @@
 package com.homestay.pojo;
 
 public class Comment {
-    String commentId;
-    String userId;
-    String roomId;
+    Integer commentId;
+    Integer userId;
+    Integer roomId;
     Integer rateStars;
     String content;
     Integer delFlag;
 
-    public String getCommentId() {
+    public Integer getCommentId() {
         return commentId;
     }
 
-    public void setCommentId(String commentId) {
+    public void setCommentId(Integer commentId) {
         this.commentId = commentId;
     }
 
-    public String getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
-    public String getRoomId() {
+    public Integer getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(String roomId) {
+    public void setRoomId(Integer roomId) {
         this.roomId = roomId;
     }
 

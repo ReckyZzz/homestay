@@ -5,6 +5,6 @@ import com.homestay.pojo.Order;
 import com.homestay.response.CommonResponse;
 
 public interface OrderService {
-    CommonResponse<PageInfo<Order>> getOrders(Integer pageNum,Integer pageSize);
     boolean isValidOrder(Order order);
+    CommonResponse<PageInfo<Order>> getOrders(Integer pageNum,Integer pageSize);
 }

@@ -2,9 +2,11 @@ package com.homestay.service.Impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.homestay.mapper.CommentMapper;
 import com.homestay.mapper.OrderMapper;
 import com.homestay.mapper.RoomMapper;
 import com.homestay.mapper.UserMapper;
+import com.homestay.pojo.Comment;
 import com.homestay.pojo.Order;
 import com.homestay.pojo.Room;
 import com.homestay.pojo.User;
@@ -31,6 +33,8 @@ public class AdminServiceImpl implements AdminService {
     OrderMapper orderMapper;
     @Resource
     OrderService orderService;
+    @Resource
+    CommentMapper commentMapper;
 
     @Override
     public CommonResponse<User> login(User admin) {
@@ -74,6 +78,14 @@ public class AdminServiceImpl implements AdminService {
         PageHelper.startPage(pageNum,pageSize);
         List<Order> orders = orderMapper.list();
         PageInfo<Order> pageInfo = new PageInfo<>(orders);
+        return new CommonResponse<>(0,"查询成功",pageInfo);
+    }
+
+    @Override
+    public CommonResponse<PageInfo<Comment>> getComments(Integer pageNum,Integer pageSize){
+        PageHelper.startPage(pageNum,pageSize);
+        List<Comment> comments = commentMapper.list();
+        PageInfo<Comment> pageInfo = new PageInfo<>(comments);
         return new CommonResponse<>(0,"查询成功",pageInfo);
     }
 
@@ -139,13 +151,13 @@ public class AdminServiceImpl implements AdminService {
                 return null;
             }
             if(order.getUserId() != null && order.getUserId() != oldOrder.getUserId()){
-                oldOrder.setUserId(oldOrder.getUserId());
+                oldOrder.setUserId(order.getUserId());
             }
-            if(order.getOwnerId() != null && order.getOrderId() != oldOrder.getOrderId()
+            if(order.getOwnerId() != null && order.getOwnerId() != oldOrder.getOwnerId()
                     && orderService.isValidOrder(order)){
                 oldOrder.setOwnerId(order.getOwnerId());
             }
-            if(order.getRoomId() != null && order.getRoomId() != order.getRoomId()){
+            if(order.getRoomId() != null && order.getRoomId() != oldOrder.getRoomId()){
                 oldOrder.setRoomId(order.getRoomId());
             }
             if(order.getLastDays() != null && order.getLastDays() != oldOrder.getLastDays()){
@@ -166,9 +178,33 @@ public class AdminServiceImpl implements AdminService {
         return null;
     }
 
+    public Comment updateComment(Comment comment){
+        if(comment.getCommentId() != null){
+            Comment oldComment = commentMapper.getCommentById(comment.getCommentId());
+            if(oldComment == null){
+                return null;
+            }
+            if(comment.getUserId() != null && comment.getUserId() != oldComment.getUserId()){
+                oldComment.setUserId(comment.getUserId());
+            }
+            if(comment.getRoomId() != null && comment.getRoomId() != oldComment.getRoomId()){
+                oldComment.setRoomId(comment.getRoomId());
+            }
+            if(comment.getRateStars() != null && comment.getRateStars() != oldComment.getRateStars()){
+                oldComment.setRateStars(comment.getRateStars());
+            }
+            if(comment.getContent() != null && comment.getContent() != oldComment.getContent()){
+                oldComment.setContent(comment.getContent());
+            }
+            commentMapper.updateComment(comment);
+            return comment;
+        }
+        return null;
+    }
+
     @Override
     public User addUser(User user){
-        if(userMapper.getUserById(user.getUserId()) != null)
+        if(user.getUserId() != null)
             return null;
         user.setUserPwd(EncryptUtil.getEncodedString(user.getUserPwd()));
         userMapper.insertUser(user);
@@ -177,7 +213,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Room addRoom(Room room){
-        if(roomMapper.getRoomByRoomId(room.getRoomId()) != null)
+        if(room.getRoomId() != null)
             return null;
         roomMapper.insertRoom(room);
         return room;
@@ -185,10 +221,18 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Order addOrder(Order order){
-        if(orderMapper.getOrderByOrderId(order.getOrderId()) != null)
+        if(order.getOrderId() != null)
             return null;
         orderMapper.insertOrder(order);
         return order;
+    }
+
+    @Override
+    public Comment addComment(Comment comment){
+        if(comment.getCommentId() != null)
+            return null;
+        commentMapper.insertComment(comment);
+        return comment;
     }
 
     @Override
@@ -213,6 +257,13 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public void deleteComment(List<Integer> ids){
+        for(int id:ids){
+            commentMapper.deleteCommentById(id);
+        }
+    }
+
+    @Override
     public void resetUser(List<Integer> ids){
         for(int id:ids){
             userMapper.resetUserById(id);
@@ -230,6 +281,13 @@ public class AdminServiceImpl implements AdminService {
     public void resetOrder(List<Integer> ids){
         for(int id:ids){
             orderMapper.resetOrderById(id);
+        }
+    }
+
+    @Override
+    public void resetComment(List<Integer> ids){
+        for(int id:ids){
+            commentMapper.resetCommentById(id);
         }
     }
 }

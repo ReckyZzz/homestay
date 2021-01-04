@@ -1,6 +1,8 @@
 package com.homestay;
 
 import com.github.pagehelper.PageInfo;
+import com.homestay.mapper.RoomMapper;
+import com.homestay.pojo.Comment;
 import com.homestay.pojo.Order;
 import com.homestay.pojo.Room;
 import com.homestay.pojo.User;
@@ -10,12 +12,14 @@ import com.homestay.service.RoomService;
 import com.homestay.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.internal.matchers.Or;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -27,6 +31,8 @@ public class ServiceTest {
     AdminService adminService;
     @Resource
     RoomService roomService;
+    @Resource
+    RoomMapper roomMapper;
 
     @Test
     public void testUser(){
@@ -55,6 +61,7 @@ public class ServiceTest {
     public void testAdmin(){
         User user = new User();
         Room room = new Room();
+        Order order = new Order();
         //updateUser
         /*user.setUserId(10);user.setUserName("159123640945");user.setUserType(1);user.setGender(1);
         adminService.updateUser(user);*/
@@ -91,26 +98,51 @@ public class ServiceTest {
         }*/
 
         //getOrder
-        CommonResponse<PageInfo<Order>> response = adminService.getOrders(1,2);
+        /*CommonResponse<PageInfo<Order>> response = adminService.getOrders(1,2);
         PageInfo<Order> pageInfos= response.getData();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         for(Order o:pageInfos.getList()){
             System.out.println(format.format(o.getCreateDate()));
-        }
+        }*/
+
+        //getComment
+        /*CommonResponse<PageInfo<Comment>> response = adminService.getComments(1,3);
+        PageInfo<Comment> pageInfos= response.getData();
+        for(Comment c:pageInfos.getList()){
+            System.out.println(c.getContent());
+        }*/
 
         //updateRoom
         /*room.setRoomId(1);room.setDescription("你加撒大声地");
         adminService.updateRoom(room);*/
+
+        //updateUser
+        /*user.setUserId(2);user.setUserName("owner");user.setUserPwd("123456");
+        adminService.updateUser(user);*/
+
+        //updateOrder
+        /*order.setOrderId(1);order.setOwnerId(2);order.setUserId(24);order.setLiveDate(new Date());
+        adminService.updateOrder(order);*/
+
+        //addOrder
+        /*order.setUserId(4);order.setOwnerId(2);order.setRoomId(2);order.setLastDays(5);order.setCreateDate(new Date());
+        order.setLiveDate(new Date());order.setMoney(roomMapper.getRoomByRoomId(2).getRoomPrice()*5);
+        adminService.addOrder(order);*/
 
         //deleteRoom
         /*List<Integer> ids = new ArrayList<>();
         ids.add(1);ids.add(2);ids.add(6);
         adminService.deleteRoom(ids);*/
 
-        //resetRoom
+        //deleteOrder
         /*List<Integer> ids = new ArrayList<>();
-        ids.add(1);ids.add(2);ids.add(6);
-        adminService.resetRoom(ids);*/
+        ids.add(1);ids.add(2);ids.add(3);
+        adminService.resetOrder(ids);*/
+
+        //deleteComment
+        /*List<Integer> ids = new ArrayList<>();
+        ids.add(1);ids.add(2);ids.add(3);
+        adminService.resetComment(ids);*/
     }
 
     @Test
@@ -121,5 +153,17 @@ public class ServiceTest {
         CommonResponse<Room> response = roomService.addRoom(room);
         System.out.println(response.getMessage());
 
+    }
+
+    @Test
+    public void testOrder(){
+        Order order = new Order();
+        //getOrder
+        CommonResponse<PageInfo<Order>> response = adminService.getOrders(1,3);
+        PageInfo<Order> pageInfos= response.getData();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for(Order o:pageInfos.getList()){
+            System.out.println(format.format(o.getCreateDate()));
+        }
     }
 }

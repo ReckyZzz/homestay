@@ -26,9 +26,9 @@
             <if test="userId != null">user_id,</if>
             <if test="ownerId != null">owner_id,</if>
             <if test="roomId != null">room_id,</if>
-            <if test="lastDays != null">last_days</if>
-            <if test="createDate != null">create_date</if>
-            <if test="liveDate != null">live_date</if>
+            <if test="lastDays != null">last_days,</if>
+            <if test="createDate != null">create_date,</if>
+            <if test="liveDate != null">live_date,</if>
             <if test="money != null">money</if>
         </trim>
     </sql>
@@ -38,15 +38,15 @@
             <if test="userId != null">#{userId},</if>
             <if test="ownerId != null">#{ownerId},</if>
             <if test="roomId != null">#{roomId},</if>
-            <if test="lastDays != null">#{lastDays}</if>
-            <if test="createDate != null">#{createDate}</if>
-            <if test="liveDate != null">#{liveDate}</if>
+            <if test="lastDays != null">#{lastDays},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="liveDate != null">#{liveDate},</if>
             <if test="money != null">#{money}</if>
         </trim>
     </sql>
     <insert id="insertOrder" parameterType="com.homestay.pojo.Order"
             keyColumn="order_id" keyProperty="orderId">
-        INSERT INTO tb_room(<include refid="orderColumns"/>)
+        INSERT INTO tb_order(<include refid="orderColumns"/>)
         VALUES (<include refid="orderValues"/>)
     </insert>
 

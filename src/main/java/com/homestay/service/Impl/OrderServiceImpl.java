@@ -30,8 +30,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public boolean isValidOrder(Order order){
-        User user = userMapper.getUserById(order.getUserId());
-        if(user.getUserType() == 1)
+        User owner = userMapper.getUserById(order.getOwnerId());
+        if(owner.getUserType() == 1)
             return true;
         return false;
     }

@@ -3,14 +3,50 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.homestay.mapper.CommentMapper">
-    <select id="getCommentByUserId" resultType="com.homestay.pojo.Comment">
+    <select id="getCommentById" resultType="com.homestay.pojo.Comment">
+        SELECT * FROM tb_comment WHERE comment_id=#{commentId} AND del_flag=0
+    </select>
+    <select id="list" resultType="com.homestay.pojo.Comment">
+        SELECT * FROM tb_comment WHERE del_flag=0
+    </select>
+    <select id="getCommentByUser" resultType="com.homestay.pojo.Comment">
         SELECT * FROM tb_comment WHERE user_id=#{userId} AND del_flag=0
     </select>
+    <select id="getCommentByRoom" resultType="com.homestay.pojo.Comment">
+        SELECT * FROM tb_comment WHERE room_id=#{roomId} AND del_flag=0
+    </select>
 
-    <update id="resetCommentByUserId">
-        UPDATE tb_comment SET del_flag=0
+    <!--插入时有默认值时使用默认值-->
+    <sql id="commentColumns">
+        <trim suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="roomId != null">room_id,</if>
+            <if test="rateStars != null">rate_stars,</if>
+            <if test="content != null">content</if>
+        </trim>
+    </sql>
+    <sql id="commentValues">
+        <trim suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="roomId != null">#{roomId},</if>
+            <if test="rateStars != null">#{rateStars},</if>
+            <if test="content != null">#{content}</if>
+        </trim>
+    </sql>
+    <insert id="insertComment" parameterType="com.homestay.pojo.Comment"
+            keyColumn="comment_id" keyProperty="commentId">
+        INSERT INTO tb_comment(<include refid="commentColumns"/>)
+        VALUES (<include refid="commentValues"/>)
+    </insert>
+
+    <update id="updateComment">
+        UPDATE tb_comment SET user_id=#{userId},room_id=#{roomId},rate_stars=#{rateStars},content=#{content}
+        WHERE comment_id=#{commentId}
     </update>
-    <update id="deleteCommentByUserId">
-        UPDATE tb_comment SET del_flag=1
+    <update id="resetCommentById">
+        UPDATE tb_comment SET del_flag=0 WHERE comment_id=#{id}
+    </update>
+    <update id="deleteCommentById">
+        UPDATE tb_comment SET del_flag=1 WHERE comment_id=#{id}
     </update>
 </mapper>
