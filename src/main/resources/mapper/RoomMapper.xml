@@ -13,7 +13,13 @@
         SELECT * FROM tb_room WHERE room_owner=#{ownerId} AND del_flag=0
     </select>
     <select id="getRoomByName" resultType="com.homestay.pojo.Room">
-        SELECT * FROM tb_room WHERE room_name=#{name} AND del_flag=0
+        SELECT * FROM tb_room WHERE room_name LIKE '%${name}%' AND del_flag=0
+    </select>
+    <select id="getAllRooms" resultType="com.homestay.pojo.Room">
+        SELECT * FROM tb_room
+    </select>
+    <select id="getARoomByName" resultType="com.homestay.pojo.Room">
+        SELECT * FROM tb_room WHERE room_name=#{name}
     </select>
 
     <!--插入时有默认值时使用默认值-->

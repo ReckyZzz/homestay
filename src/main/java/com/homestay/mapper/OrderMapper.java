@@ -12,6 +12,7 @@ public interface OrderMapper {
     List<Order> getOrderByOwner(int ownerId);
     List<Order> getOrderByRoom(int roomId);
     List<Order> list();
+    List<Order> getAllOrders();
     int insertOrder(Order order);
     int updateOrder(Order order);
     int deleteOrderById(int id);

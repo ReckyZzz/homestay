@@ -1,12 +1,12 @@
 package com.homestay.pojo;
 
 public class Comment {
-    Integer commentId;
-    Integer userId;
-    Integer roomId;
-    Integer rateStars;
-    String content;
-    Integer delFlag;
+    private Integer commentId;
+    private Integer userId;
+    private Integer roomId;
+    private Integer rateStars;
+    private String content;
+    private Integer delFlag;
 
     public Integer getCommentId() {
         return commentId;

@@ -27,12 +27,4 @@ public class OrderServiceImpl implements OrderService {
         PageInfo<Order> pageInfo = new PageInfo<>(orders);
         return new CommonResponse<>(0,"查询成功",pageInfo);
     }
-
-    @Override
-    public boolean isValidOrder(Order order){
-        User owner = userMapper.getUserById(order.getOwnerId());
-        if(owner.getUserType() == 1)
-            return true;
-        return false;
-    }
 }

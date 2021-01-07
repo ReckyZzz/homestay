@@ -1,11 +1,8 @@
 package com.homestay;
 
-import com.homestay.mapper.CommentMapper;
-import com.homestay.mapper.UserMapper;
-import com.homestay.mapper.RoomMapper;
-import com.homestay.mapper.OrderMapper;
-import com.homestay.pojo.Comment;
-import com.homestay.pojo.Order;
+import com.homestay.mapper.*;
+import com.homestay.pojo.Room;
+import com.homestay.pojo.RoomCollection;
 import com.homestay.pojo.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -27,6 +23,8 @@ public class MapperTest {
     OrderMapper orderMapper;
     @Resource
     CommentMapper commentMapper;
+    @Resource
+    RoomCollectionMapper collectionMapper;
     @Test
     public void testUser(){
         User user = new User();
@@ -68,9 +66,9 @@ public class MapperTest {
             System.out.println(u.getUserName());
         }*/
     }
-    /*@Test
+    @Test
     public void testRoom(){
-        Room room = roomMapper.getRoomByRoomId(1);
+        /*Room room = roomMapper.getRoomByRoomId(1);
         if(room!=null){
             System.out.println(room.getRoomId());
             System.out.println(room.getRoomName());
@@ -81,8 +79,14 @@ public class MapperTest {
         }
         else{
             System.out.println("failure");
+        }*/
+
+        //getRoom
+        List<Room> rooms = roomMapper.getRoomByName("直");
+        for(Room r:rooms){
+            System.out.println(r.getRoomName());
         }
-    }*/
+    }
     /*@Test
     public void testOrder(){
         //testDelete
@@ -119,4 +123,13 @@ public class MapperTest {
             System.out.println("评论不存在");
         }
     }*/
+    @Test
+    public void testCollection(){
+        RoomCollection collection = new RoomCollection();
+        //testGet
+        List<RoomCollection> collections = collectionMapper.getCollectionByUser(3);
+        for(RoomCollection r:collections){
+            System.out.println(r.getRoomId());
+        }
+    }
 }

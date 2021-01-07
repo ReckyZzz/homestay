@@ -2,6 +2,7 @@ package com.homestay.controller;
 
 import cn.hutool.json.JSONUtil;
 import com.github.pagehelper.PageInfo;
+import com.homestay.pojo.Comment;
 import com.homestay.pojo.Order;
 import com.homestay.pojo.Room;
 import com.homestay.pojo.User;
@@ -62,6 +63,12 @@ public class AdminController {
         return adminService.getOrders(pageNum,pageSize);
     }
 
+    //获取评论列表
+    @RequestMapping(value = "/getCommentInfo",method = RequestMethod.GET)
+    public CommonResponse<PageInfo<Comment>> getComments(Integer pageNum,Integer pageSize){
+        return adminService.getComments(pageNum,pageSize);
+    }
+
     //更新用户信息
     @RequestMapping(value = "/updateUserInfo",method = RequestMethod.POST)
     public CommonResponse<User> updateUser(User user){
@@ -90,6 +97,16 @@ public class AdminController {
             return new CommonResponse<>(0,"修改成功",order);
         }
         return new CommonResponse<>(1,"不存在的订单",null);
+    }
+
+    //更新评论信息
+    @RequestMapping(value = "/updateCommentInfo",method = RequestMethod.POST)
+    public CommonResponse<Comment> updateComment(Comment comment){
+        comment = adminService.updateComment(comment);
+        if(comment != null){
+            return new CommonResponse<>(0,"修改成功",comment);
+        }
+        return new CommonResponse<>(1,"不存在的评论",null);
     }
 
     //添加用户
@@ -122,6 +139,16 @@ public class AdminController {
         return new CommonResponse<>(1,"订单已存在",null);
     }
 
+    //增加评论
+    @RequestMapping(value = "addComment",method = RequestMethod.POST)
+    public CommonResponse<Comment> addComment(Comment comment){
+        comment = adminService.addComment(comment);
+        if(comment != null){
+            return new CommonResponse<>(0,"添加成功",comment);
+        }
+        return new CommonResponse<>(1,"订单已存在",null);
+    }
+
     //批量删除用户
     @RequestMapping(value = "/deleteUsers",method = RequestMethod.GET)
     public CommonResponse<Object> deleteUsers(String userIds){
@@ -146,6 +173,14 @@ public class AdminController {
         return new CommonResponse<>(0,"删除成功",null);
     }
 
+    //批量删除评论
+    @RequestMapping(value = "/deleteComments",method = RequestMethod.GET)
+    public CommonResponse<Object> deleteComments(String commentIds){
+        List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(commentIds),Integer.class);
+        adminService.deleteComment(ids);
+        return new CommonResponse<>(0,"删除成功",null);
+    }
+
     //批量还原用户
     @RequestMapping(value = "/resetUsers",method = RequestMethod.GET)
     public CommonResponse<Object> resetUsers(String userIds){
@@ -167,6 +202,14 @@ public class AdminController {
     public CommonResponse<Object> resetOrders(String orderIds){
         List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(orderIds),Integer.class);
         adminService.resetOrder(ids);
+        return new CommonResponse<>(0,"还原成功",null);
+    }
+
+    //批量还原评论
+    @RequestMapping(value = "/resetComments",method = RequestMethod.GET)
+    public CommonResponse<Object> resetComments(String commentIds){
+        List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(commentIds),Integer.class);
+        adminService.resetComment(ids);
         return new CommonResponse<>(0,"还原成功",null);
     }
 }

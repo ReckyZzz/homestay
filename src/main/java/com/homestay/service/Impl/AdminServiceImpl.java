@@ -14,6 +14,7 @@ import com.homestay.response.CommonResponse;
 import com.homestay.service.AdminService;
 import com.homestay.service.OrderService;
 import com.homestay.service.RoomService;
+import com.homestay.service.UserService;
 import com.homestay.util.EncryptUtil;
 import com.homestay.util.SessionUtil;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,8 @@ import java.util.List;
 public class AdminServiceImpl implements AdminService {
     @Resource
     UserMapper userMapper;
+    @Resource
+    UserService userService;
     @Resource
     RoomMapper roomMapper;
     @Resource
@@ -60,7 +63,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public CommonResponse<PageInfo<User>> getUsers(Integer pageNum, Integer pageSize){
         PageHelper.startPage(pageNum,pageSize);
-        List<User> users = userMapper.list();
+        List<User> users = userMapper.getAllUsers();
         PageInfo<User> pageInfo = new PageInfo<>(users);
         return new CommonResponse<>(0,"查询成功",pageInfo);
     }
@@ -68,7 +71,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public CommonResponse<PageInfo<Room>> getRooms(Integer pageNum, Integer pageSize){
         PageHelper.startPage(pageNum,pageSize);
-        List<Room> rooms = roomMapper.list();
+        List<Room> rooms = roomMapper.getAllRooms();
         PageInfo<Room> pageInfo = new PageInfo<>(rooms);
         return new CommonResponse<>(0,"查询成功",pageInfo);
     }
@@ -76,7 +79,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public CommonResponse<PageInfo<Order>> getOrders(Integer pageNum, Integer pageSize){
         PageHelper.startPage(pageNum,pageSize);
-        List<Order> orders = orderMapper.list();
+        List<Order> orders = orderMapper.getAllOrders();
         PageInfo<Order> pageInfo = new PageInfo<>(orders);
         return new CommonResponse<>(0,"查询成功",pageInfo);
     }
@@ -84,7 +87,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public CommonResponse<PageInfo<Comment>> getComments(Integer pageNum,Integer pageSize){
         PageHelper.startPage(pageNum,pageSize);
-        List<Comment> comments = commentMapper.list();
+        List<Comment> comments = commentMapper.getAllComments();
         PageInfo<Comment> pageInfo = new PageInfo<>(comments);
         return new CommonResponse<>(0,"查询成功",pageInfo);
     }
@@ -122,7 +125,7 @@ public class AdminServiceImpl implements AdminService {
                 return null;
             }
             if(room.getRoomOwner() != null && room.getRoomOwner() != oldRoom.getRoomOwner()
-                    && roomService.isValidRoom(room)){
+                    && userService.isOwner(room.getRoomOwner())){
                 oldRoom.setRoomOwner(room.getRoomOwner());
             }
             if(room.getRoomName() != null && room.getRoomName() != oldRoom.getRoomName()){
@@ -154,7 +157,7 @@ public class AdminServiceImpl implements AdminService {
                 oldOrder.setUserId(order.getUserId());
             }
             if(order.getOwnerId() != null && order.getOwnerId() != oldOrder.getOwnerId()
-                    && orderService.isValidOrder(order)){
+                    && userService.isOwner(order.getOwnerId())){
                 oldOrder.setOwnerId(order.getOwnerId());
             }
             if(order.getRoomId() != null && order.getRoomId() != oldOrder.getRoomId()){
@@ -196,8 +199,8 @@ public class AdminServiceImpl implements AdminService {
             if(comment.getContent() != null && comment.getContent() != oldComment.getContent()){
                 oldComment.setContent(comment.getContent());
             }
-            commentMapper.updateComment(comment);
-            return comment;
+            commentMapper.updateComment(oldComment);
+            return oldComment;
         }
         return null;
     }
@@ -206,33 +209,48 @@ public class AdminServiceImpl implements AdminService {
     public User addUser(User user){
         if(user.getUserId() != null)
             return null;
-        user.setUserPwd(EncryptUtil.getEncodedString(user.getUserPwd()));
-        userMapper.insertUser(user);
-        return user;
+        if(user.getUserName() != null && user.getUserPwd() != null) {
+            user.setUserPwd(EncryptUtil.getEncodedString(user.getUserPwd()));
+            userMapper.insertUser(user);
+            return user;
+        }
+        return null;
     }
 
     @Override
     public Room addRoom(Room room){
-        if(room.getRoomId() != null)
+        if(room.getRoomId() != null || room.getRoomOwner() == null)
             return null;
-        roomMapper.insertRoom(room);
-        return room;
+        if(userService.isOwner(room.getRoomOwner()) && room.getRoomName() != null && room.getRoomPrice() != 0) {
+            roomMapper.insertRoom(room);
+            return room;
+        }
+        return null;
     }
 
     @Override
     public Order addOrder(Order order){
-        if(order.getOrderId() != null)
+        if(order.getOrderId() != null || order.getOwnerId() == null)
             return null;
-        orderMapper.insertOrder(order);
-        return order;
+        if(order.getUserId() != null && userService.isOwner(order.getOwnerId()) && order.getRoomId() != null &&
+                order.getLastDays() != null && order.getCreateDate() != null && order.getLiveDate() != null &&
+                order.getMoney() != 0) {
+            orderMapper.insertOrder(order);
+            return order;
+        }
+        return null;
     }
 
     @Override
     public Comment addComment(Comment comment){
         if(comment.getCommentId() != null)
             return null;
-        commentMapper.insertComment(comment);
-        return comment;
+        if(comment.getUserId() != null && comment.getRoomId() != null && comment.getRateStars() >= 0 &&
+                comment.getRateStars() <= 5 && comment.getContent() != null) {
+            commentMapper.insertComment(comment);
+            return comment;
+        }
+        return null;
     }
 
     @Override

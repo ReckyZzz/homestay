@@ -18,6 +18,9 @@
     <select id="list" resultType="com.homestay.pojo.User">
         SELECT * FROM tb_user WHERE del_flag = 0
     </select>
+    <select id="getAllUsers" resultType="com.homestay.pojo.User">
+        SELECT * FROM tb_user
+    </select>
 
     <!--插入时有默认值时使用默认值-->
     <sql id="userColumns">

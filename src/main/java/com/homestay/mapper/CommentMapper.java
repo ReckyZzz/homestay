@@ -11,6 +11,7 @@ public interface CommentMapper {
     List<Comment> getCommentByUser(int userId);
     List<Comment> getCommentByRoom(int roomId);
     List<Comment> list();
+    List<Comment> getAllComments();
     int deleteCommentById(int id);
     int resetCommentById(int id);
     int insertComment(Comment comment);

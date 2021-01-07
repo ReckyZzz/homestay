@@ -18,6 +18,9 @@
     <select id="getOrderByRoom" resultType="com.homestay.pojo.Order">
         SELECT * FROM tb_order WHERE room_id=#{roomId} AND del_flag=0
     </select>
+    <select id="getAllOrders" resultType="com.homestay.pojo.Order">
+        SELECT * FROM tb_order
+    </select>
 
     <!--插入时有默认值时使用默认值-->
     <sql id="orderColumns">
@@ -28,6 +31,7 @@
             <if test="roomId != null">room_id,</if>
             <if test="lastDays != null">last_days,</if>
             <if test="createDate != null">create_date,</if>
+            <if test="reserveDate != null">reserve_date,</if>
             <if test="liveDate != null">live_date,</if>
             <if test="money != null">money</if>
         </trim>
@@ -40,6 +44,7 @@
             <if test="roomId != null">#{roomId},</if>
             <if test="lastDays != null">#{lastDays},</if>
             <if test="createDate != null">#{createDate},</if>
+            <if test="reserveDate != null">#{reserveDate},</if>
             <if test="liveDate != null">#{liveDate},</if>
             <if test="money != null">#{money}</if>
         </trim>
