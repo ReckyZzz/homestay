@@ -14,20 +14,44 @@
 </head>
 <body>
 <div id="userIndex" style="width: 100%;height: 100%">
-<!--    <div class="nav">-->
-<!--        <div class="nav_top" style="width: 100%;background-color: rgb(3,187,122)">-->
-<!--            <span style="margin-left: 1%;font-weight: bold;font-size: 3em">在线民宿平台</span>-->
-<!--            <button class="btn btn-link" style="padding: 0;vertical-align: 0px;float: right;padding-top: 5px;font-size: 1.2em" v-if="ifLogin==false" @click="toLogin">登录</button>-->
-<!--            <button class="btn btn-link" style="padding: 0;vertical-align: 0px;float: right;padding-top: 5px;font-size: 1.2em;margin-right: 5px" v-if="ifLogin==true">登出</button>-->
-<!--            <button class="btn btn-link" style="padding: 0;vertical-align: 0px;float: right;padding-top: 5px;font-size: 1.2em;margin-right: 5px" v-if="ifLogin==true">我的</button>-->
-<!--        </div>-->
-<!--        <div class="input-group" style="text-align: center;vertical-align:middle;background-color: rgb(3,187,122);padding-bottom: 1%">-->
-<!--            <input type="text" placeholder="输入住宿地" style="margin-left: 40%;width: 150px" id="searchName">-->
-<!--            <div class="input-group-append">-->
-<!--                <button class="btn btn-secondary" @click="search()">搜索</button>-->
+<!--    <header>-->
+<!--        <nav class="navbar navbar-default navbar-inverse">-->
+<!--            <div class="container-fluid">-->
+<!--                &lt;!&ndash; Brand and toggle get grouped for better mobile display &ndash;&gt;-->
+<!--                <div class="navbar-header">-->
+<!--                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">-->
+<!--                        <span class="sr-only">Toggle navigation</span>-->
+<!--                        <span class="icon-bar"></span>-->
+<!--                        <span class="icon-bar"></span>-->
+<!--                        <span class="icon-bar"></span>-->
+<!--                    </button>-->
+<!--                    <a class="navbar-brand" href="#">在线民宿平台</a>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Collect the nav links, forms, and other content for toggling &ndash;&gt;-->
+<!--                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">-->
+<!--                    <ul class="nav navbar-nav">-->
+<!--                        <li><a href="#" v-if="ifLogin==true">我的 <span class="sr-only"></span></a></li>-->
+<!--                        <li><a href="#" v-if="ifLogin==false" @click="toLogin">登录</a></li>-->
+<!--                        <li><a href="#" v-if="ifLogin==true" @click="logout">登出</a></li>-->
+<!--                    </ul>-->
+<!--                    &lt;!&ndash;        <form class="navbar-form navbar-left">-->
+<!--                                 <div class="form-group">-->
+<!--                                     <input type="text" class="form-control" placeholder="Search">-->
+<!--                                 </div>-->
+<!--                                 <button type="submit" class="btn btn-default">Submit</button>-->
+<!--                             </form> &ndash;&gt;-->
+<!--                    <div class="input-group navbar-form navbar-right" style="width: 150px;">-->
+<!--                        <input type="text" class="form-control" placeholder="输入住宿地" id="searchName">-->
+<!--                        <span class="input-group-btn">-->
+<!--				          <input type="submit" class="btn btn-default" value="搜索" @click="search()"/>-->
+<!--				      </span>-->
+<!--                    </div>-->
+
+<!--                </div>-->
 <!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
+<!--        </nav>-->
+<!--    </header>-->
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
             <a class="navbar-brand" href="#" @click="backIndex()">在线民宿平台</a>
@@ -73,7 +97,7 @@
                             <p class="card-text">{{roomInfo.roomName}}</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary" @click="roomNow=i">查看</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" @click="roomNow=roomInfo.roomId;setRoomNow()">查看</button>
                                 </div>
                                 <small class="text-muted">{{roomInfo.roomPrice}}元/月</small>
                             </div>
@@ -119,6 +143,10 @@
             alertMsg:{head:"",body:""},
         },
         methods:{
+            setRoomNow:function(){
+                localStorage.setItem("roomNow",this.roomNow);
+                location.href="roomDetail.html";
+            },
             search:function(){
                 let name = $('#searchName').val();
                 if(name==null){
