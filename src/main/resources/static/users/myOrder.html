@@ -68,9 +68,8 @@
                 <td>{{orderInfo.liveDate}}</td>
                 <td>{{orderInfo.money}}</td>
                 <td>
-<!--                    <a v-if="myOrder.cid==null && !myOrder.ischeck && myOrder.ishandle" v-on:click="showDetail(order)" class="btn btn-warning">待评价</a>-->
-<!--                    <span v-if="myOrder.cid!=null" class="label label-success">已评价</span>-->
-<!--                    <span v-if="myOrder.cid!=null && myOrder.ischeck" class="label label-warning">入住中</span>-->
+                    <a v-if="orderInfo.comment==1" v-on:click="" class="btn btn-warning">待评价</a>
+                    <span v-if="orderInfo.comment==0" class="label label-success">不可评价</span>
                 </td>
             </tr>
         </table>
@@ -98,12 +97,13 @@
         el:"#myOrder",
         data:{
             orderInfoList:[],
+            all:1,
+            cur: 1,//当前页码
             isSearch:false,
             ifLogin:false,
             roomNow:-1,
+            userID:-1,
             order:{
-                all:1,
-                cur: 1,//当前页码
                 checkindate:"",
                 checkoutdate:"",
                 realpay:0,
@@ -161,10 +161,10 @@
                     dataType: "json",
                     success: function (result) {
                         if (result.code === 1) {
-                            detailIndex.ifLogin = false;
+                            myOrder.ifLogin = false;
                             location.href="login.html";
                         }else if(result.code === 0){
-                            detailIndex.ifLogin = true;
+                            myOrder.ifLogin = true;
                         }
                     },
                     error: function (request, status, error) {
@@ -195,8 +195,38 @@
                 });
             },
         },
+        computed: {
+            indexs: function(){
+                var left = 1;
+                var right = this.all;
+                var ar = [];
+                if(this.all>= 5){
+                    //这里最大范围从3到6，如果到达7，那么下边加2变成9，已经超过最大的范围值
+                    if(this.cur > 3 && this.cur < this.all-1){
+                        //以4为参考基准，左面加2右边加2
+                        left = this.cur - 2
+                        right = this.cur + 2
+                    }else{
+                        if(this.cur<=3){
+                            left = 1
+                            right = 5
+                        }else{
+                            right = this.all
+                            left = this.all -4
+                        }
+                    }
+                }
+                while (left <= right){
+                    ar.push(left)
+                    left ++
+                }
+                console.log(ar);
+                return ar
+            },
+        },
         mounted:function () {
             this.isLogin();
+            this.userID = localStorage.getItem("userID");
             this.getMyOrder(1,10);
         }
     });

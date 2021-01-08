@@ -78,7 +78,7 @@
                         <span class="glyphicon glyphicon-shopping-cart"></span><span>￥ {{roomNowInfo.price*total}} 元</span>
                     </div>
                     <div class="btn-sub">
-                        <input type="button" class="btn btn-success" v-on:click="toMyOrder()" value="立即预定">
+                        <input type="button" class="btn btn-success" v-on:click="reserve()" value="立即预定">
                     </div>
                 </div>
             </div>
@@ -137,6 +137,33 @@
             }
         },
         methods:{
+            reserve:function(){
+                this.reserveRoom(detailIndex.roomNow,new Date(detailIndex.order.checkindate),detailIndex.total);
+            },
+            reserveRoom:function(roomId,reserveDate,days){
+                $.ajax({
+                    url: "../user/reserve",
+                    type: "POST",
+                    data: {
+                        roomId:roomId,
+                        reserveDate:reserveDate,
+                        days:days
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            alert("预定成功");
+                            detailIndex.toMyOrder();
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
             toMyOrder:function(){
                 if(this.ifLogin==false){
                     location.href="login.html";
