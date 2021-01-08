@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -228,6 +229,7 @@ public class UserServiceImpl implements UserService {
         List<Comment> comments = getCommentsByRoom(roomId);
         User owner = getUserById(room.getRoomOwner());
         RoomVO roomVO = new RoomVO();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         roomVO.setOwnerName(owner.getUserName());
         roomVO.setOwnerDescription(room.getDescription());
         roomVO.setRoomNum(getRoomNumByUser(owner.getUserId()));
@@ -235,13 +237,13 @@ public class UserServiceImpl implements UserService {
         List<String> userNames = new ArrayList<>();
         List<Integer> stars = new ArrayList<>();
         List<String> content = new ArrayList<>();
-        List<Date> dates = new ArrayList<>();
+        List<String> dates = new ArrayList<>();
         for(Comment c:comments){
             User user = getUserById(c.getUserId());
             userNames.add(user.getUserName());
             stars.add(c.getRateStars());
             content.add(c.getContent());
-            dates.add(c.getCreateDate());
+            dates.add(format.format(c.getCreateDate()));
         }
         roomVO.setUserNames(userNames);
         roomVO.setStars(stars);

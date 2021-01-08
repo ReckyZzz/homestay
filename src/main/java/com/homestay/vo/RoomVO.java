@@ -15,7 +15,7 @@ public class RoomVO {
     List<String> userNames;
     List<String> content;
     List<Integer> stars;
-    List<Date> dates;
+    List<String> dates;
 
     public String getOwnerName() {
         return ownerName;
@@ -73,11 +73,11 @@ public class RoomVO {
         this.content = content;
     }
 
-    public List<Date> getDates() {
+    public List<String> getDates() {
         return dates;
     }
 
-    public void setDates(List<Date> dates) {
+    public void setDates(List<String> dates) {
         this.dates = dates;
     }
 }

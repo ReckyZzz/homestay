@@ -69,7 +69,7 @@ public class ServiceTest {
         System.out.println();
 
         //查看房间信息
-        List<Comment> comments = userService.getCommentsByRoom(rooms.get(1));
+        List<Comment> comments = userService.getCommentsByRoom(1);
         System.out.println("查询成功");
         System.out.print("该房间的评论：");
         for(Comment c:comments){
