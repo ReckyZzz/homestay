@@ -6,7 +6,7 @@ import com.homestay.mapper.RoomMapper;
 import com.homestay.pojo.*;
 import com.homestay.response.CommonResponse;
 import com.homestay.service.AdminService;
-import com.homestay.service.RoomService;
+import com.homestay.service.OwnerService;
 import com.homestay.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,10 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -28,7 +25,7 @@ public class ServiceTest {
     @Resource
     AdminService adminService;
     @Resource
-    RoomService roomService;
+    OwnerService ownerService;
     @Resource
     RoomMapper roomMapper;
 

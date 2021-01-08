@@ -1,15 +1,25 @@
 package com.homestay;
 
+import cn.hutool.http.ContentType;
 import com.homestay.mapper.*;
+import com.homestay.pojo.Image;
 import com.homestay.pojo.Room;
 import com.homestay.pojo.RoomCollection;
 import com.homestay.pojo.User;
+import com.homestay.util.PictureUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -25,6 +35,8 @@ public class MapperTest {
     CommentMapper commentMapper;
     @Resource
     RoomCollectionMapper collectionMapper;
+    @Resource
+    ImageMapper imageMapper;
     @Test
     public void testUser(){
         User user = new User();
@@ -131,5 +143,12 @@ public class MapperTest {
         for(RoomCollection r:collections){
             System.out.println(r.getRoomId());
         }
+    }
+
+    @Test
+    public void testImage() throws Exception{
+        Image image = new Image();
+        image.setImageId(1);image.setImageId(1);
+        File file = new File("F:/1.jpg");
     }
 }

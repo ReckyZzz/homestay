@@ -6,6 +6,7 @@ import com.homestay.pojo.*;
 import com.homestay.response.CommonResponse;
 import com.homestay.service.UserService;
 import com.homestay.util.SessionUtil;
+import com.homestay.vo.RoomVO;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -26,9 +27,9 @@ public class UserController {
     @Resource
     UserService userService;
 
-    //用户是否登录
-    @RequestMapping("/isLogin")
-    public CommonResponse<Object> isLogin(HttpSession session){
+    @GetMapping("/isLogin")
+    @ApiOperation("用户是否登录")
+    public CommonResponse<Object> isLogin(@ApiIgnore HttpSession session){
         if(session.getAttribute(("user")) != null){
             return new CommonResponse<>(0,"已登录",null);
         }
@@ -53,15 +54,15 @@ public class UserController {
         return userService.login(user);
     }
 
-    //登出
-    @RequestMapping(value = "/logout",method = RequestMethod.POST)
-    public CommonResponse<String> logout(HttpSession session){
+    @PostMapping("/logout")
+    @ApiOperation("登出")
+    public CommonResponse<String> logout(@ApiIgnore HttpSession session){
         session.setAttribute("user",null);
         return new CommonResponse<>(0, "成功登出", null);
     }
 
-    //注册
-    @RequestMapping(value = "/register",method = RequestMethod.POST)
+    @PostMapping("/register")
+    @ApiOperation("注册")
     public CommonResponse<User> register(String username,String password){
         User user = new User();
         user.setUserName(username);
@@ -69,9 +70,9 @@ public class UserController {
         return userService.register(user);
     }
 
-    //重置密码
-    @RequestMapping(value = "/resetPassword",method = RequestMethod.POST)
-    public CommonResponse<User> resetPassword(String newPwd,String oldPwd,HttpSession session){
+    @PostMapping("/resetPassword")
+    @ApiOperation("重置密码")
+    public CommonResponse<User> resetPassword(String newPwd,String oldPwd,@ApiIgnore HttpSession session){
         User user = (User) session.getAttribute("user");
         if(userService.resetPassword(user,oldPwd,newPwd)){
             session.removeAttribute("user");
@@ -80,15 +81,21 @@ public class UserController {
         return new CommonResponse<>(1, "原密码错误", null);
     }
 
-    //查看房间信息
-    @RequestMapping(value = "/checkRoomInfo",method = RequestMethod.GET)
-    public CommonResponse<Object> checkRoomInfo(Room room){
+    @GetMapping("/checkRoomInfo")
+    @ApiOperation("查看房间信息")
+    public CommonResponse<Object> checkRoomInfo(Integer roomId){
+        Room room = userService.getRoomById(roomId);
         List<Comment> comments = userService.getCommentsByRoom(room);
-        return new CommonResponse<>(0,"查询成功",comments);
+        User owner = userService.getUserById(room.getRoomOwner());
+        RoomVO roomVO = new RoomVO();
+        roomVO.setRoom(room);
+        roomVO.setComments(comments);
+        roomVO.setRoomOwner(owner);
+        return new CommonResponse<>(0,"查询成功",roomVO);
     }
 
-    //查看房间列表
-    @RequestMapping(value = "/getRooms",method = RequestMethod.GET)
+    @GetMapping("/getRooms")
+    @ApiOperation("查看房间列表")
     public CommonResponse<PageInfo<Room>> getRooms(Integer pageNum,Integer pageSize){
         PageHelper.startPage(pageNum,pageSize);
         List<Room> rooms = userService.getRooms();
@@ -96,8 +103,8 @@ public class UserController {
         return new CommonResponse<>(0,"查询成功",pageInfo);
     }
 
-    //搜索房间
-    @RequestMapping(value = "/searchRooms",method = RequestMethod.GET)
+    @GetMapping("/searchRooms")
+    @ApiOperation("搜索房间")
     public CommonResponse<PageInfo<Room>> searchRooms(String name,Integer pageNum,Integer pageSize){
         PageHelper.startPage(pageNum,pageSize);
         List<Room> rooms = userService.searchRooms(name);
@@ -105,30 +112,32 @@ public class UserController {
         return new CommonResponse<>(0,"查询成功",pageInfo);
     }
 
-    //预订房间
-    @RequestMapping(value = "/reserve",method = RequestMethod.POST)
-    public CommonResponse<Order> reserve(HttpSession session, Integer roomId, Date reserveDate, Integer days){
+    @PostMapping("/reserve")
+    @ApiOperation("预定房间")
+    public CommonResponse<Order> reserve(@ApiIgnore HttpSession session, Integer roomId, Date reserveDate, Integer days){
         User user =(User) session.getAttribute("user");
         return userService.reserve(user.getUserId(),roomId,days,reserveDate);
     }
 
-    //收藏房间
-    @RequestMapping(value = "/collectRoom",method = RequestMethod.GET)
-    public CommonResponse<Object> collectRoom(HttpSession session,Room room){
+    @GetMapping("/collectRoom")
+    @ApiOperation("收藏房间")
+    public CommonResponse<Object> collectRoom(@ApiIgnore HttpSession session,Room room){
         User user = (User) session.getAttribute("user");
         return userService.collectRoom(user,room);
     }
 
-    //取消收藏房间
+    @GetMapping("cancelCollect")
+    @ApiOperation("取消收藏房间")
     @RequestMapping(value = "/cancelCollect",method = RequestMethod.GET)
-    public CommonResponse<Object> cancelCollect(HttpSession session,Room room){
+    public CommonResponse<Object> cancelCollect(@ApiIgnore HttpSession session,Room room){
         User user = (User) session.getAttribute("user");
         return userService.cancelCollectRoom(user,room);
     }
 
     //查看收藏房间列表
-    @RequestMapping(value = "/getCollections",method = RequestMethod.GET)
-    public CommonResponse<PageInfo<Room>> getCollections(HttpSession session,Integer pageNum,Integer pageSize){
+    @GetMapping("/getCollection")
+    @ApiOperation("查看收藏房间列表")
+    public CommonResponse<PageInfo<Room>> getCollections(@ApiIgnore HttpSession session,Integer pageNum,Integer pageSize){
         User user =(User) session.getAttribute("user");
         List<RoomCollection> collections = userService.getCollections(user);
         PageHelper.startPage(pageNum,pageSize);
@@ -141,14 +150,15 @@ public class UserController {
     }
 
     //查看订单列表
-    @RequestMapping(value = "/getOrders",method = RequestMethod.GET)
-    public CommonResponse<PageInfo<Order>> getOrders(HttpSession session,Integer pageNum,Integer pageSize){
+    @GetMapping("/getOrders")
+    @ApiOperation("查看订单列表")
+    public CommonResponse<PageInfo<Order>> getOrders(@ApiIgnore HttpSession session,Integer pageNum,Integer pageSize){
         User user =(User) session.getAttribute("user");
         return userService.getOrders(user.getUserId(),pageNum,pageSize);
     }
 
-    //从订单评论房间
-    @RequestMapping(value = "/commentRoom",method = RequestMethod.GET)
+    @GetMapping("/commentRoom")
+    @ApiOperation("从订单评论房间")
     public CommonResponse<Comment> commentRoom(Order order,Integer stars,String content){
         return userService.commentRoom(order,stars,content);
     }

@@ -7,10 +7,9 @@ import com.homestay.response.CommonResponse;
 import java.util.Date;
 import java.util.List;
 
-public interface UserService {
-    boolean isOwner(int ownerId);
+public interface OwnerService {
+    int addImage(Image image);
     boolean resetPassword(User user,String oldPassword,String newPassword);
-    User getUserById(Integer id);
     Room getRoomById(Integer id);
     List<RoomCollection> getCollections(User user);
     List<Comment> getCommentsByRoom(Room room);
@@ -21,6 +20,6 @@ public interface UserService {
     CommonResponse<Order> reserve(Integer userId, Integer roomId, Integer days, Date reserveDate);
     CommonResponse<Object> collectRoom(User user,Room room);
     CommonResponse<Object> cancelCollectRoom(User user,Room room);
-    CommonResponse<Comment> commentRoom(Order order,Integer stars,String content);
-    CommonResponse<PageInfo<Order>> getOrders(Integer userId,Integer pageNum,Integer pageSize);
+    CommonResponse<Comment> commentRoom(Order order, Integer stars, String content);
+    CommonResponse<PageInfo<Order>> getOrders(Integer userId, Integer pageNum, Integer pageSize);
 }

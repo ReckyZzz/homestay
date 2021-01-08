@@ -12,8 +12,7 @@ import com.homestay.pojo.Room;
 import com.homestay.pojo.User;
 import com.homestay.response.CommonResponse;
 import com.homestay.service.AdminService;
-import com.homestay.service.OrderService;
-import com.homestay.service.RoomService;
+import com.homestay.service.OwnerService;
 import com.homestay.service.UserService;
 import com.homestay.util.EncryptUtil;
 import com.homestay.util.SessionUtil;
@@ -31,11 +30,9 @@ public class AdminServiceImpl implements AdminService {
     @Resource
     RoomMapper roomMapper;
     @Resource
-    RoomService roomService;
+    OwnerService ownerService;
     @Resource
     OrderMapper orderMapper;
-    @Resource
-    OrderService orderService;
     @Resource
     CommentMapper commentMapper;
 

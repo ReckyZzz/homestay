@@ -5,10 +5,10 @@ import com.github.pagehelper.PageInfo;
 import com.homestay.mapper.*;
 import com.homestay.pojo.*;
 import com.homestay.response.CommonResponse;
+import com.homestay.service.OwnerService;
 import com.homestay.service.UserService;
 import com.homestay.util.EncryptUtil;
 import com.homestay.util.SessionUtil;
-import io.swagger.models.auth.In;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class OwnerServiceImpl implements OwnerService {
     @Resource
     private UserMapper userMapper;
     @Resource
@@ -29,6 +29,8 @@ public class UserServiceImpl implements UserService {
     private CommentMapper commentMapper;
     @Resource
     private RoomCollectionMapper roomCollectionMapper;
+    @Resource
+    private ImageMapper imageMapper;
 
     @Override
     public CommonResponse<User> login(User user) {
@@ -84,12 +86,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isOwner(int ownerId){
-        User owner = userMapper.getUserById(ownerId);
-        return owner.getUserType() == 1;
-    }
-
-    @Override
     public  List<Room> getRooms(){
         return roomMapper.list();
     }
@@ -137,7 +133,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponse<PageInfo<Order>> getOrders(Integer userId,Integer pageNum,Integer pageSize){
+    public CommonResponse<PageInfo<Order>> getOrders(Integer userId, Integer pageNum, Integer pageSize){
         PageHelper.startPage(pageNum,pageSize);
         List<Order> orders = orderMapper.getOrderByUser(userId);
         PageInfo<Order> pageInfo = new PageInfo<>(orders);
@@ -192,10 +188,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(Integer id){
-        return userMapper.getUserById(id);
-    }
-    @Override
     public CommonResponse<Comment> commentRoom(Order order,Integer stars,String content){
         Comment comment = new Comment();
         comment.setUserId(order.getUserId());comment.setRoomId(order.getRoomId());
@@ -209,5 +201,10 @@ public class UserServiceImpl implements UserService {
             return new CommonResponse<>(0,"评论成功",comment);
         }
         return new CommonResponse<>(1,"评论失败，订单尚未完成！",null);
+    }
+
+    @Override
+    public int addImage(Image image){
+        return imageMapper.insertImage(image);
     }
 }

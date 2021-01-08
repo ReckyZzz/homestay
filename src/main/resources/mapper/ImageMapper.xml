@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.homestay.mapper.ImageMapper">
+    <select id="getImagesByRoom" resultType="com.homestay.pojo.Image">
+        SELECT * FROM tb_image WHERE room_id=#{roomId}
+    </select>
+    <update id="updateImage">
+        UPDATE tb_image SET room_id=#{roomId},image_data=#{imageData} WHERE image_id=#{imageId}
+    </update>
+    <insert id="insertImage">
+        INSERT INTO tb_image (room_id,image_data) VALUES(#{roomId},#{imageData})
+    </insert>
+</mapper>
