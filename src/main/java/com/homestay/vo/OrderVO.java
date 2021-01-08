@@ -9,6 +9,7 @@ public class OrderVO {
     String reserveDate;//预定时间
     String liveDate;//入住时间
     Double money;//金额
+    Integer comment;//能否评论
 
     public Integer getOrderId() {
         return orderId;
@@ -72,5 +73,13 @@ public class OrderVO {
 
     public void setMoney(Double money) {
         this.money = money;
+    }
+
+    public Integer getComment() {
+        return comment;
+    }
+
+    public void setComment(Integer comment) {
+        this.comment = comment;
     }
 }

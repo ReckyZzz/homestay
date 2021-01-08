@@ -142,19 +142,38 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CommonResponse<PageInfo<OrderVO>> getOrders(Integer userId, Integer pageNum, Integer pageSize){
+        List<Boolean> commentables = new ArrayList<>();
         PageHelper.startPage(pageNum,pageSize);
         List<Order> orders = orderMapper.getOrderByUser(userId);
         List<OrderVO> orderVOS = new ArrayList<>();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        //订单是否可评价
         for(Order o:orders){
+            Date beginDate = o.getReserveDate();
+            Calendar ca = Calendar.getInstance();ca.setTime(beginDate);ca.add(Calendar.DATE,o.getLastDays());
+            Date endDate = ca.getTime();
+            if(new Date().after(endDate)){
+                commentables.add(true);//待评论
+            }
+            else{
+                commentables.add(false);//不可评论
+            }
+        }
+        for(int i=0;i < orders.size();i++){
             OrderVO vo = new OrderVO();
+            Order o = orders.get(i);
             vo.setOrderId(o.getOrderId());
             vo.setUserName(userMapper.getUserById(o.getUserId()).getUserName());
             vo.setOwnerName(userMapper.getUserById(o.getUserId()).getUserName());
             vo.setRoomName(roomMapper.getRoomByRoomId(o.getRoomId()).getRoomName());
             vo.setCreateDate(format.format(o.getCreateDate()));
             vo.setReserveDate(format.format(o.getReserveDate()));
-            vo.setLiveDate(format.format(o.getLiveDate()));
+            if(commentables.get(i)){
+                vo.setComment(1);//待评论
+            }
+            else{
+                vo.setComment(0);//不可评论
+            }
             vo.setMoney(o.getMoney());
             orderVOS.add(vo);
         }
