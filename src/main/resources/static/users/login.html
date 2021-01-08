@@ -65,7 +65,7 @@
                             login.alertMsg.body = "登录成功";
                             localStorage.setItem("userName",result.data.name);
                             location.href = "index.html";
-                        } else if (result.code === 1){
+                        } else{
                             alert("用户名或密码错误");
                         }
                     },
