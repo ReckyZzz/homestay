@@ -6,9 +6,16 @@ import com.homestay.pojo.*;
 import com.homestay.response.CommonResponse;
 import com.homestay.service.UserService;
 import com.homestay.util.SessionUtil;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import springfox.documentation.annotations.ApiIgnore;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -33,8 +40,15 @@ public class UserController {
     }
 
     //登录
-    @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public CommonResponse<User> login(String username,String password,HttpSession session){
+    @PostMapping("/login")
+    @ApiOperation("管理员登录")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "password",value = "管理员账号",required = true),
+            @ApiImplicitParam(name = "password",value = "管理员密码",required = true),
+    })
+    public CommonResponse<User> login(@RequestParam String username,
+                                      @RequestParam String password,
+                                      @ApiIgnore HttpSession session){
         User user = new User();
         user.setUserName(username);
         user.setUserPwd(password);
