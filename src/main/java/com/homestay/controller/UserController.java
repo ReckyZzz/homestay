@@ -84,27 +84,7 @@ public class UserController {
     @GetMapping("/checkRoomInfo")
     @ApiOperation("查看房间信息")
     public CommonResponse<Object> checkRoomInfo(Integer roomId){
-        Room room = userService.getRoomById(roomId);
-        List<Comment> comments = userService.getCommentsByRoom(room);
-        User owner = userService.getUserById(room.getRoomOwner());
-        RoomVO roomVO = new RoomVO();
-        roomVO.setOwnerName(owner.getUserName());
-        roomVO.setOwnerDescription(room.getDescription());
-        roomVO.setRoomNum(userService.getRoomNumByUser(owner.getUserId()));
-        roomVO.setPrice(room.getRoomPrice());
-        List<String> userNames = new ArrayList<>();
-        List<Integer> stars = new ArrayList<>();
-        List<String> content = new ArrayList<>();
-        for(Comment c:comments){
-            User user = userService.getUserById(c.getUserId());
-            userNames.add(user.getUserName());
-            stars.add(c.getRateStars());
-            content.add(c.getContent());
-        }
-        roomVO.setUserNames(userNames);
-        roomVO.setStars(stars);
-        roomVO.setContent(content);
-        return new CommonResponse<>(0,"查询成功",roomVO);
+        return userService.checkRoomInfo(roomId);
     }
 
     @GetMapping("/getRooms")
@@ -134,9 +114,9 @@ public class UserController {
 
     @GetMapping("/collectRoom")
     @ApiOperation("收藏房间")
-    public CommonResponse<Object> collectRoom(@ApiIgnore HttpSession session,Room room){
+    public CommonResponse<Object> collectRoom(@ApiIgnore HttpSession session,Integer roomId){
         User user = (User) session.getAttribute("user");
-        return userService.collectRoom(user,room);
+        return userService.collectRoom(user,roomId);
     }
 
     @GetMapping("cancelCollect")
@@ -152,7 +132,7 @@ public class UserController {
     @ApiOperation("查看收藏房间列表")
     public CommonResponse<PageInfo<Room>> getCollections(@ApiIgnore HttpSession session,Integer pageNum,Integer pageSize){
         User user =(User) session.getAttribute("user");
-        List<RoomCollection> collections = userService.getCollections(user);
+        List<RoomCollection> collections = userService.getCollections(user.getUserId());
         PageHelper.startPage(pageNum,pageSize);
         List<Room> rooms = new ArrayList<>();
         for(RoomCollection c:collections){
@@ -172,7 +152,7 @@ public class UserController {
 
     @GetMapping("/commentRoom")
     @ApiOperation("从订单评论房间")
-    public CommonResponse<Comment> commentRoom(Order order,Integer stars,String content){
-        return userService.commentRoom(order,stars,content);
+    public CommonResponse<Comment> commentRoom(Integer orderId,Integer stars,String content){
+        return userService.commentRoom(orderId,stars,content);
     }
 }

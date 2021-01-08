@@ -8,11 +8,13 @@ import com.homestay.response.CommonResponse;
 import com.homestay.service.UserService;
 import com.homestay.util.EncryptUtil;
 import com.homestay.util.SessionUtil;
+import com.homestay.vo.RoomVO;
 import io.swagger.models.auth.In;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -100,8 +102,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Comment> getCommentsByRoom(Room room){
-        return commentMapper.getCommentByRoom(room.getRoomId());
+    public List<Comment> getCommentsByRoom(Integer roomId){
+        return commentMapper.getCommentByRoom(roomId);
     }
 
     @Override
@@ -145,9 +147,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponse<Object> collectRoom(User user,Room room){
+    public CommonResponse<Object> collectRoom(User user,Integer roomId){
         boolean flag = false;
         List<RoomCollection> collections = roomCollectionMapper.getAllCollectionByUser(user.getUserId());
+        Room room = roomMapper.getRoomByRoomId(roomId);
         //要收藏的房间已在数据库中
         for(RoomCollection c:collections){
             if(c.getRoomId() == room.getRoomId()) {
@@ -182,8 +185,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<RoomCollection> getCollections(User user){
-        return roomCollectionMapper.getCollectionByUser(user.getUserId());
+    public List<RoomCollection> getCollections(Integer userId){
+        return roomCollectionMapper.getCollectionByUser(userId);
     }
 
     @Override
@@ -203,8 +206,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponse<Comment> commentRoom(Order order,Integer stars,String content){
+    public CommonResponse<Comment> commentRoom(Integer orderId,Integer stars,String content){
         Comment comment = new Comment();
+        Order order = orderMapper.getOrderByOrderId(orderId);
         comment.setUserId(order.getUserId());comment.setRoomId(order.getRoomId());
         comment.setRateStars(stars);comment.setContent(content);
         Date beginDate = order.getReserveDate();
@@ -216,5 +220,33 @@ public class UserServiceImpl implements UserService {
             return new CommonResponse<>(0,"评论成功",comment);
         }
         return new CommonResponse<>(1,"评论失败，订单尚未完成！",null);
+    }
+
+    @Override
+    public CommonResponse<Object> checkRoomInfo(Integer roomId){
+        Room room = getRoomById(roomId);
+        List<Comment> comments = getCommentsByRoom(roomId);
+        User owner = getUserById(room.getRoomOwner());
+        RoomVO roomVO = new RoomVO();
+        roomVO.setOwnerName(owner.getUserName());
+        roomVO.setOwnerDescription(room.getDescription());
+        roomVO.setRoomNum(getRoomNumByUser(owner.getUserId()));
+        roomVO.setPrice(room.getRoomPrice());
+        List<String> userNames = new ArrayList<>();
+        List<Integer> stars = new ArrayList<>();
+        List<String> content = new ArrayList<>();
+        List<Date> dates = new ArrayList<>();
+        for(Comment c:comments){
+            User user = getUserById(c.getUserId());
+            userNames.add(user.getUserName());
+            stars.add(c.getRateStars());
+            content.add(c.getContent());
+            dates.add(c.getCreateDate());
+        }
+        roomVO.setUserNames(userNames);
+        roomVO.setStars(stars);
+        roomVO.setContent(content);
+        roomVO.setDates(dates);
+        return new CommonResponse<>(0,"查询成功",roomVO);
     }
 }

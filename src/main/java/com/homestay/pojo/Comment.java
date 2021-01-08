@@ -1,11 +1,14 @@
 package com.homestay.pojo;
 
+import java.util.Date;
+
 public class Comment {
     private Integer commentId;
     private Integer userId;
     private Integer roomId;
     private Integer rateStars;
     private String content;
+    private Date createDate;
     private Integer delFlag;
 
     public Integer getCommentId() {
@@ -46,6 +49,14 @@ public class Comment {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
     public Integer getDelFlag() {

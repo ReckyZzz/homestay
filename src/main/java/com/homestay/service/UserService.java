@@ -13,15 +13,16 @@ public interface UserService {
     Integer getRoomNumByUser(Integer id);
     User getUserById(Integer id);
     Room getRoomById(Integer id);
-    List<RoomCollection> getCollections(User user);
-    List<Comment> getCommentsByRoom(Room room);
+    List<RoomCollection> getCollections(Integer userId);
+    List<Comment> getCommentsByRoom(Integer roomId);
     List<Room> getRooms();
     List<Room> searchRooms(String name);
     CommonResponse<User> login(User user);
     CommonResponse<User> register(User user);
     CommonResponse<Order> reserve(Integer userId, Integer roomId, Integer days, Date reserveDate);
-    CommonResponse<Object> collectRoom(User user,Room room);
+    CommonResponse<Object> checkRoomInfo(Integer roomId);
+    CommonResponse<Object> collectRoom(User user,Integer roomId);
     CommonResponse<Object> cancelCollectRoom(User user,Room room);
-    CommonResponse<Comment> commentRoom(Order order,Integer stars,String content);
+    CommonResponse<Comment> commentRoom(Integer orderId,Integer stars,String content);
     CommonResponse<PageInfo<Order>> getOrders(Integer userId,Integer pageNum,Integer pageSize);
 }
