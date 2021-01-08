@@ -78,7 +78,7 @@
                         <span class="glyphicon glyphicon-shopping-cart"></span><span>￥ {{roomNowInfo.price*total}} 元</span>
                     </div>
                     <div class="btn-sub">
-                        <input type="button" class="btn btn-success" v-on:click="" value="立即预定">
+                        <input type="button" class="btn btn-success" v-on:click="toMyOrder()" value="立即预定">
                     </div>
                 </div>
             </div>
@@ -137,6 +137,14 @@
             }
         },
         methods:{
+            toMyOrder:function(){
+                if(this.ifLogin==false){
+                    location.href="login.html";
+                }
+                else{
+                    location.href="myOrder.html";
+                }
+            },
             formatDate:function(date){
                 //var date = new Date(date);
                 var year = date.getFullYear();

@@ -58,35 +58,6 @@ p{
 .text-size-25{
     font-size: 25px;
 }
-.order-title{
-    text-align: center;
-    margin-left: 25%;
-    width: 50%;
-}
-.order-tool{
-    float: left;
-
-    background-color: #ecf0f1;
-    padding: 5px;
-    margin-left: 25%;
-    width: 50%;
-    border-left: 3px #888888 dotted;
-    border-right: 3px #888888 dotted;
-    margin-bottom: 1px;
-}
-.choose-pay{
-    font-weight: 900;
-}
-#submit{
-    margin-left: 80%;
-}
-#price{
-    padding-left: 50px;
-    color:red;
-    font-size: 25px;
-    font-weight: 900;
-}
-.data-color{
-    color: green;
-    font-weight: 800;
+#myOrder{
+    min-height: 500px;
 }
