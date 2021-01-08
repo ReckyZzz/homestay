@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -40,7 +41,6 @@ public class AdminController {
         }
     }
 
-    //登录
     @PostMapping("/login")
     @ApiOperation("管理员登录")
     @ApiImplicitParams({
@@ -49,7 +49,7 @@ public class AdminController {
     })
     public CommonResponse<User> login(@RequestParam String username,
                                       @RequestParam String password,
-                                      @RequestParam HttpSession session){
+                                      @ApiIgnore HttpSession session){
         User user = new User();
         user.setUserName(username);
         user.setUserPwd(password);
