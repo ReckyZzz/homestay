@@ -195,6 +195,13 @@ public class UserServiceImpl implements UserService {
     public User getUserById(Integer id){
         return userMapper.getUserById(id);
     }
+
+    @Override
+    public Integer getRoomNumByUser(Integer id){
+        List<Room> rooms = roomMapper.getRoomByOwner(id);
+        return rooms.size();
+    }
+
     @Override
     public CommonResponse<Comment> commentRoom(Order order,Integer stars,String content){
         Comment comment = new Comment();

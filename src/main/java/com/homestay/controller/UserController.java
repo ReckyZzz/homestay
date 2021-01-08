@@ -88,9 +88,22 @@ public class UserController {
         List<Comment> comments = userService.getCommentsByRoom(room);
         User owner = userService.getUserById(room.getRoomOwner());
         RoomVO roomVO = new RoomVO();
-        roomVO.setRoom(room);
-        roomVO.setComments(comments);
-        roomVO.setRoomOwner(owner);
+        roomVO.setOwnerName(owner.getUserName());
+        roomVO.setOwnerDescription(room.getDescription());
+        roomVO.setRoomNum(userService.getRoomNumByUser(owner.getUserId()));
+        roomVO.setPrice(room.getRoomPrice());
+        List<String> userNames = new ArrayList<>();
+        List<Integer> stars = new ArrayList<>();
+        List<String> content = new ArrayList<>();
+        for(Comment c:comments){
+            User user = userService.getUserById(c.getUserId());
+            userNames.add(user.getUserName());
+            stars.add(c.getRateStars());
+            content.add(c.getContent());
+        }
+        roomVO.setUserNames(userNames);
+        roomVO.setStars(stars);
+        roomVO.setContent(content);
         return new CommonResponse<>(0,"查询成功",roomVO);
     }
 

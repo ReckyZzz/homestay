@@ -10,6 +10,7 @@ import java.util.List;
 public interface UserService {
     boolean isOwner(int ownerId);
     boolean resetPassword(User user,String oldPassword,String newPassword);
+    Integer getRoomNumByUser(Integer id);
     User getUserById(Integer id);
     Room getRoomById(Integer id);
     List<RoomCollection> getCollections(User user);
