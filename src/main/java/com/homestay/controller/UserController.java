@@ -6,6 +6,7 @@ import com.homestay.pojo.*;
 import com.homestay.response.CommonResponse;
 import com.homestay.service.UserService;
 import com.homestay.util.SessionUtil;
+import com.homestay.vo.OrderVO;
 import com.homestay.vo.RoomVO;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -142,10 +143,9 @@ public class UserController {
         return new CommonResponse<>(0,"查询成功",pageInfo);
     }
 
-    //查看订单列表
     @GetMapping("/getOrders")
     @ApiOperation("查看订单列表")
-    public CommonResponse<PageInfo<Order>> getOrders(@ApiIgnore HttpSession session,Integer pageNum,Integer pageSize){
+    public CommonResponse<PageInfo<OrderVO>> getOrders(@ApiIgnore HttpSession session, Integer pageNum, Integer pageSize){
         User user =(User) session.getAttribute("user");
         return userService.getOrders(user.getUserId(),pageNum,pageSize);
     }

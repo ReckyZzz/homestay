@@ -8,6 +8,7 @@ import com.homestay.response.CommonResponse;
 import com.homestay.service.UserService;
 import com.homestay.util.EncryptUtil;
 import com.homestay.util.SessionUtil;
+import com.homestay.vo.OrderVO;
 import com.homestay.vo.RoomVO;
 import io.swagger.models.auth.In;
 import org.springframework.stereotype.Service;
@@ -140,10 +141,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponse<PageInfo<Order>> getOrders(Integer userId,Integer pageNum,Integer pageSize){
+    public CommonResponse<PageInfo<OrderVO>> getOrders(Integer userId, Integer pageNum, Integer pageSize){
         PageHelper.startPage(pageNum,pageSize);
         List<Order> orders = orderMapper.getOrderByUser(userId);
-        PageInfo<Order> pageInfo = new PageInfo<>(orders);
+        List<OrderVO> orderVOS = new ArrayList<>();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        for(Order o:orders){
+            OrderVO vo = new OrderVO();
+            vo.setOrderId(o.getOrderId());
+            vo.setUserName(userMapper.getUserById(o.getUserId()).getUserName());
+            vo.setOwnerName(userMapper.getUserById(o.getUserId()).getUserName());
+            vo.setRoomName(roomMapper.getRoomByRoomId(o.getRoomId()).getRoomName());
+            vo.setCreateDate(format.format(o.getCreateDate()));
+            vo.setReserveDate(format.format(o.getReserveDate()));
+            vo.setLiveDate(format.format(o.getLiveDate()));
+            vo.setMoney(o.getMoney());
+            orderVOS.add(vo);
+        }
+        PageInfo<OrderVO> pageInfo = new PageInfo<>(orderVOS);
         return new CommonResponse<>(0,"查询成功",pageInfo);
     }
 

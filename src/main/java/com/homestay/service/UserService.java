@@ -3,6 +3,7 @@ package com.homestay.service;
 import com.github.pagehelper.PageInfo;
 import com.homestay.pojo.*;
 import com.homestay.response.CommonResponse;
+import com.homestay.vo.OrderVO;
 
 import java.util.Date;
 import java.util.List;
@@ -24,5 +25,5 @@ public interface UserService {
     CommonResponse<Object> collectRoom(User user,Integer roomId);
     CommonResponse<Object> cancelCollectRoom(User user,Room room);
     CommonResponse<Comment> commentRoom(Integer orderId,Integer stars,String content);
-    CommonResponse<PageInfo<Order>> getOrders(Integer userId,Integer pageNum,Integer pageSize);
+    CommonResponse<PageInfo<OrderVO>> getOrders(Integer userId, Integer pageNum, Integer pageSize);
 }
