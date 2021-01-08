@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
         if(userInfo != null){
             if(EncryptUtil.check(user.getUserPwd(),userInfo.getUserPwd())) {
                 if (session != null) {
-                    session.setAttribute("user", user);
+                    session.setAttribute("user", userInfo);
                 }
                 return new CommonResponse<>(0, "登录成功", userInfo);
             }
