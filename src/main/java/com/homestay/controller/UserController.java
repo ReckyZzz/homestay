@@ -41,10 +41,10 @@ public class UserController {
 
     //登录
     @PostMapping("/login")
-    @ApiOperation("管理员登录")
+    @ApiOperation("用户登录")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "password",value = "管理员账号",required = true),
-            @ApiImplicitParam(name = "password",value = "管理员密码",required = true),
+            @ApiImplicitParam(name = "username",value = "用户账号",required = true),
+            @ApiImplicitParam(name = "password",value = "用户密码",required = true),
     })
     public CommonResponse<User> login(@RequestParam String username,
                                       @RequestParam String password,
