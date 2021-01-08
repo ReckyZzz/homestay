@@ -106,7 +106,7 @@ public class ServiceTest {
         System.out.println();*/
 
         //查看收藏列表
-        List<RoomCollection> collections = userService.getCollections(user);
+        /*List<RoomCollection> collections = userService.getCollections(user);
         PageHelper.startPage(pageNum,pageSize);
         rooms = new ArrayList<>();
         for(RoomCollection c:collections){
@@ -119,15 +119,15 @@ public class ServiceTest {
         for(Room r:rooms){
             System.out.println(r.getRoomName());
         }
-        System.out.println();
+        System.out.println();*/
 
         //getOrders
-        /*CommonResponse<PageInfo<Order>> response = userService.getOrders(4,1,5);
-        List<Order> orders = response.getData().getList();
+        CommonResponse<PageInfo<Order>> response5 = userService.getOrders(4,1,5);
+        List<Order> orders = response5.getData().getList();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         for(Order o:orders){
             System.out.println(format.format(o.getCreateDate()));
-        }*/
+        }
     }
 
     @Test
