@@ -166,7 +166,7 @@ public class UserServiceImpl implements UserService {
             if(new Date().after(endDate) && !flag){
                 commentables.add(1);//待评论
             }
-            else if(new Date().after(beginDate) && new Date().before(beginDate) && !flag){
+            else if(new Date().after(beginDate) && new Date().before(endDate) && !flag){
                 commentables.add(0);//入住中
             }
             else if(new Date().before(beginDate) && !flag){
@@ -188,7 +188,7 @@ public class UserServiceImpl implements UserService {
             }
             else if(commentables.get(i) == 0){
                 vo.setComment(0);//入住中
-                vo.setLiveDate("入住中");
+                vo.setLiveDate(format.format(o.getLiveDate()));
             }
             else if(commentables.get(i) == 2){
                 vo.setComment(2);//已评论
@@ -307,6 +307,8 @@ public class UserServiceImpl implements UserService {
         roomVO.setStars(stars);
         roomVO.setContent(content);
         roomVO.setDates(dates);
+        roomVO.setUrl("../img/" + room.getRoomId() + ".jpg");
+        roomVO.setRoomName(room.getRoomName());
         return new CommonResponse<>(0,"查询成功",roomVO);
     }
 }

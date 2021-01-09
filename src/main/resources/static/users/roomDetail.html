@@ -27,7 +27,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">在线民宿平台</a>
+                    <a class="navbar-brand" href="/users/index.html">在线民宿平台</a>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
@@ -42,12 +42,13 @@
         </nav>
     </header>
     <div class="container">
+        <div class="hdetail">{{roomNowInfo.roomName}}</div>
         <div class="row"><hr></div>
         <div class="margin-10"></div>
         <div class="row">
             <div class="col-sm-6 col-md-8">
                 <div class="thumbnail">
-                    <img src="..." alt="...">
+                    <img v-bind:src="roomNowInfo.url">
                 </div>
             </div>
         </div>
@@ -138,7 +139,12 @@
         },
         methods:{
             reserve:function(){
-                this.reserveRoom(detailIndex.roomNow,new Date(detailIndex.order.checkindate),detailIndex.total);
+                if(this.ifLogin==false){
+                    location.href="login.html";
+                }
+                else {
+                    this.reserveRoom(detailIndex.roomNow, new Date(detailIndex.order.checkindate), detailIndex.total);
+                }
             },
             reserveRoom:function(roomId,reserveDate,days){
                 $.ajax({

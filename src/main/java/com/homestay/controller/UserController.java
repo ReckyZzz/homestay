@@ -93,6 +93,9 @@ public class UserController {
     public CommonResponse<PageInfo<Room>> getRooms(Integer pageNum,Integer pageSize){
         PageHelper.startPage(pageNum,pageSize);
         List<Room> rooms = userService.getRooms();
+        for(Room r:rooms){
+            r.setUrl("../img/" + r.getRoomId() +".jpg");
+        }
         PageInfo<Room> pageInfo = new PageInfo<>(rooms);
         return new CommonResponse<>(0,"查询成功",pageInfo);
     }
@@ -102,6 +105,9 @@ public class UserController {
     public CommonResponse<PageInfo<Room>> searchRooms(String name,Integer pageNum,Integer pageSize){
         PageHelper.startPage(pageNum,pageSize);
         List<Room> rooms = userService.searchRooms(name);
+        for(Room r:rooms){
+            r.setUrl("../img/" + r.getRoomId() +".jpg");
+        }
         PageInfo<Room> pageInfo = new PageInfo<>(rooms);
         return new CommonResponse<>(0,"查询成功",pageInfo);
     }
@@ -149,6 +155,8 @@ public class UserController {
         User user =(User) session.getAttribute("user");
         return userService.getOrders(user.getUserId(),pageNum,pageSize);
     }
+
+
 
     @GetMapping("/commentRoom")
     @ApiOperation("从订单评论房间")

@@ -8,14 +8,24 @@ import java.util.Date;
 import java.util.List;
 
 public class RoomVO {
+    String roomName;
     String ownerName;
     String ownerDescription;
+    String url;
     Integer roomNum;
     Double price;
     List<String> userNames;
     List<String> content;
     List<Integer> stars;
     List<String> dates;
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
 
     public String getOwnerName() {
         return ownerName;
@@ -31,6 +41,14 @@ public class RoomVO {
 
     public void setOwnerDescription(String ownerDescription) {
         this.ownerDescription = ownerDescription;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public Integer getRoomNum() {

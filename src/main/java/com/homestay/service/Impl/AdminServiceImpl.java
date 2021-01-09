@@ -305,4 +305,9 @@ public class AdminServiceImpl implements AdminService {
             commentMapper.resetCommentById(id);
         }
     }
+
+    @Override
+    public User getUserById(Integer id){
+        return userMapper.getUserById(id);
+    }
 }

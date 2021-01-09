@@ -14,10 +14,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
@@ -30,9 +27,9 @@ public class AdminController {
     @Resource
     AdminService adminService;
 
-    //管理员是否登录
-    @RequestMapping("/isLogin")
-    public CommonResponse<Object> isLogin(HttpSession session){
+    @GetMapping("/isLogin")
+    @ApiOperation("管理员是否登录")
+    public CommonResponse<Object> isLogin(@ApiIgnore HttpSession session){
         if(session.getAttribute(("user")) != null){
             return new CommonResponse<>(0,"已登录",null);
         }
@@ -57,33 +54,34 @@ public class AdminController {
         return adminService.login(user);
     }
 
-    //获取用户列表
-    @RequestMapping(value = "/getUserInfo",method = RequestMethod.GET)
+    @GetMapping("/getUserInfo")
+    @ApiOperation("获取用户列表")
     public CommonResponse<PageInfo<User>> getStudents(Integer pageNum, Integer pageSize){
         return adminService.getUsers(pageNum,pageSize);
     }
 
-    //获取房间列表
-    @RequestMapping(value = "/getRoomInfo",method = RequestMethod.GET)
+    @GetMapping("/getRoomInfo")
+    @ApiOperation("获取房间列表")
     public CommonResponse<PageInfo<Room>> getRooms(Integer pageNum, Integer pageSize){
         return adminService.getRooms(pageNum,pageSize);
     }
 
-    //获取订单列表
-    @RequestMapping(value = "/getOrderInfo",method = RequestMethod.GET)
+    @GetMapping("/getOrderInfo")
+    @ApiOperation("获取订单列表")
     public CommonResponse<PageInfo<Order>> getOrders(Integer pageNum, Integer pageSize){
         return adminService.getOrders(pageNum,pageSize);
     }
 
-    //获取评论列表
-    @RequestMapping(value = "/getCommentInfo",method = RequestMethod.GET)
+    @GetMapping("/getCommentInfo")
+    @ApiOperation("获取评论列表")
     public CommonResponse<PageInfo<Comment>> getComments(Integer pageNum,Integer pageSize){
         return adminService.getComments(pageNum,pageSize);
     }
 
-    //更新用户信息
-    @RequestMapping(value = "/updateUserInfo",method = RequestMethod.POST)
+    @PostMapping("/updateUserInfo")
+    @ApiOperation("更新用户信息")
     public CommonResponse<User> updateUser(User user){
+        //User user = adminService.getUserById(userId);
         user = adminService.updateUser(user);
         if(user != null){
             return new CommonResponse<>(0,"修改成功",user);
@@ -91,8 +89,8 @@ public class AdminController {
         return new CommonResponse<>(1,"不存在的用户",null);
     }
 
-    //更新房间信息
-    @RequestMapping(value = "/updateRoomInfo",method = RequestMethod.POST)
+    @PostMapping("/updateRoomInfo")
+    @ApiOperation("更新房间信息")
     public CommonResponse<Room> updateRoom(Room room){
         room = adminService.updateRoom(room);
         if(room != null){
@@ -101,8 +99,8 @@ public class AdminController {
         return new CommonResponse<>(1,"不存在的房间",null);
     }
 
-    //更新订单信息
-    @RequestMapping(value = "/updateOrderInfo",method = RequestMethod.POST)
+    @PostMapping("/updateOrderInfo")
+    @ApiOperation("更新房间信息")
     public CommonResponse<Order> updateOrder(Order order){
         order = adminService.updateOrder(order);
         if(order != null){
@@ -111,8 +109,8 @@ public class AdminController {
         return new CommonResponse<>(1,"不存在的订单",null);
     }
 
-    //更新评论信息
-    @RequestMapping(value = "/updateCommentInfo",method = RequestMethod.POST)
+    @PostMapping("updateCommentInfo")
+    @ApiOperation("更新评论信息")
     public CommonResponse<Comment> updateComment(Comment comment){
         comment = adminService.updateComment(comment);
         if(comment != null){
@@ -121,8 +119,8 @@ public class AdminController {
         return new CommonResponse<>(1,"不存在的评论",null);
     }
 
-    //添加用户
-    @RequestMapping(value = "/addUser",method = RequestMethod.POST)
+    @PostMapping("/addUser")
+    @ApiOperation("添加用户")
     public CommonResponse<User> addUser(User user){
         user = adminService.addUser(user);
         if(user != null){
@@ -131,8 +129,8 @@ public class AdminController {
         return new CommonResponse<>(1,"用户已存在",null);
     }
 
-    //添加房间
-    @RequestMapping(value = "/addRoom",method = RequestMethod.POST)
+    @PostMapping("/addRoom")
+    @ApiOperation("添加房间")
     public CommonResponse<Room> addRoom(Room room){
         room = adminService.addRoom(room);
         if(room != null){
@@ -141,8 +139,8 @@ public class AdminController {
         return new CommonResponse<>(1,"房间已存在",null);
     }
 
-    //增加订单
-    @RequestMapping(value = "/addOrder",method = RequestMethod.POST)
+    @PostMapping("/addOrder")
+    @ApiOperation("添加订单")
     public CommonResponse<Order> addOrder(Order order){
         order = adminService.addOrder(order);
         if(order != null){
@@ -151,8 +149,8 @@ public class AdminController {
         return new CommonResponse<>(1,"订单已存在",null);
     }
 
-    //增加评论
-    @RequestMapping(value = "addComment",method = RequestMethod.POST)
+    @PostMapping("/addComment")
+    @ApiOperation("添加评论")
     public CommonResponse<Comment> addComment(Comment comment){
         comment = adminService.addComment(comment);
         if(comment != null){
@@ -161,64 +159,64 @@ public class AdminController {
         return new CommonResponse<>(1,"订单已存在",null);
     }
 
-    //批量删除用户
-    @RequestMapping(value = "/deleteUsers",method = RequestMethod.GET)
+    @GetMapping("/addUser")
+    @ApiOperation("批量删除用户")
     public CommonResponse<Object> deleteUsers(String userIds){
         List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(userIds),Integer.class);
         adminService.deleteUser(ids);
         return new CommonResponse<>(0,"删除成功",null);
     }
 
-    //批量删除房间
-    @RequestMapping(value = "/deleteRooms",method = RequestMethod.GET)
+    @GetMapping("/deleteRooms")
+    @ApiOperation("批量删除房间")
     public CommonResponse<Object> deleteRooms(String roomIds){
         List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(roomIds),Integer.class);
         adminService.deleteRoom(ids);
         return new CommonResponse<>(0,"删除成功",null);
     }
 
-    //批量删除订单
-    @RequestMapping(value = "/deleteOrders",method = RequestMethod.GET)
+    @GetMapping("/deleteOrders")
+    @ApiOperation("批量删除订单")
     public CommonResponse<Object> deleteOrders(String orderIds){
         List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(orderIds),Integer.class);
         adminService.deleteOrder(ids);
         return new CommonResponse<>(0,"删除成功",null);
     }
 
-    //批量删除评论
-    @RequestMapping(value = "/deleteComments",method = RequestMethod.GET)
+    @GetMapping("/deleteComments")
+    @ApiOperation("批量删除评论")
     public CommonResponse<Object> deleteComments(String commentIds){
         List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(commentIds),Integer.class);
         adminService.deleteComment(ids);
         return new CommonResponse<>(0,"删除成功",null);
     }
 
-    //批量还原用户
-    @RequestMapping(value = "/resetUsers",method = RequestMethod.GET)
+    @GetMapping("/resetUsers")
+    @ApiOperation("评论还原用户")
     public CommonResponse<Object> resetUsers(String userIds){
         List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(userIds),Integer.class);
         adminService.resetUser(ids);
         return new CommonResponse<>(0,"还原成功",null);
     }
 
-    //批量还原房间
-    @RequestMapping(value = "/resetRooms",method = RequestMethod.GET)
+    @GetMapping("/resetRooms")
+    @ApiOperation("批量还原房间")
     public CommonResponse<Object> resetRooms(String roomIds){
         List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(roomIds),Integer.class);
         adminService.resetRoom(ids);
         return new CommonResponse<>(0,"还原成功",null);
     }
 
-    //批量还原订单
-    @RequestMapping(value = "/resetOrders",method = RequestMethod.GET)
+    @GetMapping("/resetOrders")
+    @ApiOperation("批量还原订单")
     public CommonResponse<Object> resetOrders(String orderIds){
         List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(orderIds),Integer.class);
         adminService.resetOrder(ids);
         return new CommonResponse<>(0,"还原成功",null);
     }
 
-    //批量还原评论
-    @RequestMapping(value = "/resetComments",method = RequestMethod.GET)
+    @GetMapping("/resetComments")
+    @ApiOperation("批量还原评论")
     public CommonResponse<Object> resetComments(String commentIds){
         List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(commentIds),Integer.class);
         adminService.resetComment(ids);

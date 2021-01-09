@@ -8,6 +8,7 @@ public class Room {
     private double roomPrice;
     private Integer isAvailable;
     private Integer delFlag;
+    private String url;
 
     public Integer getRoomId() {
         return roomId;
@@ -65,4 +66,11 @@ public class Room {
         this.delFlag = delFlag;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 }

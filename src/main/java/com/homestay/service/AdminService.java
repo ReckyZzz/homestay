@@ -17,6 +17,7 @@ public interface AdminService {
     CommonResponse<PageInfo<Comment>> getComments(Integer pageNum,Integer pageSize);
     User updateUser(User user);
     User addUser(User user);
+    User getUserById(Integer id);
     Room updateRoom(Room room);
     Room addRoom(Room room);
     Order updateOrder(Order order);
