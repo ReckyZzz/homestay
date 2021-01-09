@@ -1,0 +1,75 @@
+.margin-10{
+    margin: 10px;
+}
+.padding-10{
+    padding: 10px;
+}
+.border-1{
+    border: 1px solid #a6a6a6;
+}
+.border-radius-4{
+    border: 1px solid #ffdd00;
+    border-radius: 4px;
+}
+.fluid{
+    width: 100%;
+    height: 100%;
+}
+.fluid-height{
+    height: 100%;
+}
+.fluid-width{
+    width: 100%;
+}
+.bg-yellow{
+    background-color: #ffdd00;
+}
+.margin-left-10{
+    margin-left: 10px;
+}
+.margin-left-8{
+    margin-left: 8px;
+}
+.text-center{
+    text-align: center;
+}
+.margin-50{
+    margin-left: 50px;
+}
+.margin-bottom{
+    margin-bottom: 1px;
+}
+p{
+    margin: 0;
+    padding: 5px;
+}
+.date{
+    color: #999;
+    border-radius: 4px;
+    height: 34px;
+    width: 20%;
+    line-height: 34px;
+    border: 1px solid #ccc;
+    padding-left:12px;
+}
+.text-size-35{
+    font-size: 35px;
+}
+.text-size-25{
+    font-size: 25px;
+}
+.room-bigpic{
+    height: 380px;
+}
+.mar-top-30{
+    margin-top: 30px;
+}
+.yellow{
+    color: #ffdd00;
+}
+.w-h{
+    padding: 10px;
+    border-radius: 5px;
+    width:520px;
+    height:175px;
+}
