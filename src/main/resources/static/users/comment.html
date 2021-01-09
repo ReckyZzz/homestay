@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <title>评论房间</title>
+    <title>首页</title>
     <link rel="stylesheet" type="text/css" href="../css/global.css">
     <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <link rel="stylesheet" type="text/css" href="../css/user/comment.css">
     <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
-    <link rel="stylesheet" href="../css/user/roomDetail.css">
 </head>
 <body>
-<div class="container-fluid" id="detailIndex">
+<div id="comment">
     <header>
         <nav class="navbar navbar-default navbar-inverse">
             <div class="container-fluid">
@@ -42,199 +42,58 @@
         </nav>
     </header>
     <div class="container">
-        <div class="hdetail">{{roomNowInfo.roomName}}</div>
-        <div class="row"><hr></div>
-        <div class="margin-10"></div>
-        <div class="row">
-            <div class="col-sm-6 col-md-8">
-                <div class="thumbnail">
-                    <img v-bind:src="roomNowInfo.url">
+        <div class="row mar-top-30">
+            <div class="col-md-6">
+                <img class="room-bigpic thumbnail img-responsive">
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-info">
+                    <div class="panel-heading"><span class="glyphicon glyphicon-home"> </span> 住宿评价</div>
+                    <div class="panel-body">
+                        <textarea class="text-warning w-h" placeholder="请填写评价内容" v-model="content"></textarea>
+                    </div>
+                    <div class="panel-footer">
+                        <span class="label label-info"><span class="glyphicon glyphicon-duplicate"></span> 评星:</span>
+                        <span v-for="index in count" class="glyphicon glyphicon-star">
+
+                    <div class="btn-group">
+                          <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Action <span class="caret"></span>
+                          </button>
+                          <ul class="dropdown-menu">
+                            <li><a @click="count=1">1</a></li>
+                            <li><a @click="count=2">2</a></li>
+                            <li><a @click="count=3">3</a></li>
+                            <li><a @click="count=4">4</a></li>
+                            <li><a @click="count=5">5</a></li>
+                          </ul>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="hdetail">房东</div>
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <span class="">姓名:</span>
-                    <span class="user-content">{{roomNowInfo.ownerName}}</span>
-                    <span class="user-content"> <span class="glyphicon glyphicon-home"></span> 房源数 <span class="badge">{{roomNowInfo.roomNum}}</span></span>
+                    <input  type="button" class="btn btn-warning btn-block" value="提交评价">
                 </div>
-                <div class="panel-body">
-                    <div>{{roomNowInfo.ownerDescription}}</div>
-                </div>
-            </div>
-        </div>
-        <!--预定-->
-        <div class="row">
-            <div class="hdetail">预定</div>
-            <div class="panel panel-info">
-                <div class="panel-body  bg-warning">
-                    <div v-show="error.isActive" class="alert alert-danger">{{error.msg}}</div>
-                    <div>
-                        <span class="glyphicon glyphicon-time"></span> 入住日期：<input type="date" class="date" v-on:blur="checkInDate" v-model="order.checkindate">
-                        <span class="glyphicon glyphicon-time"></span> 退房日期：<input type="date" class="date" v-on:blur="checkOutDate" v-model="order.checkoutdate">
-                    </div>
-                    <div v-if="total!='' && total!=null && total > 0" class="price">
-                        <span class="glyphicon glyphicon-shopping-cart"></span><span>￥ {{roomNowInfo.price*total}} 元</span>
-                    </div>
-                    <div class="btn-sub">
-                        <input type="button" class="btn btn-success" v-on:click="reserve()" value="立即预定">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--评价-->
-        <div class="row">
-            <div class="hdetail">评价</div>
-            <div class="panel panel-info" v-for="(userName,i) in roomNowInfo.userNames">
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <span>姓名:</span>
-                                <span class="user-content">{{userName}}</span>
-                                <span class="user-content">
-                                    <span class="glyphicon glyphicon-star-empty"></span>
-                                    评分 <span class="badge">{{roomNowInfo.stars[i]}}</span>
-                                </span>
-                                <label v-for="index in Math.floor(roomNowInfo.stars[i])"><span class="color-yellow glyphicon glyphicon-star"></span></label>
-                            </div>
-                            <div class="panel-body">
-                                {{roomNowInfo.content[i]}}
-                            </div>
-                            <div class="panel-footer">
-                                <span class="user-content">
-                                    <span class="glyphicon glyphicon-time"></span>
-                                    评价时间： <span class="badge">{{roomNowInfo.dates[i]}}</span>
-                                </span>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
             </div>
         </div>
     </div>
+    </div>
 </div>
 <script type="text/javascript">
-    let detailIndex=new Vue({
-        el:"#detailIndex",
+    let comment=new Vue({
+        el:"#comment",
         data:{
-            roomNowInfo:{},
-            isSearch:false,
             ifLogin:false,
-            roomNow:-1,
-            order:{
-                checkindate:"",
-                checkoutdate:"",
-                realpay:0,
-                hid:"",
-                uid:""
-            },
-            total:0,
-            error:{
-                isActive:false,
-                msg:""
-            }
+            count:0,
+            roomID:-1,
         },
         methods:{
-            reserve:function(){
-                if(this.ifLogin==false){
-                    location.href="login.html";
-                }
-                else {
-                    this.reserveRoom(detailIndex.roomNow, new Date(detailIndex.order.checkindate), detailIndex.total);
-                }
-            },
-            reserveRoom:function(roomId,reserveDate,days){
-                $.ajax({
-                    url: "../user/reserve",
-                    type: "POST",
-                    data: {
-                        roomId:roomId,
-                        reserveDate:reserveDate,
-                        days:days
-                    },
-                    dataType: "json",
-                    success: function (result) {
-                        if (result.code === 0) {
-                            alert("预定成功");
-                            detailIndex.toMyOrder();
-                        }
-                    },
-                    error: function (request, status, error) {
-                        alert("系统异常！");
-                        console.log(request.status);
-                        console.log(request.readyState);
-                        console.log(status);
-                    }
-                });
-            },
-            toMyOrder:function(){
-                if(this.ifLogin==false){
-                    location.href="login.html";
-                }
-                else{
-                    location.href="myOrder.html";
-                }
-            },
-            formatDate:function(date){
-                //var date = new Date(date);
-                var year = date.getFullYear();
-                var mouth = date.getMonth()+1;
-                var day = date.getDate();
-                if(mouth<10){
-                    mouth = "0" + mouth;
-                }
-                if(day<10){
-                    day = "0" + day;
-                }
-                return year + "-" + mouth + "-" +day;
-            },
-            checkInDate:function(){
-                var currentDate = new Date();
-                var checkoutDate = new Date(this.order.checkoutdate);
-                var checkinDate = new Date(this.order.checkindate);
-                //alert(currentDate.toLocaleDateString()+"-----------"+checkinDate.toLocaleDateString());
-                if(checkinDate <= currentDate && checkinDate < checkoutDate){
-                    this.error.isActive = true;
-                    this.error.msg = "请选择正确的入住日期！";
-                    var _this = this;
-                    setTimeout(function () {
-                        _this.error.isActive = false;
-                    },2000);
-                }
-            },
-            checkOutDate:function(){
-                var checkinDate = new Date(this.order.checkindate);
-                var checkoutDate = new Date(this.order.checkoutdate);
-                if(checkinDate >= checkoutDate){
-                    this.error.isActive = true;
-                    this.error.msg = "请选择正确的退房日期！";
-                    var _this = this;
-                    setTimeout(function () {
-                        _this.error.isActive = false;
-                    },2000);
-                }
-                this.total = (checkoutDate- checkinDate)/(1000*60*60*24);
-
-            },
-            submitOrder:function () {
-                if(this.user==null){
-                    location.href="login.html";
-                    return;
-                }
-                this.order.realpay = this.total*this.housres.hprice;
-                this.order.hid = this.housres.hid;
-                this.order.uid = this.user.uid;
-                var _this = this;
-                var param = new URLSearchParams();
-                //param.append("order",this.order);
-                param.append("checkindate",this.order.checkindate);
-                param.append("checkoutdate",this.order.checkoutdate);
-                param.append("realpay",this.order.realpay);
-                param.append("uid",this.order.uid);
-                param.append("hid",this.order.hid);
+            subArr() {
+                console.log("subArr");
+                this.getPageRoomInfoList(this.cur,10);
+                return this.orderInfoList;
             },
             toLogin:function(){
                 location.href="login.html";
@@ -271,9 +130,10 @@
                     dataType: "json",
                     success: function (result) {
                         if (result.code === 1) {
-                            detailIndex.ifLogin = false;
+                            comment.ifLogin = false;
+                            location.href="login.html";
                         }else if(result.code === 0){
-                            detailIndex.ifLogin = true;
+                            comment.ifLogin = true;
                         }
                     },
                     error: function (request, status, error) {
@@ -304,10 +164,40 @@
                 });
             },
         },
+        computed: {
+            indexs: function(){
+                var left = 1;
+                var right = this.all;
+                var ar = [];
+                if(this.all>= 5){
+                    //这里最大范围从3到6，如果到达7，那么下边加2变成9，已经超过最大的范围值
+                    if(this.cur > 3 && this.cur < this.all-1){
+                        //以4为参考基准，左面加2右边加2
+                        left = this.cur - 2
+                        right = this.cur + 2
+                    }else{
+                        if(this.cur<=3){
+                            left = 1
+                            right = 5
+                        }else{
+                            right = this.all
+                            left = this.all -4
+                        }
+                    }
+                }
+                while (left <= right){
+                    ar.push(left)
+                    left ++
+                }
+                console.log(ar);
+                return ar
+            },
+        },
         mounted:function () {
-            this.getRoomNow();
-            this.getRoomDetail(this.roomNow);
             this.isLogin();
+            this.userID = localStorage.getItem("userID");
+            this.roomID = localStorage.getItem("roomID");
+            this.getRoomDetail(this.roomID);
         }
     });
 </script>

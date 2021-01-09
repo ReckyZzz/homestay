@@ -68,7 +68,7 @@
                 <td>{{orderInfo.days}}</td>
                 <td>{{orderInfo.money}}</td>
                 <td>
-                    <a v-if="orderInfo.comment==1" v-on:click="" class="btn btn-warning">待评价</a>
+                    <a v-if="orderInfo.comment==1" v-on:click="toComment(orderInfo.orderId)" class="btn btn-warning">待评价</a>
                     <span v-if="orderInfo.comment==0" class="label label-primary">入住中</span>
                     <span v-if="orderInfo.comment==2" class="label label-success">已评价</span>
                     <span v-if="orderInfo.comment==3" class="label label-info">待入住</span>
@@ -128,6 +128,7 @@
                 location.href="login.html";
             },
             toComment:function(orderId){
+                localStorage.setItem("roomID",orderId);
                 Location.href="comment.html";
             },
             getRoomNow:function(){
