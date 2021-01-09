@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>评论房间</title>
+    <link rel="stylesheet" type="text/css" href="../css/global.css">
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+    <link rel="stylesheet" href="../css/user/roomDetail.css">
+</head>
+<body>
+<div class="container-fluid" id="detailIndex">
+    <header>
+        <nav class="navbar navbar-default navbar-inverse">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/users/index.html">在线民宿平台</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="#" v-if="ifLogin==true">我的 <span class="sr-only"></span></a></li>
+                        <li><a href="#" v-if="ifLogin==false" @click="toLogin">登录</a></li>
+                        <li><a href="#" v-if="ifLogin==true" @click="logout">登出</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="hdetail">{{roomNowInfo.roomName}}</div>
+        <div class="row"><hr></div>
+        <div class="margin-10"></div>
+        <div class="row">
+            <div class="col-sm-6 col-md-8">
+                <div class="thumbnail">
+                    <img v-bind:src="roomNowInfo.url">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="hdetail">房东</div>
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <span class="">姓名:</span>
+                    <span class="user-content">{{roomNowInfo.ownerName}}</span>
+                    <span class="user-content"> <span class="glyphicon glyphicon-home"></span> 房源数 <span class="badge">{{roomNowInfo.roomNum}}</span></span>
+                </div>
+                <div class="panel-body">
+                    <div>{{roomNowInfo.ownerDescription}}</div>
+                </div>
+            </div>
+        </div>
+        <!--预定-->
+        <div class="row">
+            <div class="hdetail">预定</div>
+            <div class="panel panel-info">
+                <div class="panel-body  bg-warning">
+                    <div v-show="error.isActive" class="alert alert-danger">{{error.msg}}</div>
+                    <div>
+                        <span class="glyphicon glyphicon-time"></span> 入住日期：<input type="date" class="date" v-on:blur="checkInDate" v-model="order.checkindate">
+                        <span class="glyphicon glyphicon-time"></span> 退房日期：<input type="date" class="date" v-on:blur="checkOutDate" v-model="order.checkoutdate">
+                    </div>
+                    <div v-if="total!='' && total!=null && total > 0" class="price">
+                        <span class="glyphicon glyphicon-shopping-cart"></span><span>￥ {{roomNowInfo.price*total}} 元</span>
+                    </div>
+                    <div class="btn-sub">
+                        <input type="button" class="btn btn-success" v-on:click="reserve()" value="立即预定">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--评价-->
+        <div class="row">
+            <div class="hdetail">评价</div>
+            <div class="panel panel-info" v-for="(userName,i) in roomNowInfo.userNames">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <span>姓名:</span>
+                                <span class="user-content">{{userName}}</span>
+                                <span class="user-content">
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                    评分 <span class="badge">{{roomNowInfo.stars[i]}}</span>
+                                </span>
+                                <label v-for="index in Math.floor(roomNowInfo.stars[i])"><span class="color-yellow glyphicon glyphicon-star"></span></label>
+                            </div>
+                            <div class="panel-body">
+                                {{roomNowInfo.content[i]}}
+                            </div>
+                            <div class="panel-footer">
+                                <span class="user-content">
+                                    <span class="glyphicon glyphicon-time"></span>
+                                    评价时间： <span class="badge">{{roomNowInfo.dates[i]}}</span>
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    let detailIndex=new Vue({
+        el:"#detailIndex",
+        data:{
+            roomNowInfo:{},
+            isSearch:false,
+            ifLogin:false,
+            roomNow:-1,
+            order:{
+                checkindate:"",
+                checkoutdate:"",
+                realpay:0,
+                hid:"",
+                uid:""
+            },
+            total:0,
+            error:{
+                isActive:false,
+                msg:""
+            }
+        },
+        methods:{
+            reserve:function(){
+                if(this.ifLogin==false){
+                    location.href="login.html";
+                }
+                else {
+                    this.reserveRoom(detailIndex.roomNow, new Date(detailIndex.order.checkindate), detailIndex.total);
+                }
+            },
+            reserveRoom:function(roomId,reserveDate,days){
+                $.ajax({
+                    url: "../user/reserve",
+                    type: "POST",
+                    data: {
+                        roomId:roomId,
+                        reserveDate:reserveDate,
+                        days:days
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            alert("预定成功");
+                            detailIndex.toMyOrder();
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            toMyOrder:function(){
+                if(this.ifLogin==false){
+                    location.href="login.html";
+                }
+                else{
+                    location.href="myOrder.html";
+                }
+            },
+            formatDate:function(date){
+                //var date = new Date(date);
+                var year = date.getFullYear();
+                var mouth = date.getMonth()+1;
+                var day = date.getDate();
+                if(mouth<10){
+                    mouth = "0" + mouth;
+                }
+                if(day<10){
+                    day = "0" + day;
+                }
+                return year + "-" + mouth + "-" +day;
+            },
+            checkInDate:function(){
+                var currentDate = new Date();
+                var checkoutDate = new Date(this.order.checkoutdate);
+                var checkinDate = new Date(this.order.checkindate);
+                //alert(currentDate.toLocaleDateString()+"-----------"+checkinDate.toLocaleDateString());
+                if(checkinDate <= currentDate && checkinDate < checkoutDate){
+                    this.error.isActive = true;
+                    this.error.msg = "请选择正确的入住日期！";
+                    var _this = this;
+                    setTimeout(function () {
+                        _this.error.isActive = false;
+                    },2000);
+                }
+            },
+            checkOutDate:function(){
+                var checkinDate = new Date(this.order.checkindate);
+                var checkoutDate = new Date(this.order.checkoutdate);
+                if(checkinDate >= checkoutDate){
+                    this.error.isActive = true;
+                    this.error.msg = "请选择正确的退房日期！";
+                    var _this = this;
+                    setTimeout(function () {
+                        _this.error.isActive = false;
+                    },2000);
+                }
+                this.total = (checkoutDate- checkinDate)/(1000*60*60*24);
+
+            },
+            submitOrder:function () {
+                if(this.user==null){
+                    location.href="login.html";
+                    return;
+                }
+                this.order.realpay = this.total*this.housres.hprice;
+                this.order.hid = this.housres.hid;
+                this.order.uid = this.user.uid;
+                var _this = this;
+                var param = new URLSearchParams();
+                //param.append("order",this.order);
+                param.append("checkindate",this.order.checkindate);
+                param.append("checkoutdate",this.order.checkoutdate);
+                param.append("realpay",this.order.realpay);
+                param.append("uid",this.order.uid);
+                param.append("hid",this.order.hid);
+            },
+            toLogin:function(){
+                location.href="login.html";
+            },
+            getRoomNow:function(){
+                this.roomNow = localStorage.getItem("roomNow");
+            },
+            getRoomDetail:function(roomNow){
+                $.ajax({
+                    url: "../user/checkRoomInfo",
+                    type: "GET",
+                    data: {
+                        roomId:roomNow
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            detailIndex.roomNowInfo = result.data;
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            isLogin:function(){
+                $.ajax({
+                    url: "../user/isLogin",
+                    type: "GET",
+                    data: {},
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 1) {
+                            detailIndex.ifLogin = false;
+                        }else if(result.code === 0){
+                            detailIndex.ifLogin = true;
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            logout:function () {
+                $.ajax({
+                    url: "../user/logout",
+                    type: "POST",
+                    data:{},
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.code === 0) {
+                            location.href = "login.html";
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+        },
+        mounted:function () {
+            this.getRoomNow();
+            this.getRoomDetail(this.roomNow);
+            this.isLogin();
+        }
+    });
+</script>
+</body>
+</html>

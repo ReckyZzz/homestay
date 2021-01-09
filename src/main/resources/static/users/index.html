@@ -154,6 +154,8 @@
                 }
                 else{
                     this.searchRooms(name,1,9);
+                    userIndex.all=1;
+                    userIndex.cur=1;
                 }
             },
             searchRooms:function(i,pageNum,pageSize){
@@ -171,8 +173,6 @@
                             userIndex.roomInfoList = result.data.list;
                             userIndex.all = result.data.pages;
                             userIndex.isSearch=true;
-                            userIndex.all=1;
-                            userIndex.cur=1;
                         }
                     },
                     error: function (request, status, error) {

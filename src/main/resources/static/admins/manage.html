@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-
-    <title>我的订单</title>
+    <title>管理界面</title>
     <link rel="stylesheet" type="text/css" href="../css/global.css">
     <link rel="stylesheet" type="text/css" href="../css/index.css">
     <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
@@ -16,7 +14,7 @@
     <link rel="stylesheet" href="../css/user/myorder.css">
 </head>
 <body>
-<div id="myOrder">
+<div id="manage">
     <header>
         <nav class="navbar navbar-default navbar-inverse">
             <div class="container-fluid">
@@ -42,68 +40,16 @@
             </div>
         </nav>
     </header>
-    <div class="container-fluid">
-        <table id="orders" class="table table-hover table-responsive">
-            <caption>我的订单</caption>
-            <tr>
-                <th>订单ID</th>
-                <th>用户名</th>
-                <th>民宿主人</th>
-                <th>房间名</th>
-                <th>创建时间</th>
-                <th>预定时间</th>
-                <th>入住时间</th>
-                <th>入住天数</th>
-                <th>金额</th>
-                <th>评价</th>
-            </tr>
-            <tr v-for="orderInfo in orderInfoList">
-                <td>{{orderInfo.orderId}}</td>
-                <td>{{orderInfo.userName}}</td>
-                <td>{{orderInfo.ownerName}}</td>
-                <td>{{orderInfo.roomName}}</td>
-                <td>{{orderInfo.createDate}}</td>
-                <td>{{orderInfo.reserveDate}}</td>
-                <td>{{orderInfo.liveDate}}</td>
-                <td>{{orderInfo.days}}</td>
-                <td>{{orderInfo.money}}</td>
-                <td>
-                    <a v-if="orderInfo.comment==1" v-on:click="" class="btn btn-warning">待评价</a>
-                    <span v-if="orderInfo.comment==0" class="label label-primary">入住中</span>
-                    <span v-if="orderInfo.comment==2" class="label label-success">已评价</span>
-                    <span v-if="orderInfo.comment==3" class="label label-info">待入住</span>
-                </td>
-            </tr>
-        </table>
-        <div class="page-bar">
-            <ul>
-                <li v-if="cur>1"><a v-on:click="cur=1,pageClick(),subArr()">首页</a></li>
-                <li v-if="cur==1"><a class="banclick">首页</a></li>
-                <li v-if="cur>1"><a v-on:click="cur--,pageClick(),subArr()">上一页</a></li>
-                <li v-if="cur==1"><a class="banclick">上一页</a></li>
-                <!--当前页背景色为蓝色-->
-                <li v-for="index in indexs"  v-bind:class="{ 'active': cur == index}">
-                    <a v-on:click="btnClick(index)">{{ index }}</a>
-                </li>
-                <li v-if="cur<all"><a v-on:click="cur++,pageClick(),subArr()">下一页</a></li>
-                <li v-if="cur == all"><a class="banclick">下一页</a></li>
-                <li v-if="cur<all"><a v-on:click="cur=all,pageClick(),subArr()">尾页</a></li>
-                <li v-if="cur == all"><a class="banclick">尾页</a></li>
-                <li><a>共<i>{{all}}</i>页</a></li>
-            </ul>
-        </div>
-    </div>
 </div>
 <script type="text/javascript">
-    let myOrder=new Vue({
+    let manage=new Vue({
         el:"#myOrder",
         data:{
             orderInfoList:[],
-            all:1,
-            cur: 1,//当前页码
-            isSearch:false,
+            userInfoList:[],
+            commentInfoList:[],
+            roomInfoList:[],
             ifLogin:false,
-            roomNow:-1,
             userID:-1,
             order:{
                 checkindate:"",
@@ -133,7 +79,7 @@
             getRoomNow:function(){
                 this.roomNow = localStorage.getItem("roomNow");
             },
-            getMyOrder:function(pageNum,pageSize){
+            getOrder:function(pageNum,pageSize){
                 $.ajax({
                     url: "../user/getOrders",
                     type: "GET",
@@ -157,6 +103,11 @@
                         console.log(status);
                     }
                 });
+            },
+            getUser:function(pageNum,pageSize){
+               $.ajax({
+                   url:"",
+               })
             },
             isLogin:function(){
                 $.ajax({
@@ -232,7 +183,7 @@
         mounted:function () {
             this.isLogin();
             this.userID = localStorage.getItem("userID");
-            this.getMyOrder(1,10);
+            this.getOrder(1,20);
         }
     });
 </script>

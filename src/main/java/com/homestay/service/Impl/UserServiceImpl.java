@@ -148,6 +148,7 @@ public class UserServiceImpl implements UserService {
         List<Comment> comments = commentMapper.getCommentByUser(userId);
         List<OrderVO> orderVOS = new ArrayList<>();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //订单是否可评价
         for(int i = 0;i < orders.size();i++){
             boolean flag = false;
@@ -180,19 +181,20 @@ public class UserServiceImpl implements UserService {
             vo.setUserName(userMapper.getUserById(o.getUserId()).getUserName());
             vo.setOwnerName(userMapper.getUserById(o.getOwnerId()).getUserName());
             vo.setRoomName(roomMapper.getRoomByRoomId(o.getRoomId()).getRoomName());
-            vo.setCreateDate(format.format(o.getCreateDate()));
+            vo.setCreateDate(format2.format(o.getCreateDate()));
             vo.setReserveDate(format.format(o.getReserveDate()));
+            vo.setDays(o.getLastDays());
             if(commentables.get(i) == 1){
                 vo.setComment(1);//待评论
-                vo.setLiveDate(format.format(o.getLiveDate()));
+                vo.setLiveDate(format2.format(o.getLiveDate()));
             }
             else if(commentables.get(i) == 0){
                 vo.setComment(0);//入住中
-                vo.setLiveDate(format.format(o.getLiveDate()));
+                vo.setLiveDate(format2.format(o.getLiveDate()));
             }
             else if(commentables.get(i) == 2){
                 vo.setComment(2);//已评论
-                vo.setLiveDate(format.format(o.getLiveDate()));
+                vo.setLiveDate(format2.format(o.getLiveDate()));
             }
             else if(commentables.get(i) == 3){
                 vo.setComment((3));//待入住
