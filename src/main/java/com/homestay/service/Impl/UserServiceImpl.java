@@ -142,21 +142,35 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CommonResponse<PageInfo<OrderVO>> getOrders(Integer userId, Integer pageNum, Integer pageSize){
-        List<Boolean> commentables = new ArrayList<>();
+        List<Integer> commentables = new ArrayList<>(pageSize);
         PageHelper.startPage(pageNum,pageSize);
         List<Order> orders = orderMapper.getOrderByUser(userId);
+        List<Comment> comments = commentMapper.getCommentByUser(userId);
         List<OrderVO> orderVOS = new ArrayList<>();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         //订单是否可评价
-        for(Order o:orders){
+        for(int i = 0;i < orders.size();i++){
+            boolean flag = false;
+            Order o = orders.get(i);
             Date beginDate = o.getReserveDate();
             Calendar ca = Calendar.getInstance();ca.setTime(beginDate);ca.add(Calendar.DATE,o.getLastDays());
             Date endDate = ca.getTime();
-            if(new Date().after(endDate)){
-                commentables.add(true);//待评论
+            for(int j = 0;j < comments.size();j++){
+                Comment c = comments.get(j);
+                if(c.getUserId() == userId && c.getRoomId() == o.getRoomId() && c.getCreateDate().after(endDate)) {
+                    commentables.add(2);//已评论
+                    flag = true;
+                    break;
+                }
             }
-            else{
-                commentables.add(false);//不可评论
+            if(new Date().after(endDate) && !flag){
+                commentables.add(1);//待评论
+            }
+            else if(new Date().after(beginDate) && new Date().before(beginDate) && !flag){
+                commentables.add(0);//入住中
+            }
+            else if(new Date().before(beginDate) && !flag){
+                commentables.add(3);//待入住
             }
         }
         for(int i=0;i < orders.size();i++){
@@ -164,15 +178,25 @@ public class UserServiceImpl implements UserService {
             Order o = orders.get(i);
             vo.setOrderId(o.getOrderId());
             vo.setUserName(userMapper.getUserById(o.getUserId()).getUserName());
-            vo.setOwnerName(userMapper.getUserById(o.getUserId()).getUserName());
+            vo.setOwnerName(userMapper.getUserById(o.getOwnerId()).getUserName());
             vo.setRoomName(roomMapper.getRoomByRoomId(o.getRoomId()).getRoomName());
             vo.setCreateDate(format.format(o.getCreateDate()));
             vo.setReserveDate(format.format(o.getReserveDate()));
-            if(commentables.get(i)){
+            if(commentables.get(i) == 1){
                 vo.setComment(1);//待评论
+                vo.setLiveDate(format.format(o.getLiveDate()));
             }
-            else{
-                vo.setComment(0);//不可评论
+            else if(commentables.get(i) == 0){
+                vo.setComment(0);//入住中
+                vo.setLiveDate("入住中");
+            }
+            else if(commentables.get(i) == 2){
+                vo.setComment(2);//已评论
+                vo.setLiveDate(format.format(o.getLiveDate()));
+            }
+            else if(commentables.get(i) == 3){
+                vo.setComment((3));//待入住
+                vo.setLiveDate(null);
             }
             vo.setMoney(o.getMoney());
             orderVOS.add(vo);
