@@ -10,7 +10,6 @@ import com.homestay.util.EncryptUtil;
 import com.homestay.util.SessionUtil;
 import com.homestay.vo.OrderVO;
 import com.homestay.vo.RoomVO;
-import io.swagger.models.auth.In;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -149,28 +148,22 @@ public class UserServiceImpl implements UserService {
         List<OrderVO> orderVOS = new ArrayList<>();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        //订单是否可评价
-        for(int i = 0;i < orders.size();i++){
-            boolean flag = false;
+        //订单可否评价
+        for(int i=0;i < comments.size();i++){
+            commentables.add(2);//已评论
+        }
+        for(int i=comments.size();i < orders.size();i++){
             Order o = orders.get(i);
             Date beginDate = o.getReserveDate();
             Calendar ca = Calendar.getInstance();ca.setTime(beginDate);ca.add(Calendar.DATE,o.getLastDays());
             Date endDate = ca.getTime();
-            for(int j = 0;j < comments.size();j++){
-                Comment c = comments.get(j);
-                if(c.getUserId() == userId && c.getRoomId() == o.getRoomId() && c.getCreateDate().after(endDate)) {
-                    commentables.add(2);//已评论
-                    flag = true;
-                    break;
-                }
-            }
-            if(new Date().after(endDate) && !flag){
+            if(new Date().after(endDate)){
                 commentables.add(1);//待评论
             }
-            else if(new Date().after(beginDate) && new Date().before(endDate) && !flag){
+            else if(new Date().after(beginDate) && new Date().before(endDate)){
                 commentables.add(0);//入住中
             }
-            else if(new Date().before(beginDate) && !flag){
+            else if(new Date().before(beginDate)){
                 commentables.add(3);//待入住
             }
         }
@@ -184,23 +177,26 @@ public class UserServiceImpl implements UserService {
             vo.setCreateDate(format2.format(o.getCreateDate()));
             vo.setReserveDate(format.format(o.getReserveDate()));
             vo.setDays(o.getLastDays());
+            if(o.getLiveDate() == null){
+                vo.setLiveDate(null);
+            }
+            else{
+                vo.setLiveDate(format2.format(o.getLiveDate()));
+            }
             if(commentables.get(i) == 1){
                 vo.setComment(1);//待评论
-                vo.setLiveDate(format2.format(o.getLiveDate()));
             }
             else if(commentables.get(i) == 0){
                 vo.setComment(0);//入住中
-                vo.setLiveDate(format2.format(o.getLiveDate()));
             }
             else if(commentables.get(i) == 2){
                 vo.setComment(2);//已评论
-                vo.setLiveDate(format2.format(o.getLiveDate()));
             }
             else if(commentables.get(i) == 3){
                 vo.setComment((3));//待入住
-                vo.setLiveDate(null);
             }
             vo.setMoney(o.getMoney());
+            vo.setRoomId(o.getRoomId());
             orderVOS.add(vo);
         }
         PageInfo<OrderVO> pageInfo = new PageInfo<>(orderVOS);
@@ -272,6 +268,7 @@ public class UserServiceImpl implements UserService {
         Order order = orderMapper.getOrderByOrderId(orderId);
         comment.setUserId(order.getUserId());comment.setRoomId(order.getRoomId());
         comment.setRateStars(stars);comment.setContent(content);
+        comment.setCreateDate(new Date());
         Date beginDate = order.getReserveDate();
         Calendar ca = Calendar.getInstance();ca.setTime(beginDate);ca.add(Calendar.DATE,order.getLastDays());
         Date endDate = ca.getTime();
@@ -311,6 +308,7 @@ public class UserServiceImpl implements UserService {
         roomVO.setDates(dates);
         roomVO.setUrl("../img/" + room.getRoomId() + ".jpg");
         roomVO.setRoomName(room.getRoomName());
+        roomVO.setLocation(room.getLocation());
         return new CommonResponse<>(0,"查询成功",roomVO);
     }
 }

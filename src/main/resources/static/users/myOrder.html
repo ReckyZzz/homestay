@@ -34,7 +34,7 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        <li><a href="#" v-if="ifLogin==true">我的 <span class="sr-only"></span></a></li>
+                        <li><a href="myOrder.html" v-if="ifLogin==true">我的 <span class="sr-only"></span></a></li>
                         <li><a href="#" v-if="ifLogin==false" @click="toLogin">登录</a></li>
                         <li><a href="#" v-if="ifLogin==true" @click="logout">登出</a></li>
                     </ul>
@@ -55,7 +55,7 @@
                 <th>入住时间</th>
                 <th>入住天数</th>
                 <th>金额</th>
-                <th>评价</th>
+                <th>评价状态</th>
             </tr>
             <tr v-for="orderInfo in orderInfoList">
                 <td>{{orderInfo.orderId}}</td>
@@ -68,30 +68,30 @@
                 <td>{{orderInfo.days}}</td>
                 <td>{{orderInfo.money}}</td>
                 <td>
-                    <a v-if="orderInfo.comment==1" v-on:click="toComment(orderInfo.orderId)" class="btn btn-warning">待评价</a>
+                    <a v-if="orderInfo.comment==1" v-on:click="toComment(orderInfo.roomId,orderInfo.orderId)" class="btn btn-warning">待评价</a>
                     <span v-if="orderInfo.comment==0" class="label label-primary">入住中</span>
                     <span v-if="orderInfo.comment==2" class="label label-success">已评价</span>
                     <span v-if="orderInfo.comment==3" class="label label-info">待入住</span>
                 </td>
             </tr>
         </table>
-        <div class="page-bar">
-            <ul>
-                <li v-if="cur>1"><a v-on:click="cur=1,pageClick(),subArr()">首页</a></li>
-                <li v-if="cur==1"><a class="banclick">首页</a></li>
-                <li v-if="cur>1"><a v-on:click="cur--,pageClick(),subArr()">上一页</a></li>
-                <li v-if="cur==1"><a class="banclick">上一页</a></li>
-                <!--当前页背景色为蓝色-->
-                <li v-for="index in indexs"  v-bind:class="{ 'active': cur == index}">
-                    <a v-on:click="btnClick(index)">{{ index }}</a>
-                </li>
-                <li v-if="cur<all"><a v-on:click="cur++,pageClick(),subArr()">下一页</a></li>
-                <li v-if="cur == all"><a class="banclick">下一页</a></li>
-                <li v-if="cur<all"><a v-on:click="cur=all,pageClick(),subArr()">尾页</a></li>
-                <li v-if="cur == all"><a class="banclick">尾页</a></li>
-                <li><a>共<i>{{all}}</i>页</a></li>
-            </ul>
-        </div>
+<!--        <div class="page-bar">-->
+<!--            <ul>-->
+<!--                <li v-if="cur>1"><a v-on:click="cur=1,pageClick(),subArr()">首页</a></li>-->
+<!--                <li v-if="cur==1"><a class="banclick">首页</a></li>-->
+<!--                <li v-if="cur>1"><a v-on:click="cur&#45;&#45;,pageClick(),subArr()">上一页</a></li>-->
+<!--                <li v-if="cur==1"><a class="banclick">上一页</a></li>-->
+<!--                &lt;!&ndash;当前页背景色为蓝色&ndash;&gt;-->
+<!--                <li v-for="index in indexs"  v-bind:class="{ 'active': cur == index}">-->
+<!--                    <a v-on:click="btnClick(index)">{{ index }}</a>-->
+<!--                </li>-->
+<!--                <li v-if="cur<all"><a v-on:click="cur++,pageClick(),subArr()">下一页</a></li>-->
+<!--                <li v-if="cur == all"><a class="banclick">下一页</a></li>-->
+<!--                <li v-if="cur<all"><a v-on:click="cur=all,pageClick(),subArr()">尾页</a></li>-->
+<!--                <li v-if="cur == all"><a class="banclick">尾页</a></li>-->
+<!--                <li><a>共<i>{{all}}</i>页</a></li>-->
+<!--            </ul>-->
+<!--        </div>-->
     </div>
 </div>
 <script type="text/javascript">
@@ -127,9 +127,10 @@
             toLogin:function(){
                 location.href="login.html";
             },
-            toComment:function(orderId){
-                localStorage.setItem("roomID",orderId);
-                Location.href="comment.html";
+            toComment:function(roomId,orderId){
+                localStorage.setItem("roomID",roomId);
+                localStorage.setItem("orderID",orderId)
+                location.href="comment.html";
             },
             getRoomNow:function(){
                 this.roomNow = localStorage.getItem("roomNow");
@@ -233,7 +234,7 @@
         mounted:function () {
             this.isLogin();
             this.userID = localStorage.getItem("userID");
-            this.getMyOrder(1,10);
+            this.getMyOrder(1,30);
         }
     });
 </script>

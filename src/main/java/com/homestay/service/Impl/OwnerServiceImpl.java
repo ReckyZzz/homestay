@@ -6,13 +6,17 @@ import com.homestay.mapper.*;
 import com.homestay.pojo.*;
 import com.homestay.response.CommonResponse;
 import com.homestay.service.OwnerService;
-import com.homestay.service.UserService;
 import com.homestay.util.EncryptUtil;
 import com.homestay.util.SessionUtil;
+import com.homestay.vo.CommentVO;
+import com.homestay.vo.OrderVO;
+import com.homestay.vo.RoomVO2;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -33,61 +37,23 @@ public class OwnerServiceImpl implements OwnerService {
     private ImageMapper imageMapper;
 
     @Override
-    public CommonResponse<User> login(User user) {
-        HttpSession session = SessionUtil.getSession();
-        SessionUtil.removeSession();
-        User userInfo = userMapper.getUserByUsername(user.getUserName());
-        if(userInfo != null){
-            if(EncryptUtil.check(user.getUserPwd(),userInfo.getUserPwd())) {
-                if (session != null) {
-                    session.setAttribute("user", user);
-                }
-                return new CommonResponse<>(0, "登录成功", userInfo);
-            }
-            else{
-                return new CommonResponse<>(1,"密码错误",null);
-            }
+    public  List<RoomVO2> getRooms(Integer ownerId){
+        List<Room> rooms = roomMapper.getRoomByOwner(ownerId);
+        List<RoomVO2> roomVO2s = new ArrayList<>();
+        for(int i=0;i < rooms.size();i++){
+            Room r = rooms.get(i);
+            RoomVO2 vo = new RoomVO2();
+            vo.setRoomName(r.getRoomName());
+            User owner = userMapper.getUserById(r.getRoomOwner());
+            vo.setOwnerName(owner.getUserName());
+            vo.setDescription(r.getDescription());
+            vo.setRoomPrice(r.getRoomPrice());
+            vo.setAvailable(r.getIsAvailable());
+            vo.setRoomId(r.getRoomId());
+            vo.setLocation(r.getLocation());
+            roomVO2s.add(vo);
         }
-        else{
-            return new CommonResponse<>(2,"用户名错误",null);
-        }
-    }
-
-    @Override
-    public CommonResponse<User> register(User user){
-        if(user.getUserName()!=null && user.getUserPwd()!=null) {
-            User databaseUser = userMapper.getUserByUsername(user.getUserName());
-            if(databaseUser == null){
-                user.setUserPwd(EncryptUtil.getEncodedString(user.getUserPwd()));
-                userMapper.insertUser(user);
-                return new CommonResponse<>(0,"注册成功",user);
-            }
-            else{
-                return new CommonResponse<>(1,"用户已存在",null);
-            }
-        }
-        else {
-            return new CommonResponse<>(2,"用户名或密码为空",null);
-        }
-    }
-
-    @Override
-    public boolean resetPassword(User user,String oldPassword,String newPassword){
-        oldPassword = EncryptUtil.getEncodedString(oldPassword);
-        newPassword = EncryptUtil.getEncodedString(newPassword);
-        if(oldPassword.equals(user.getUserPwd())){
-            user.setUserPwd(newPassword);
-            userMapper.updateUser(user);
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-    @Override
-    public  List<Room> getRooms(){
-        return roomMapper.list();
+        return roomVO2s;
     }
 
     @Override
@@ -133,10 +99,58 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public CommonResponse<PageInfo<Order>> getOrders(Integer userId, Integer pageNum, Integer pageSize){
+    public CommonResponse<PageInfo<OrderVO>> getOrders(Integer ownerId, Integer pageNum, Integer pageSize){
+        List<Integer> inable = new ArrayList<>(pageSize);
         PageHelper.startPage(pageNum,pageSize);
-        List<Order> orders = orderMapper.getOrderByUser(userId);
-        PageInfo<Order> pageInfo = new PageInfo<>(orders);
+        List<Order> orders = orderMapper.getOrderByOwner(ownerId);
+        List<OrderVO> orderVOS = new ArrayList<>();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //用户是否入住
+        for(Order o:orders){
+            Date beginDate = o.getReserveDate();
+            Calendar ca = Calendar.getInstance();ca.setTime(beginDate);ca.add(Calendar.DATE,o.getLastDays());
+            Date endDate = ca.getTime();
+            if(o.getLiveDate() == null){
+                inable.add(1);//待入住
+            }
+            else if(o.getLiveDate() != null && new Date().after(beginDate) && new Date().before(endDate)){
+                inable.add(0);//入住中
+            }
+            else{
+                inable.add(2);//已完成
+            }
+        }
+        for(int i=0;i < orders.size();i++){
+            OrderVO vo = new OrderVO();
+            Order o = orders.get(i);
+            vo.setOrderId(o.getOrderId());
+            vo.setUserName(userMapper.getUserById(o.getUserId()).getUserName());
+            vo.setOwnerName(userMapper.getUserById(o.getOwnerId()).getUserName());
+            vo.setRoomName(roomMapper.getRoomByRoomId(o.getRoomId()).getRoomName());
+            vo.setCreateDate(format2.format(o.getCreateDate()));
+            vo.setReserveDate(format.format(o.getReserveDate()));
+            vo.setDays(o.getLastDays());
+            if(o.getLiveDate() == null){
+                vo.setLiveDate(null);
+            }
+            else{
+                vo.setLiveDate(format2.format(o.getLiveDate()));
+            }
+            if(inable.get(i) == 1){
+                vo.setComment(1);//待入住
+            }
+            else if(inable.get(i) == 0){
+                vo.setComment(0);//入住中
+            }
+            else{
+                vo.setComment(2);//已完成
+            }
+            vo.setMoney(o.getMoney());
+            vo.setRoomId(o.getRoomId());
+            orderVOS.add(vo);
+        }
+        PageInfo<OrderVO> pageInfo = new PageInfo<>(orderVOS);
         return new CommonResponse<>(0,"查询成功",pageInfo);
     }
 
@@ -201,6 +215,26 @@ public class OwnerServiceImpl implements OwnerService {
             return new CommonResponse<>(0,"评论成功",comment);
         }
         return new CommonResponse<>(1,"评论失败，订单尚未完成！",null);
+    }
+
+    @Override
+    public CommonResponse<List<CommentVO>> getComments(Integer ownerId){
+        List<Comment> comments = commentMapper.list();
+        List<CommentVO> commentVOS = new ArrayList<>();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        for(Comment c:comments){
+            User user = userMapper.getUserById(c.getUserId());
+            Room room = roomMapper.getRoomByRoomId(c.getRoomId());
+            CommentVO vo = new CommentVO();
+            vo.setCommentId(c.getCommentId());
+            vo.setCommentDate(format.format(c.getCreateDate()));
+            vo.setUserName(user.getUserName());
+            vo.setRoomName(room.getRoomName());
+            vo.setStars(c.getRateStars());
+            vo.setContent(c.getContent());
+            commentVOS.add(vo);
+        }
+        return new CommonResponse<>(0,"查询成功",commentVOS);
     }
 
     @Override

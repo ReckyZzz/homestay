@@ -33,7 +33,7 @@ public class ServiceTest {
     public void testUser(){
         User user = new User();
         //login
-        String username="admin";String password="123456";Integer pageNum=1;Integer pageSize=5;
+        /*String username="admin";String password="123456";Integer pageNum=1;Integer pageSize=5;
         user.setUserId(1);
         user.setUserName(username);
         user.setUserPwd(password);
@@ -57,7 +57,7 @@ public class ServiceTest {
         }*/
 
         //查看房间列表
-        PageHelper.startPage(pageNum,pageSize+1);
+        /*PageHelper.startPage(pageNum,pageSize+1);
         List<Room> rooms = userService.getRooms();
         PageInfo<Room> pageInfo = new PageInfo<>(rooms);
         System.out.println("查询成功");

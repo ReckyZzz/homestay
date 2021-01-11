@@ -6,6 +6,7 @@ import com.homestay.pojo.Image;
 import com.homestay.pojo.Room;
 import com.homestay.pojo.RoomCollection;
 import com.homestay.pojo.User;
+import com.homestay.pojo.Comment;
 import com.homestay.util.PictureUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -94,7 +96,7 @@ public class MapperTest {
         }*/
 
         //getRoom
-        List<Room> rooms = roomMapper.getRoomByName("直");
+        List<Room> rooms = roomMapper.getRoomByOwner(2);
         for(Room r:rooms){
             System.out.println(r.getRoomName());
         }
@@ -119,22 +121,14 @@ public class MapperTest {
             System.out.println("failure");
         }
     }*/
-    /*@Test
+    @Test
     public void testComment(){
-        commentMapper.deleteCommentByUserId(1);
-        commentMapper.resetCommentByUserId(1);
-        Comment comment = commentMapper.getCommentByUserId(1);
-        if(comment != null) {
-            System.out.println(comment.getCommentId());
-            System.out.println(comment.getUserId());
-            System.out.println(comment.getRoomId());
-            System.out.println(comment.getRateStars());
-            System.out.println(comment.getContent());
-        }
-        if(comment == null){
-            System.out.println("评论不存在");
-        }
-    }*/
+        Comment comment = new Comment();
+        comment.setUserId(3);comment.setRoomId(1);
+        comment.setRateStars(4);comment.setContent("12244");
+        comment.setCreateDate(new Date());
+        commentMapper.insertComment(comment);
+    }
     @Test
     public void testCollection(){
         RoomCollection collection = new RoomCollection();

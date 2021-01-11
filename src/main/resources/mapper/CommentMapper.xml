@@ -25,7 +25,8 @@
             <if test="userId != null">user_id,</if>
             <if test="roomId != null">room_id,</if>
             <if test="rateStars != null">rate_stars,</if>
-            <if test="content != null">content</if>
+            <if test="content != null">content,</if>
+            <if test="createDate != null">create_date</if>
         </trim>
     </sql>
     <sql id="commentValues">
@@ -33,7 +34,8 @@
             <if test="userId != null">#{userId},</if>
             <if test="roomId != null">#{roomId},</if>
             <if test="rateStars != null">#{rateStars},</if>
-            <if test="content != null">#{content}</if>
+            <if test="content != null">#{content},</if>
+            <if test="createDate != null">#{createDate}</if>
         </trim>
     </sql>
     <insert id="insertComment" parameterType="com.homestay.pojo.Comment"

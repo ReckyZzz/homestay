@@ -43,7 +43,7 @@
 </div>
 <script type="text/javascript">
     let manage=new Vue({
-        el:"#myOrder",
+        el:"#manage",
         data:{
             orderInfoList:[],
             userInfoList:[],
@@ -73,15 +73,12 @@
             toLogin:function(){
                 location.href="login.html";
             },
-            toComment:function(orderId){
-                Location.href="comment.html";
-            },
             getRoomNow:function(){
                 this.roomNow = localStorage.getItem("roomNow");
             },
             getOrder:function(pageNum,pageSize){
                 $.ajax({
-                    url: "../user/getOrders",
+                    url: "../admin/getOrderInfo",
                     type: "GET",
                     data: {
                         pageNum:pageNum,
@@ -90,10 +87,7 @@
                     dataType: "json",
                     success: function (result) {
                         if (result.code === 0) {
-                            myOrder.orderInfoList = result.data.list;
-                            myOrder.all = result.data.pages;
-                            myOrder.all=1;
-                            myOrder.cur=1;
+                            manage.orderInfoList = result.data.list;
                         }
                     },
                     error: function (request, status, error) {
@@ -106,8 +100,69 @@
             },
             getUser:function(pageNum,pageSize){
                $.ajax({
-                   url:"",
+                   url:"../admin/getUserInfo",
+                   type: "GET",
+                   data: {
+                       pageNum:pageNum,
+                       pageSize:pageSize
+                   },
+                   dataType: "json",
+                   success: function (result) {
+                       if (result.code === 0) {
+                           manage.userInfoList = result.data.list;
+                       }
+                   },
+                   error: function (request, status, error) {
+                       alert("系统异常！");
+                       console.log(request.status);
+                       console.log(request.readyState);
+                       console.log(status);
+                   }
                })
+            },
+            getComment:function(pageNum,pageSize){
+                $.ajax({
+                    url:"../admin/getCommentInfo",
+                    type: "GET",
+                    data: {
+                        pageNum:pageNum,
+                        pageSize:pageSize
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            manage.commentInfoList = result.data.list;
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                })
+            },
+            getRoom:function(pageNum,pageSize){
+                $.ajax({
+                    url:"../admin/getRoomInfo",
+                    type: "GET",
+                    data: {
+                        pageNum:pageNum,
+                        pageSize:pageSize
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            manage.roomInfoList = result.data.list;
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                })
             },
             isLogin:function(){
                 $.ajax({
@@ -117,10 +172,10 @@
                     dataType: "json",
                     success: function (result) {
                         if (result.code === 1) {
-                            myOrder.ifLogin = false;
+                            manage.ifLogin = false;
                             location.href="login.html";
                         }else if(result.code === 0){
-                            myOrder.ifLogin = true;
+                            manage.ifLogin = true;
                         }
                     },
                     error: function (request, status, error) {

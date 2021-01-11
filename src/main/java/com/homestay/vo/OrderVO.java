@@ -3,6 +3,7 @@ package com.homestay.vo;
 public class OrderVO {
     Integer orderId;//订单ID
     Integer days;//入住天数
+    Integer roomId;//房间ID
     String userName;//用户
     String ownerName;//民宿主
     String roomName;//房间名
@@ -11,6 +12,14 @@ public class OrderVO {
     String liveDate;//入住时间
     Double money;//金额
     Integer comment;//能否评论
+
+    public Integer getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(Integer roomId) {
+        this.roomId = roomId;
+    }
 
     public Integer getOrderId() {
         return orderId;

@@ -8,16 +8,17 @@ import java.util.Date;
 import java.util.List;
 
 public class RoomVO {
-    String roomName;
-    String ownerName;
-    String ownerDescription;
-    String url;
-    Integer roomNum;
-    Double price;
-    List<String> userNames;
-    List<String> content;
-    List<Integer> stars;
-    List<String> dates;
+    private String roomName;
+    private String ownerName;
+    private String ownerDescription;
+    private String url;
+    private String location;
+    private Integer roomNum;
+    private Double price;
+    private List<String> userNames;
+    private List<String> content;
+    private List<Integer> stars;
+    private List<String> dates;
 
     public String getRoomName() {
         return roomName;
@@ -97,5 +98,13 @@ public class RoomVO {
 
     public void setDates(List<String> dates) {
         this.dates = dates;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

@@ -5,18 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <title>房间评论</title>
+
+    <title>我的信息</title>
     <link rel="stylesheet" type="text/css" href="../css/global.css">
     <link rel="stylesheet" type="text/css" href="../css/index.css">
-    <link rel="stylesheet" type="text/css" href="../css/user/comment.css">
-    <link rel="stylesheet" href="../css/user/roomDetail.css">
     <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+    <link rel="stylesheet" href="../css/user/ownerOrder.css">
 </head>
 <body>
-<div id="comment">
+<div id="ownerOrder">
     <header>
         <nav class="navbar navbar-default navbar-inverse">
             <div class="container-fluid">
@@ -28,13 +28,13 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="/users/index.html">在线民宿平台</a>
+                    <a class="navbar-brand" href="index.html">在线民宿平台</a>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        <li><a href="#" v-if="ifLogin==true">我的 <span class="sr-only"></span></a></li>
+                        <li><a href="myOrder.html" v-if="ifLogin==true">我的 <span class="sr-only"></span></a></li>
                         <li><a href="#" v-if="ifLogin==false" @click="toLogin">登录</a></li>
                         <li><a href="#" v-if="ifLogin==true" @click="logout">登出</a></li>
                     </ul>
@@ -42,103 +42,125 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <div class="hdetail">{{roomNowInfo.roomName}}</div>
-        <div class="row mar-top-30">
-            <div class="col-md-6">
-                <img class="room-bigpic thumbnail img-responsive" :src="roomNowInfo.url">
-            </div>
-            <div class="col-md-6">
-                <div class="panel panel-info">
-                    <div class="panel-heading"><span class="glyphicon glyphicon-home"> </span> 住宿评价</div>
-                    <div class="panel-body">
-                        <textarea class="text-warning w-h" placeholder="请输入你的评价" v-model="content"></textarea>
-                    </div>
-                    <div class="panel-footer">
-                        <span class="label label-info"><span class="glyphicon glyphicon-duplicate"></span> 评星:</span>
-                        <span v-for="index in count" class="glyphicon glyphicon-star"></span>
-
-                    <div class="btn-group">
-                          <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            评星 <span class="caret"></span>
-                          </button>
-                          <ul class="dropdown-menu">
-                            <li><a @click="count=1">1</a></li>
-                            <li><a @click="count=2">2</a></li>
-                            <li><a @click="count=3">3</a></li>
-                            <li><a @click="count=4">4</a></li>
-                            <li><a @click="count=5">5</a></li>
-                          </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <input  type="button" class="btn btn-warning btn-block" @click="commentRoom(orderID,count,content)" value="提交评价">
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="container-fluid">
+        <table id="orders" class="table table-hover table-responsive">
+            <caption>我的订单</caption>
+            <tr>
+                <th>订单ID</th>
+                <th>用户名</th>
+                <th>民宿主人</th>
+                <th>房间名</th>
+                <th>创建时间</th>
+                <th>预定时间</th>
+                <th>入住时间</th>
+                <th>入住天数</th>
+                <th>金额</th>
+                <th>入住情况</th>
+            </tr>
+            <tr v-for="orderInfo in orderInfoList">
+                <td>{{orderInfo.orderId}}</td>
+                <td>{{orderInfo.userName}}</td>
+                <td>{{orderInfo.ownerName}}</td>
+                <td>{{orderInfo.roomName}}</td>
+                <td>{{orderInfo.createDate}}</td>
+                <td>{{orderInfo.reserveDate}}</td>
+                <td>{{orderInfo.liveDate}}</td>
+                <td>{{orderInfo.days}}</td>
+                <td>{{orderInfo.money}}</td>
+                <td>
+                    <a v-if="orderInfo.comment==1" v-on:click="toComment(orderInfo.roomId,orderInfo.orderId)" class="btn btn-warning">待入住</a>
+                    <span v-if="orderInfo.comment==0" class="label label-primary">入住中</span>
+                    <span v-if="orderInfo.comment==2" class="label label-success">已完成</span>
+                </td>
+            </tr>
+        </table>
+        <table id="rooms" class="table table-hover table-responsive">
+            <caption>我的房源</caption>
+            <tr>
+                <th>房间ID</th>
+                <th>房间地址</th>
+                <th>房间名</th>
+                <th>详细描述</th>
+                <th>房间价格</th>
+                <th>是否可用</th>
+            </tr>
+            <tr v-for="roomInfo in roomInfoList">
+                <td>{{roomInfo.roomId}}</td>
+                <td>{{roomInfo.location}}</td>
+                <td>{{roomInfo.roomName}}</td>
+                <td>{{roomInfo.description}}</td>
+                <td>{{roomInfo.roomPrice}}</td>
+                <td>
+                    <a v-if="roomInfo.available==1" v-on:click="changeAvailable(roomInfo.roomId)" class="btn btn-success">可用</a>
+                    <span v-if="orderInfo.comment==0" class="label label-warning">不可用</span>
+                </td>
+            </tr>
+        </table>
+        <table id="comments" class="table table-hover table-responsive">
+            <caption>我的评论</caption>
+            <tr>
+                <th>评论ID</th>
+                <th>评论用户名</th>
+                <th>房间名</th>
+                <th>评论星级</th>
+                <th>评论内容</th>
+                <th>评论时间</th>
+            </tr>
+            <tr v-for="commentInfo in commentInfoList">
+                <td>{{commentInfo.commentId}}</td>
+                <td>{{commentInfo.userName}}</td>
+                <td>{{commentInfo.roomName}}</td>
+                <td>{{commentInfo.stars}}</td>
+                <td>{{commentInfo.content}}</td>
+                <td>{{commentInfo.commentDate}}</td>
+            </tr>
+        </table>
     </div>
 </div>
 <script type="text/javascript">
-    let comment=new Vue({
-        el:"#comment",
+    let ownerOrder=new Vue({
+        el:"#ownerOrder",
         data:{
-            roomNowInfo:{},
+            orderInfoList:[],
+            roomInfoList:[],
+            commentInfoList:[],
+            orderInfo:0,
+            roomInfo:0,
+            commentInfo:0,
             ifLogin:false,
-            count:0,
-            roomID:-1,
-            orderID:-1,
+            ownerID:-1,
+            order:{
+                checkindate:"",
+                checkoutdate:"",
+                realpay:0,
+                hid:"",
+                uid:""
+            },
+            total:0,
+            error:{
+                isActive:false,
+                msg:""
+            }
         },
         methods:{
-            subArr() {
-                console.log("subArr");
-                this.getPageRoomInfoList(this.cur,10);
-                return this.orderInfoList;
-            },
             toLogin:function(){
                 location.href="login.html";
             },
-            getRoomNow:function(){
-                this.roomNow = localStorage.getItem("roomNow");
-            },
-            commentRoom:function(orderID,count,content){
+            getMyOrder:function(pageNum,pageSize){
                 $.ajax({
-                    url: "../user/commentRoom",
-                    type: "GET",
-                    data:{
-                        orderId:orderID,
-                        stars:count,
-                        content:content
-                    },
-                    dataType: "json",
-                    success: function (result) {
-                        if (result.code === 0) {
-                            location.href="myOrder.html";
-                        }
-                    },
-                    error: function (request, status, error) {
-                        alert("系统异常！");
-                        console.log(request.status);
-                        console.log(request.readyState);
-                        console.log(status);
-                    }
-                });
-            },
-            getRoomDetail:function(roomNow){
-                $.ajax({
-                    url: "../user/checkRoomInfo",
+                    url: "../owner/getOrders",
                     type: "GET",
                     data: {
-                        roomId:roomNow
+                        pageNum:pageNum,
+                        pageSize:pageSize
                     },
                     dataType: "json",
                     success: function (result) {
                         if (result.code === 0) {
-                            comment.roomNowInfo = result.data;
+                            ownerOrder.orderInfoList = result.data.list;
+                            ownerOrder.all = result.data.pages;
+                            ownerOrder.all=1;
+                            ownerOrder.cur=1;
                         }
                     },
                     error: function (request, status, error) {
@@ -148,6 +170,44 @@
                         console.log(status);
                     }
                 });
+            },
+            getMyRoom:function(){
+                $.ajax({
+                    url: "../owner/getRooms",
+                    type: "GET",
+                    data: {},
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            ownerOrder.roomInfoList = result.data;
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                })
+            },
+            getMyComment:function(){
+              $.ajax({
+                  url: "../owner/getComments",
+                  type: "GET",
+                  data: {},
+                  dataType: "json",
+                  success: function (result) {
+                      if (result.code === 0) {
+                          ownerOrder.commentInfoList = result.data;
+                      }
+                  },
+                  error: function (request, status, error) {
+                      alert("系统异常！");
+                      console.log(request.status);
+                      console.log(request.readyState);
+                      console.log(status);
+                  }
+              })
             },
             isLogin:function(){
                 $.ajax({
@@ -157,10 +217,10 @@
                     dataType: "json",
                     success: function (result) {
                         if (result.code === 1) {
-                            comment.ifLogin = false;
+                            ownerOrder.ifLogin = false;
                             location.href="login.html";
                         }else if(result.code === 0){
-                            comment.ifLogin = true;
+                            ownerOrder.ifLogin = true;
                         }
                     },
                     error: function (request, status, error) {
@@ -222,9 +282,10 @@
         },
         mounted:function () {
             this.isLogin();
-            this.roomID = localStorage.getItem("roomID");
-            this.orderID = localStorage.getItem("orderID");
-            this.getRoomDetail(this.roomID);
+            this.ownerID = localStorage.getItem("userID");
+            this.getMyOrder(1,30);
+            this.getMyRoom();
+            this.getMyComment();
         }
     });
 </script>

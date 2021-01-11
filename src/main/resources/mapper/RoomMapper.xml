@@ -28,6 +28,7 @@
             <if test="roomOwner != null">room_owner,</if>
             <if test="roomName != null">room_name,</if>
             <if test="description != null">description,</if>
+            <if test="location != null">location,</if>
             <if test="roomPrice != null">room_price,</if>
             <if test="isAvailable != null">is_available</if>
         </trim>
@@ -37,6 +38,7 @@
             <if test="roomOwner != null">#{roomOwner},</if>
             <if test="roomName != null">#{roomName},</if>
             <if test="description != null">#{description},</if>
+            <if test="location != null">#{location},</if>
             <if test="roomPrice != null">#{roomPrice},</if>
             <if test="isAvailable != null">#{isAvailable}</if>
         </trim>
@@ -49,7 +51,7 @@
 
     <update id="updateRoom">
         UPDATE tb_room SET room_owner=#{roomOwner},room_name=#{roomName},description=#{description},
-        room_price=#{roomPrice},is_available=#{isAvailable}
+        room_price=#{roomPrice},is_available=#{isAvailable},location=#{loaction}
         WHERE room_id=#{roomId}
     </update>
     <update id="deleteRoomById">

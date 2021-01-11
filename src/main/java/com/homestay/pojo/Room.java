@@ -5,6 +5,7 @@ public class Room {
     private String roomName;
     private Integer roomOwner;
     private String description;
+    private String location;
     private double roomPrice;
     private Integer isAvailable;
     private Integer delFlag;
@@ -40,6 +41,14 @@ public class Room {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public double getRoomPrice() {
