@@ -9,49 +9,18 @@ import com.homestay.pojo.User;
 import com.homestay.response.CommonResponse;
 import com.homestay.service.AdminService;
 import com.homestay.util.SessionUtil;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/admin")
 public class AdminController {
     @Resource
     AdminService adminService;
-
-    @GetMapping("/isLogin")
-    @ApiOperation("管理员是否登录")
-    public CommonResponse<Object> isLogin(@ApiIgnore HttpSession session){
-        if(session.getAttribute(("user")) != null){
-            return new CommonResponse<>(0,"已登录",null);
-        }
-        else{
-            return new CommonResponse<>(1,"未登录",null);
-        }
-    }
-
-    @PostMapping("/login")
-    @ApiOperation("管理员登录")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "username",value = "用户账号",required = true),
-            @ApiImplicitParam(name = "password",value = "用户密码",required = true),
-    })
-    public CommonResponse<User> login(@RequestParam String username,
-                                      @RequestParam String password,
-                                      @ApiIgnore HttpSession session){
-        User user = new User();
-        user.setUserName(username);
-        user.setUserPwd(password);
-        SessionUtil.setSession(session);
-        return adminService.login(user);
-    }
 
     @GetMapping("/getUserInfo")
     @ApiOperation("获取用户列表")
@@ -108,7 +77,7 @@ public class AdminController {
         return new CommonResponse<>(1,"不存在的订单",null);
     }
 
-    @PostMapping("updateCommentInfo")
+    @PostMapping("/updateCommentInfo")
     @ApiOperation("更新评论信息")
     public CommonResponse<Comment> updateComment(Comment comment){
         comment = adminService.updateComment(comment);
@@ -158,7 +127,7 @@ public class AdminController {
         return new CommonResponse<>(1,"订单已存在",null);
     }
 
-    @GetMapping("/addUser")
+    @GetMapping("/deleteUsers")
     @ApiOperation("批量删除用户")
     public CommonResponse<Object> deleteUsers(String userIds){
         List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(userIds),Integer.class);

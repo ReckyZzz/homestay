@@ -13,6 +13,8 @@ public interface RoomMapper {
     List<Room> getRoomByOwner(int ownerId);
     List<Room> list();
     List<Room> getAllRooms();
+    int enableRoom(Integer roomId);
+    int disableRoom(Integer roomId);
     int insertRoom(Room room);
     int updateRoom(Room room);
     int deleteRoomById(int id);

@@ -28,8 +28,7 @@
             <if test="userName != null">user_name,</if>
             <if test="userPwd != null">user_pwd,</if>
             <if test="userType != null">user_type,</if>
-            <if test="gender != null">gender,</if>
-            <if test="delFlag != null">del_flag</if>
+            <if test="nickname != null">nickname,</if>
         </trim>
     </sql>
     <sql id="userValues">
@@ -37,8 +36,7 @@
             <if test="userName != null">#{userName},</if>
             <if test="userPwd != null">#{userPwd},</if>
             <if test="userType != null">#{userType},</if>
-            <if test="gender != null">#{gender},</if>
-            <if test="delFlag != null">#{delFlag}</if>
+            <if test="nickname != null">#{nickname},</if>
         </trim>
     </sql>
     <insert id="insertUser" parameterType="com.homestay.pojo.User"
@@ -63,7 +61,7 @@
         UPDATE tb_user SET user_pwd=#{newPwd} WHERE user_name=#{username} AND del_flag = 0
     </update>
     <update id="updateUser">
-        UPDATE tb_user SET user_name=#{userName},user_pwd=#{userPwd},user_type=#{userType},gender=#{gender}
+        UPDATE tb_user SET user_name=#{userName},user_pwd=#{userPwd},user_type=#{userType},nickname=#{nickname}
         WHERE user_id=#{userId}
     </update>
 </mapper>

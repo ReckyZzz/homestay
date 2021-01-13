@@ -7,11 +7,9 @@ import com.homestay.response.CommonResponse;
 import com.homestay.service.UserService;
 import com.homestay.util.SessionUtil;
 import com.homestay.vo.OrderVO;
-import com.homestay.vo.RoomVO;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 

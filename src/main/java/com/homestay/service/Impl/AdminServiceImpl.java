@@ -102,9 +102,6 @@ public class AdminServiceImpl implements AdminService {
             if(user.getUserPwd() != null){
                 oldUser.setUserPwd(EncryptUtil.getEncodedString(user.getUserPwd()));
             }
-            if(user.getGender() != null && user.getGender() != oldUser.getGender()){
-                oldUser.setGender(user.getGender());
-            }
             if(user.getUserType() != null && user.getUserType() != oldUser.getUserType()){
                 oldUser.setUserType(user.getUserType());
             }

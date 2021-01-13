@@ -12,15 +12,8 @@ import java.util.List;
 
 public interface OwnerService {
     int addImage(Image image);
-    Room getRoomById(Integer id);
-    List<RoomCollection> getCollections(User user);
-    List<Comment> getCommentsByRoom(Room room);
     List<RoomVO2> getRooms(Integer ownerId);
-    List<Room> searchRooms(String name);
-    CommonResponse<Order> reserve(Integer userId, Integer roomId, Integer days, Date reserveDate);
-    CommonResponse<Object> collectRoom(User user,Room room);
-    CommonResponse<Object> cancelCollectRoom(User user,Room room);
-    CommonResponse<Comment> commentRoom(Order order, Integer stars, String content);
+    CommonResponse<Room> addRoom(Integer ownerId,String roomName,String description, String location, Double price);
     CommonResponse<List<CommentVO>> getComments(Integer ownerId);
     CommonResponse<PageInfo<OrderVO>> getOrders(Integer userId, Integer pageNum, Integer pageSize);
 }

@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+
     <title>管理界面</title>
     <link rel="stylesheet" type="text/css" href="../css/global.css">
     <link rel="stylesheet" type="text/css" href="../css/index.css">
@@ -11,10 +13,10 @@
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
-    <link rel="stylesheet" href="../css/user/myorder.css">
+    <link rel="stylesheet" href="../css/user/ownerOrder.css">
 </head>
 <body>
-<div id="manage">
+<div id="admin">
     <header>
         <nav class="navbar navbar-default navbar-inverse">
             <div class="container-fluid">
@@ -26,13 +28,13 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="/users/index.html">在线民宿平台</a>
+                    <a class="navbar-brand" href="index.html">在线民宿平台</a>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        <li><a href="#" v-if="ifLogin==true">我的 <span class="sr-only"></span></a></li>
+                        <li><a href="manage.html" v-if="ifLogin==true">管理 <span class="sr-only"></span></a></li>
                         <li><a href="#" v-if="ifLogin==false" @click="toLogin">登录</a></li>
                         <li><a href="#" v-if="ifLogin==true" @click="logout">登出</a></li>
                     </ul>
@@ -40,15 +42,124 @@
             </div>
         </nav>
     </header>
+    <div class="container-fluid">
+        <table id="users" class="table table-hover table-responsive">
+            <caption>所有用户</caption>
+            <tr>
+                <th>用户ID</th>
+                <th>用户名</th>
+                <th>用户密码</th>
+                <th>用户类型</th>
+                <th>用户昵称</th>
+                <th>删除状态</th>
+            </tr>
+            <tr v-for="userInfo in userInfoList">
+                <td>{{userInfo.userId}}</td>
+                <td>{{userInfo.userName}}</td>
+                <td>{{userInfo.userPwd}}</td>
+                <td>{{userInfo.userType}}</td>
+                <td>{{userInfo.nickname}}</td>
+                <td>
+                    <a v-if="userInfo.delFlag==1" v-on:click="resetUser(userInfo.userId)" class="btn btn-danger">已删除</a>
+                    <a v-if="userInfo.delFlag==0" v-on:click="deleteUser(userInfo.userId)" class="btn btn-success">未删除</a>
+                </td>
+            </tr>
+        </table>
+        <table id="orders" class="table table-hover table-responsive">
+            <caption>所有订单</caption>
+            <tr>
+                <th>订单ID</th>
+                <th>用户ID</th>
+                <th>民宿主人ID</th>
+                <th>创建时间</th>
+                <th>预定时间</th>
+                <th>入住时间</th>
+                <th>入住天数</th>
+                <th>金额</th>
+                <th>删除状态</th>
+            </tr>
+            <tr v-for="orderInfo in orderInfoList">
+                <td>{{orderInfo.orderId}}</td>
+                <td>{{orderInfo.userId}}</td>
+                <td>{{orderInfo.ownerId}}</td>
+                <td>{{orderInfo.createDate}}</td>
+                <td>{{orderInfo.reserveDate}}</td>
+                <td>{{orderInfo.liveDate}}</td>
+                <td>{{orderInfo.lastDays}}</td>
+                <td>{{orderInfo.money}}</td>
+                <td>
+                    <a v-if="orderInfo.delFlag==1" v-on:click="resetOrder(orderInfo.orderId)" class="btn btn-danger">已删除</a>
+                    <a v-if="orderInfo.delFlag==0" v-on:click="deleteOrder(orderInfo.orderId)" class="btn btn-success">未删除</a>
+                </td>
+            </tr>
+        </table>
+        <table id="rooms" class="table table-hover table-responsive">
+            <caption>所有房源</caption>
+            <tr>
+                <th>房间ID</th>
+                <th>民宿主人ID</th>
+                <th>房间名</th>
+                <th>详细描述</th>
+                <th>房间位置</th>
+                <th>房间价格</th>
+                <th>是否可用</th>
+                <th>删除状态</th>
+            </tr>
+            <tr v-for="roomInfo in roomInfoList">
+                <td>{{roomInfo.roomId}}</td>
+                <td>{{roomInfo.roomOwner}}</td>
+                <td>{{roomInfo.roomName}}</td>
+                <td>{{roomInfo.description}}</td>
+                <td>{{roomInfo.location}}</td>
+                <td>{{roomInfo.roomPrice}}</td>
+                <td>
+                    <a v-if="roomInfo.isAvailable==1" v-on:click="disableRoom(roomInfo.roomId)" class="btn btn-success">可用</a>
+                    <a v-if="roomInfo.isAvailable==0" v-on:click="enableRoom(roomInfo.roomId)" class="btn btn-danger">不可用</a>
+                </td>
+                <td>
+                    <a v-if="roomInfo.delFlag==1" v-on:click="resetRoom(roomInfo.roomId)" class="btn btn-danger">已删除</a>
+                    <a v-if="roomInfo.delFlag==0" v-on:click="deleteRoom(roomInfo.roomId)" class="btn btn-success">未删除</a>
+                </td>
+            </tr>
+        </table>
+        <table id="comments" class="table table-hover table-responsive">
+            <caption>所有评论</caption>
+            <tr>
+                <th>评论ID</th>
+                <th>用户ID</th>
+                <th>房间ID</th>
+                <th>评论星级</th>
+                <th>评论内容</th>
+                <th>评论时间</th>
+                <th>删除状态</th>
+            </tr>
+            <tr v-for="commentInfo in commentInfoList">
+                <td>{{commentInfo.commentId}}</td>
+                <td>{{commentInfo.userId}}</td>
+                <td>{{commentInfo.roomId}}</td>
+                <td>{{commentInfo.rateStars}}</td>
+                <td>{{commentInfo.content}}</td>
+                <td>{{commentInfo.createDate}}</td>
+                <td>
+                    <a v-if="commentInfo.delFlag==1" v-on:click="resetComment(commentInfo.commentId)" class="btn btn-danger">已删除</a>
+                    <a v-if="commentInfo.delFlag==0" v-on:click="deleteComment(commentInfo.commentId)" class="btn btn-success">未删除</a>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
 <script type="text/javascript">
-    let manage=new Vue({
-        el:"#manage",
+    let admin=new Vue({
+        el:"#admin",
         data:{
-            orderInfoList:[],
             userInfoList:[],
-            commentInfoList:[],
+            orderInfoList:[],
             roomInfoList:[],
+            commentInfoList:[],
+            userInfo:null,
+            orderInfo:null,
+            roomInfo:null,
+            commentInfo:null,
             ifLogin:false,
             userID:-1,
             order:{
@@ -58,80 +169,26 @@
                 hid:"",
                 uid:""
             },
-            total:0,
             error:{
                 isActive:false,
                 msg:""
             }
         },
         methods:{
-            subArr() {
-                console.log("subArr");
-                this.getPageRoomInfoList(this.cur,10);
-                return this.orderInfoList;
-            },
             toLogin:function(){
                 location.href="login.html";
             },
-            getRoomNow:function(){
-                this.roomNow = localStorage.getItem("roomNow");
-            },
-            getOrder:function(pageNum,pageSize){
+            getUserInfo:function(pageNum,pageSize){
                 $.ajax({
-                    url: "../admin/getOrderInfo",
+                    url: "../admin/getUserInfo",
                     type: "GET",
-                    data: {
+                    data:{
                         pageNum:pageNum,
                         pageSize:pageSize
                     },
-                    dataType: "json",
                     success: function (result) {
                         if (result.code === 0) {
-                            manage.orderInfoList = result.data.list;
-                        }
-                    },
-                    error: function (request, status, error) {
-                        alert("系统异常！");
-                        console.log(request.status);
-                        console.log(request.readyState);
-                        console.log(status);
-                    }
-                });
-            },
-            getUser:function(pageNum,pageSize){
-               $.ajax({
-                   url:"../admin/getUserInfo",
-                   type: "GET",
-                   data: {
-                       pageNum:pageNum,
-                       pageSize:pageSize
-                   },
-                   dataType: "json",
-                   success: function (result) {
-                       if (result.code === 0) {
-                           manage.userInfoList = result.data.list;
-                       }
-                   },
-                   error: function (request, status, error) {
-                       alert("系统异常！");
-                       console.log(request.status);
-                       console.log(request.readyState);
-                       console.log(status);
-                   }
-               })
-            },
-            getComment:function(pageNum,pageSize){
-                $.ajax({
-                    url:"../admin/getCommentInfo",
-                    type: "GET",
-                    data: {
-                        pageNum:pageNum,
-                        pageSize:pageSize
-                    },
-                    dataType: "json",
-                    success: function (result) {
-                        if (result.code === 0) {
-                            manage.commentInfoList = result.data.list;
+                            admin.userInfoList = result.data.list;
                         }
                     },
                     error: function (request, status, error) {
@@ -142,9 +199,9 @@
                     }
                 })
             },
-            getRoom:function(pageNum,pageSize){
+            getOrderInfo:function(pageNum,pageSize){
                 $.ajax({
-                    url:"../admin/getRoomInfo",
+                    url: "../admin/getOrderInfo",
                     type: "GET",
                     data: {
                         pageNum:pageNum,
@@ -153,7 +210,51 @@
                     dataType: "json",
                     success: function (result) {
                         if (result.code === 0) {
-                            manage.roomInfoList = result.data.list;
+                            admin.orderInfoList = result.data.list;
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            getRoomInfo:function(pageNum,pageSize){
+                $.ajax({
+                    url: "../admin/getRoomInfo",
+                    type: "GET",
+                    data: {
+                        pageNum:pageNum,
+                        pageSize:pageSize
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            admin.roomInfoList = result.data.list;
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                })
+            },
+            getCommentInfo:function(pageNum,pageSize){
+                $.ajax({
+                    url: "../admin/getCommentInfo",
+                    type: "GET",
+                    data: {
+                        pageNum:pageNum,
+                        pageSize:pageSize
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            admin.commentInfoList = result.data.list;
                         }
                     },
                     error: function (request, status, error) {
@@ -172,10 +273,10 @@
                     dataType: "json",
                     success: function (result) {
                         if (result.code === 1) {
-                            manage.ifLogin = false;
+                            admin.ifLogin = false;
                             location.href="login.html";
                         }else if(result.code === 0){
-                            manage.ifLogin = true;
+                            admin.ifLogin = true;
                         }
                     },
                     error: function (request, status, error) {
@@ -237,8 +338,10 @@
         },
         mounted:function () {
             this.isLogin();
-            this.userID = localStorage.getItem("userID");
-            this.getOrder(1,20);
+            this.getUserInfo(1,30);
+            this.getRoomInfo(1,30);
+            this.getCommentInfo(1,30);
+            this.getOrderInfo(1,30);
         }
     });
 </script>

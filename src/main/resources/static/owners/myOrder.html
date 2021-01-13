@@ -35,6 +35,9 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <li><a href="myOrder.html" v-if="ifLogin==true">我的 <span class="sr-only"></span></a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="addRoom.html" v-if="ifLogin==true">发布房源 <span class="sr-only"></span></a>
+                        </li>
                         <li><a href="#" v-if="ifLogin==false" @click="toLogin">登录</a></li>
                         <li><a href="#" v-if="ifLogin==true" @click="logout">登出</a></li>
                     </ul>
@@ -48,7 +51,6 @@
             <tr>
                 <th>订单ID</th>
                 <th>用户名</th>
-                <th>民宿主人</th>
                 <th>房间名</th>
                 <th>创建时间</th>
                 <th>预定时间</th>
@@ -60,7 +62,6 @@
             <tr v-for="orderInfo in orderInfoList">
                 <td>{{orderInfo.orderId}}</td>
                 <td>{{orderInfo.userName}}</td>
-                <td>{{orderInfo.ownerName}}</td>
                 <td>{{orderInfo.roomName}}</td>
                 <td>{{orderInfo.createDate}}</td>
                 <td>{{orderInfo.reserveDate}}</td>
@@ -110,7 +111,7 @@
                 <td>{{commentInfo.commentId}}</td>
                 <td>{{commentInfo.userName}}</td>
                 <td>{{commentInfo.roomName}}</td>
-                <td>{{commentInfo.stars}}</td>
+                <td> <span v-for="index in commentInfo.stars" class="glyphicon glyphicon-star"></span></td>
                 <td>{{commentInfo.content}}</td>
                 <td>{{commentInfo.commentDate}}</td>
             </tr>

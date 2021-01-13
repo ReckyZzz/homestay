@@ -25,7 +25,6 @@
     <!--插入时有默认值时使用默认值-->
     <sql id="orderColumns">
         <trim suffixOverrides=",">
-            <if test="orderId != null">order_id,</if>
             <if test="userId != null">user_id,</if>
             <if test="ownerId != null">owner_id,</if>
             <if test="roomId != null">room_id,</if>
@@ -38,7 +37,6 @@
     </sql>
     <sql id="orderValues">
         <trim suffixOverrides=",">
-            <if test="orderId != null">#{orderId},</if>
             <if test="userId != null">#{userId},</if>
             <if test="ownerId != null">#{ownerId},</if>
             <if test="roomId != null">#{roomId},</if>

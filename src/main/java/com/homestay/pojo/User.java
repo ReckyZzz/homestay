@@ -3,9 +3,9 @@ package com.homestay.pojo;
 public class User {
     private Integer userId;
     private Integer userType;
-    private Integer gender;
     private String userName;
     private String userPwd;
+    private String nickname;
     private Integer delFlag;
 
     public Integer getUserId() {
@@ -40,12 +40,12 @@ public class User {
         this.userPwd = userPwd;
     }
 
-    public Integer getGender() {
-        return gender;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setGender(Integer gender) {
-        this.gender = gender;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public Integer getDelFlag() {

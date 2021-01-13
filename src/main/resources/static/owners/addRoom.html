@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>发布房源</title>
+    <link rel="stylesheet" type="text/css" href="../css/global.css">
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+    <style>
+        body{
+            background-color: #ecf0f1;
+            min-height: 500px;
+        }
+    </style>
+</head>
+<body>
+<div id="ownerAdd">
+        <header>
+            <nav class="navbar navbar-default navbar-inverse">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="index.html">在线民宿平台</a>
+                    </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li><a href="myOrder.html" v-if="ifLogin==true">我的 <span class="sr-only"></span></a></li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="addRoom.html" v-if="ifLogin==true">发布房源 <span class="sr-only"></span></a>
+                            </li>
+                            <li><a href="#" v-if="ifLogin==false" @click="toLogin">登录</a></li>
+                            <li><a href="#" v-if="ifLogin==true" @click="logout">登出</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <div class="container">
+            <div class="page-header">
+                <h1>发布房源 <small>发布自己的房源信息</small></h1>
+            </div>
+            <div class="row">
+                <div class="panel panel-info">
+                    <div class="panel-heading"><span class="glyphicon glyphicon-home"></span> 基础信息</div>
+                    <div class="panel-body">
+                        <ul class="list-group">
+                            <li  class="list-group-item list-group-item-warning">
+                                <div class="input-group">
+                                    <span class="input-group-addon" >详细地址</span>
+                                    <input type="text" class="form-control" v-model="addr" placeholder="请填写详细地址">
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="panel panel-info">
+                    <div class="panel-heading"><span class="glyphicon glyphicon-info-sign"></span> 房源介绍</div>
+                    <div class="panel-body">
+                        <ul class="list-group">
+                            <li  class="list-group-item list-group-item-warning">
+                                <div class="input-group">
+                                    <span class="input-group-addon" >标题</span>
+                                    <input type="text" class="form-control" v-model="roomName" placeholder="请填写标题">
+                                </div>
+                            </li>
+                            <li  class="list-group-item list-group-item-warning">
+                                <div class="input-group">
+                                    <span class="input-group-addon" >简介</span>
+                                    <textarea type="text" class="form-control" v-model="description" placeholder="请填写房源简介"></textarea>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="panel panel-info">
+                    <div class="panel-heading"><span class="glyphicon glyphicon-time"></span> 预定信息</div>
+                    <div class="panel-body">
+                        <ul class="list-group">
+                            <li  class="list-group-item list-group-item-warning">
+                                <div class="input-group">
+                                    <span class="input-group-addon" >价格</span>
+                                    <input type="number" class="form-control" v-model="price" placeholder="请填写价格">
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="panel panel-success">
+                    <div class="panel-body">
+                        <input type="button" class="btn btn-block btn-success" value="发布房源" @click="addRoom(roomName,description,addr,price)">
+                    </div>
+                </div>
+            </div>
+            <div style="height: 50px"></div>
+        </div>
+</div>
+</body>
+<script type="text/javascript">
+    let ownerAdd=new Vue({
+        el:"#ownerAdd",
+        data:{
+            ifLogin:false,
+            ownerID:null,
+            roomName:null,
+            addr:null,
+            description:null,
+            price:null,
+            error:{
+                isActive:false,
+                msg:""
+            }
+        },
+        methods:{
+            addRoom:function(roomName,description,addr,price){
+                $.ajax({
+                    url: "../owner/addRoom",
+                    type: "GET",
+                    data:{
+                        roomName:roomName,
+                        description:description,
+                        address:addr,
+                        price:price
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            location.href="index.html";
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                })
+            },
+            toLogin:function(){
+                location.href="login.html";
+            },
+            isLogin:function(){
+                $.ajax({
+                    url: "../user/isLogin",
+                    type: "GET",
+                    data: {},
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 1) {
+                            ownerAdd.ifLogin = false;
+                            location.href="login.html";
+                        }else if(result.code === 0){
+                            ownerAdd.ifLogin = true;
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            logout:function () {
+                $.ajax({
+                    url: "../user/logout",
+                    type: "POST",
+                    data:{},
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.code === 0) {
+                            location.href = "login.html";
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+        },
+        computed: {
+            indexs: function(){
+                var left = 1;
+                var right = this.all;
+                var ar = [];
+                if(this.all>= 5){
+                    //这里最大范围从3到6，如果到达7，那么下边加2变成9，已经超过最大的范围值
+                    if(this.cur > 3 && this.cur < this.all-1){
+                        //以4为参考基准，左面加2右边加2
+                        left = this.cur - 2
+                        right = this.cur + 2
+                    }else{
+                        if(this.cur<=3){
+                            left = 1
+                            right = 5
+                        }else{
+                            right = this.all
+                            left = this.all -4
+                        }
+                    }
+                }
+                while (left <= right){
+                    ar.push(left)
+                    left ++
+                }
+                console.log(ar);
+                return ar
+            },
+        },
+        mounted:function () {
+            this.isLogin();
+            this.ownerID = localStorage.getItem("userID");
+        }
+    });
+</script>
+</html>

@@ -30,7 +30,6 @@
             <if test="description != null">description,</if>
             <if test="location != null">location,</if>
             <if test="roomPrice != null">room_price,</if>
-            <if test="isAvailable != null">is_available</if>
         </trim>
     </sql>
     <sql id="roomValues">
@@ -40,7 +39,6 @@
             <if test="description != null">#{description},</if>
             <if test="location != null">#{location},</if>
             <if test="roomPrice != null">#{roomPrice},</if>
-            <if test="isAvailable != null">#{isAvailable}</if>
         </trim>
     </sql>
     <insert id="insertRoom" parameterType="com.homestay.pojo.Room"
@@ -59,5 +57,11 @@
     </update>
     <update id="resetRoomById">
         UPDATE tb_room SET del_flag=0 WHERE room_id=#{id}
+    </update>
+    <update id="enableRoom">
+        UPDATE tb_room SET is_available=1 WHERE room_id=#{roomId}
+    </update>
+    <update id="disableRoom">
+        UPDATE tb_room SET is_available=0 WHERE room_id=#{roomId}
     </update>
 </mapper>

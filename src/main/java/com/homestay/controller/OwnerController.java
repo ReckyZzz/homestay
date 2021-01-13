@@ -6,14 +6,10 @@ import com.homestay.pojo.Room;
 import com.homestay.pojo.User;
 import com.homestay.response.CommonResponse;
 import com.homestay.service.OwnerService;
-import com.homestay.util.SessionUtil;
 import com.homestay.vo.CommentVO;
 import com.homestay.vo.OrderVO;
 import com.homestay.vo.RoomVO2;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
@@ -49,6 +45,14 @@ public class OwnerController {
     public CommonResponse<List<CommentVO>> getComments(@ApiIgnore HttpSession session){
         User owner =(User) session.getAttribute("user");
         return ownerService.getComments(owner.getUserId());
+    }
+
+    @GetMapping("/addRoom")
+    @ApiOperation("增加房间")
+    public CommonResponse<Room> addRoom(@ApiIgnore HttpSession session,String roomName,String description
+            , String address, Double price){
+        User owner =(User) session.getAttribute("user");
+        return ownerService.addRoom(owner.getUserId(),roomName,description,address,price);
     }
 
     @PostMapping("/upload")
