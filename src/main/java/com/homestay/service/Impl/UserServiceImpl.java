@@ -160,10 +160,12 @@ public class UserServiceImpl implements UserService {
             if(new Date().after(endDate)){
                 commentables.add(1);//待评论
             }
-            else if(new Date().after(beginDate) && new Date().before(endDate)){
-                commentables.add(0);//入住中
+            else if(o.getLiveDate() != null){
+                if(o.getLiveDate().after(beginDate) && o.getLiveDate().before(endDate)){
+                    commentables.add(0);//入住中
+                }
             }
-            else if(new Date().before(beginDate)){
+            else{
                 commentables.add(3);//待入住
             }
         }

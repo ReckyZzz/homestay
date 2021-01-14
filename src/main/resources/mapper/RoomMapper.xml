@@ -7,7 +7,7 @@
         SELECT * FROM tb_room WHERE room_id=#{roomId} AND del_flag=0
     </select>
     <select id="list" resultType="com.homestay.pojo.Room">
-        SELECT * FROM tb_room WHERE del_flag=0
+        SELECT * FROM tb_room WHERE del_flag=0 AND is_available=1
     </select>
     <select id="getRoomByOwner" resultType="com.homestay.pojo.Room">
         SELECT * FROM tb_room WHERE room_owner=#{ownerId} AND del_flag=0

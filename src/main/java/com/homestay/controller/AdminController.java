@@ -127,67 +127,51 @@ public class AdminController {
         return new CommonResponse<>(1,"订单已存在",null);
     }
 
-    @GetMapping("/deleteUsers")
-    @ApiOperation("批量删除用户")
-    public CommonResponse<Object> deleteUsers(String userIds){
-        List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(userIds),Integer.class);
-        adminService.deleteUser(ids);
-        return new CommonResponse<>(0,"删除成功",null);
+    @GetMapping("/deleteUser")
+    @ApiOperation("删除用户")
+    public CommonResponse<Object> deleteUser(Integer userId){
+        return adminService.deleteUser(userId);
     }
 
-    @GetMapping("/deleteRooms")
-    @ApiOperation("批量删除房间")
-    public CommonResponse<Object> deleteRooms(String roomIds){
-        List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(roomIds),Integer.class);
-        adminService.deleteRoom(ids);
-        return new CommonResponse<>(0,"删除成功",null);
+    @GetMapping("/deleteRoom")
+    @ApiOperation("删除房间")
+    public CommonResponse<Object> deleteRoom(Integer roomId){
+        return adminService.deleteRoom(roomId);
     }
 
-    @GetMapping("/deleteOrders")
-    @ApiOperation("批量删除订单")
-    public CommonResponse<Object> deleteOrders(String orderIds){
-        List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(orderIds),Integer.class);
-        adminService.deleteOrder(ids);
-        return new CommonResponse<>(0,"删除成功",null);
+    @GetMapping("/deleteOrder")
+    @ApiOperation("删除订单")
+    public CommonResponse<Object> deleteOrder(Integer orderId){
+        return adminService.deleteOrder(orderId);
     }
 
-    @GetMapping("/deleteComments")
-    @ApiOperation("批量删除评论")
-    public CommonResponse<Object> deleteComments(String commentIds){
-        List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(commentIds),Integer.class);
-        adminService.deleteComment(ids);
-        return new CommonResponse<>(0,"删除成功",null);
+    @GetMapping("/deleteComment")
+    @ApiOperation("删除评论")
+    public CommonResponse<Object> deleteComments(Integer commentId){
+        return adminService.deleteComment(commentId);
     }
 
-    @GetMapping("/resetUsers")
-    @ApiOperation("评论还原用户")
-    public CommonResponse<Object> resetUsers(String userIds){
-        List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(userIds),Integer.class);
-        adminService.resetUser(ids);
-        return new CommonResponse<>(0,"还原成功",null);
+    @GetMapping("/resetUser")
+    @ApiOperation("还原用户")
+    public CommonResponse<Object> resetUser(Integer userId){
+        return adminService.resetUser(userId);
     }
 
-    @GetMapping("/resetRooms")
-    @ApiOperation("批量还原房间")
-    public CommonResponse<Object> resetRooms(String roomIds){
-        List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(roomIds),Integer.class);
-        adminService.resetRoom(ids);
-        return new CommonResponse<>(0,"还原成功",null);
+    @GetMapping("/resetRoom")
+    @ApiOperation("还原房间")
+    public CommonResponse<Object> resetRoom(Integer roomId){
+        return adminService.resetRoom(roomId);
     }
 
-    @GetMapping("/resetOrders")
-    @ApiOperation("批量还原订单")
-    public CommonResponse<Object> resetOrders(String orderIds){
-        List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(orderIds),Integer.class);
-        adminService.resetOrder(ids);
-        return new CommonResponse<>(0,"还原成功",null);
+    @GetMapping("/resetOrder")
+    @ApiOperation("还原订单")
+    public CommonResponse<Object> resetOrder(Integer orderId){
+        return adminService.resetOrder(orderId);
     }
 
-    @GetMapping("/resetComments")
-    @ApiOperation("批量还原评论")
-    public CommonResponse<Object> resetComments(String commentIds){
-        List<Integer> ids = JSONUtil.toList(JSONUtil.parseArray(commentIds),Integer.class);
-        adminService.resetComment(ids);
-        return new CommonResponse<>(0,"还原成功",null);
+    @GetMapping("/resetComment")
+    @ApiOperation("还原评论")
+    public CommonResponse<Object> resetComment(Integer commentId){
+        return adminService.resetComment(commentId);
     }
 }

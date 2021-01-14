@@ -24,12 +24,12 @@ public interface AdminService {
     Order addOrder(Order order);
     Comment updateComment(Comment comment);
     Comment addComment(Comment comment);
-    void deleteUser(List<Integer> ids);
-    void resetUser(List<Integer> ids);
-    void deleteRoom(List<Integer> ids);
-    void resetRoom(List<Integer> ids);
-    void deleteOrder(List<Integer> ids);
-    void resetOrder(List<Integer> ids);
-    void deleteComment(List<Integer> ids);
-    void resetComment(List<Integer> ids);
+    CommonResponse<Object> deleteUser(Integer userId);
+    CommonResponse<Object> resetUser(Integer userId);
+    CommonResponse<Object> deleteRoom(Integer roomId);
+    CommonResponse<Object> resetRoom(Integer roomId);
+    CommonResponse<Object> deleteOrder(Integer orderId);
+    CommonResponse<Object> resetOrder(Integer orderId);
+    CommonResponse<Object> deleteComment(Integer commentId);
+    CommonResponse<Object> resetComment(Integer commentId);
 }

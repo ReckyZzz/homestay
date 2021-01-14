@@ -69,7 +69,7 @@
                 <td>{{orderInfo.days}}</td>
                 <td>{{orderInfo.money}}</td>
                 <td>
-                    <a v-if="orderInfo.comment==1" v-on:click="toComment(orderInfo.roomId,orderInfo.orderId)" class="btn btn-warning">待入住</a>
+                    <a v-if="orderInfo.comment==1" v-on:click="getIn(orderInfo.orderId)" class="btn btn-warning">待入住</a>
                     <span v-if="orderInfo.comment==0" class="label label-primary">入住中</span>
                     <span v-if="orderInfo.comment==2" class="label label-success">已完成</span>
                 </td>
@@ -92,8 +92,8 @@
                 <td>{{roomInfo.description}}</td>
                 <td>{{roomInfo.roomPrice}}</td>
                 <td>
-                    <a v-if="roomInfo.available==1" v-on:click="changeAvailable(roomInfo.roomId)" class="btn btn-success">可用</a>
-                    <span v-if="orderInfo.comment==0" class="label label-warning">不可用</span>
+                    <a v-if="roomInfo.available==1" v-on:click="disableRoom(roomInfo.roomId)" class="btn btn-success">可用</a>
+                    <a v-if="roomInfo.available==0" v-on:click="enableRoom(roomInfo.roomId)" class="btn btn-warning">不可用</a>
                 </td>
             </tr>
         </table>
@@ -209,6 +209,78 @@
                       console.log(status);
                   }
               })
+            },
+            getIn:function(orderId){
+                $.ajax({
+                    url: "../owner/getIn",
+                    type: "GET",
+                    data:{
+                      orderId:orderId
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            alert("入住成功！");
+                        }
+                        else{
+                            alert("入住失败！尚未到预定时间");
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                })
+            },
+            disableRoom:function(roomId){
+                $.ajax({
+                    url: "../owner/disableRoom",
+                    type: "GET",
+                    data:{
+                        roomId:roomId
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            alert("修改成功！");
+                        }
+                        else{
+                            alert("修改失败");
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                })
+            },
+            enableRoom:function(roomId){
+                $.ajax({
+                    url: "../owner/enableRoom",
+                    type: "GET",
+                    data:{
+                        roomId:roomId
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            alert("修改成功！");
+                        }
+                        else{
+                            alert("修改失败");
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                })
             },
             isLogin:function(){
                 $.ajax({

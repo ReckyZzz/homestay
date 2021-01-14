@@ -248,59 +248,51 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void deleteUser(List<Integer> ids){
-        for(int id:ids){
-            userMapper.deleteUserById(id);
-        }
+    public CommonResponse<Object> deleteUser(Integer userId){
+        userMapper.deleteUserById(userId);
+        return new CommonResponse<>(0,"修改成功",null);
     }
 
     @Override
-    public void deleteRoom(List<Integer> ids){
-        for(int id:ids){
-            roomMapper.deleteRoomById(id);
-        }
+    public CommonResponse<Object> deleteRoom(Integer roomId){
+        roomMapper.deleteRoomById(roomId);
+        return new CommonResponse<>(0,"修改成功",null);
     }
 
     @Override
-    public void deleteOrder(List<Integer> ids){
-        for(int id:ids){
-            orderMapper.deleteOrderById(id);
-        }
+    public CommonResponse<Object> deleteOrder(Integer orderId){
+        orderMapper.deleteOrderById(orderId);
+        return new CommonResponse<>(0,"修改成功",null);
     }
 
     @Override
-    public void deleteComment(List<Integer> ids){
-        for(int id:ids){
-            commentMapper.deleteCommentById(id);
-        }
+    public CommonResponse<Object> deleteComment(Integer commentId){
+        commentMapper.deleteCommentById(commentId);
+        return new CommonResponse<>(0,"修改成功",null);
     }
 
     @Override
-    public void resetUser(List<Integer> ids){
-        for(int id:ids){
-            userMapper.resetUserById(id);
-        }
+    public CommonResponse<Object> resetUser(Integer userId){
+        userMapper.resetUserById(userId);
+        return new CommonResponse<>(0,"修改成功",null);
     }
 
     @Override
-    public void resetRoom(List<Integer> ids){
-        for(int id:ids){
-            roomMapper.resetRoomById(id);
-        }
+    public CommonResponse<Object> resetRoom(Integer roomId){
+        roomMapper.resetRoomById(roomId);
+        return new CommonResponse<>(0,"修改成功",null);
     }
 
     @Override
-    public void resetOrder(List<Integer> ids){
-        for(int id:ids){
-            orderMapper.resetOrderById(id);
-        }
+    public CommonResponse<Object> resetOrder(Integer orderId){
+        orderMapper.resetOrderById(orderId);
+        return new CommonResponse<>(0,"修改成功",null);
     }
 
     @Override
-    public void resetComment(List<Integer> ids){
-        for(int id:ids){
-            commentMapper.resetCommentById(id);
-        }
+    public CommonResponse<Object> resetComment(Integer commentId){
+        commentMapper.resetCommentById(commentId);
+        return new CommonResponse<>(0,"修改成功",null);
     }
 
     @Override

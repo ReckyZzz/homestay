@@ -64,6 +64,30 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
+    public CommonResponse<Object> getIn(Integer orderId){
+        Order order = orderMapper.getOrderByOrderId(orderId);
+        Date beginDate = order.getReserveDate();
+        Calendar ca = Calendar.getInstance();ca.setTime(beginDate);ca.add(Calendar.DATE,order.getLastDays());
+        Date endDate = ca.getTime();
+        if(order.getLiveDate() == null && new Date().after(beginDate) && new Date().before(endDate)) {
+            order.setLiveDate(new Date());
+            orderMapper.updateOrder(order);
+            return new CommonResponse<>(0,"修改成功",null);
+        }
+        return new CommonResponse<>(1,"修改失败",null);
+    }
+
+    @Override
+    public CommonResponse<Object> disableRoom(Integer roomId){
+        roomMapper.disableRoom(roomId);
+        return new CommonResponse<>(0,"修改成功",null);
+    }
+    public CommonResponse<Object> enableRoom(Integer roomId){
+        roomMapper.enableRoom(roomId);
+        return new CommonResponse<>(0,"修改成功",null);
+    }
+
+    @Override
     public CommonResponse<PageInfo<OrderVO>> getOrders(Integer ownerId, Integer pageNum, Integer pageSize){
         List<Integer> inable = new ArrayList<>(pageSize);
         PageHelper.startPage(pageNum,pageSize);

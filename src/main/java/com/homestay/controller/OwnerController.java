@@ -33,6 +33,24 @@ public class OwnerController {
         return new CommonResponse<>(0,"查询成功",roomVO2s);
     }
 
+    @GetMapping("/getIn")
+    @ApiOperation("用户入住")
+    public CommonResponse<Object> getIn(Integer orderId){
+        return  ownerService.getIn(orderId);
+    }
+
+    @GetMapping("/disableRoom")
+    @ApiOperation("设房间为不可用")
+    public CommonResponse<Object> disableRoom(Integer roomId){
+        return ownerService.disableRoom(roomId);
+    }
+
+    @GetMapping("/enableRoom")
+    @ApiOperation("设房间为可用")
+    public CommonResponse<Object> enableRoom(Integer roomId){
+        return ownerService.enableRoom(roomId);
+    }
+
     @GetMapping("/getOrders")
     @ApiOperation("查看订单列表")
     public CommonResponse<PageInfo<OrderVO>> getOrders(@ApiIgnore HttpSession session, Integer pageNum, Integer pageSize){

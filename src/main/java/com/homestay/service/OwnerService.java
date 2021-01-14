@@ -13,6 +13,9 @@ import java.util.List;
 public interface OwnerService {
     int addImage(Image image);
     List<RoomVO2> getRooms(Integer ownerId);
+    CommonResponse<Object> getIn(Integer orderId);
+    CommonResponse<Object> disableRoom(Integer roomId);
+    CommonResponse<Object> enableRoom(Integer roomId);
     CommonResponse<Room> addRoom(Integer ownerId,String roomName,String description, String location, Double price);
     CommonResponse<List<CommentVO>> getComments(Integer ownerId);
     CommonResponse<PageInfo<OrderVO>> getOrders(Integer userId, Integer pageNum, Integer pageSize);

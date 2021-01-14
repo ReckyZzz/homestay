@@ -66,27 +66,6 @@
                 </div>
             </div>
         </div>
-        <!--预定-->
-        <div class="row">
-            <div class="hdetail">预定</div>
-            <div class="panel panel-info">
-                <div class="panel-body  bg-warning">
-                    <div v-show="error.isActive" class="alert alert-danger">{{error.msg}}</div>
-                    <div>
-                        <span class="glyphicon glyphicon-time"></span> 入住日期：<input type="date" class="date" v-on:blur="checkInDate" v-model="order.checkindate">
-                        <span class="glyphicon glyphicon-time"></span> 退房日期：<input type="date" class="date" v-on:blur="checkOutDate" v-model="order.checkoutdate">
-                    </div>
-                    <div>房间单价:{{roomNowInfo.price}}元/天</div>
-                    <div v-if="total!='' && total!=null && total > 0" class="price">
-                        <span class="glyphicon glyphicon-shopping-cart"></span><span>￥ {{roomNowInfo.price*total}} 元</span>
-                    </div>
-                    <div class="btn-sub">
-                        <input type="button" class="btn btn-success" v-on:click="reserve()" value="立即预定">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--评价-->
         <div class="row">
             <div class="hdetail">评价</div>
             <div class="panel panel-info" v-for="(userName,i) in roomNowInfo.userNames">

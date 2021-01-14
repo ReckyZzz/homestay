@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="../css/user/ownerOrder.css">
 </head>
 <body>
-<div id="admin">
+<div id="manage">
     <header>
         <nav class="navbar navbar-default navbar-inverse">
             <div class="container-fluid">
@@ -149,8 +149,8 @@
     </div>
 </div>
 <script type="text/javascript">
-    let admin=new Vue({
-        el:"#admin",
+    let manage=new Vue({
+        el:"#manage",
         data:{
             userInfoList:[],
             orderInfoList:[],
@@ -161,7 +161,6 @@
             roomInfo:null,
             commentInfo:null,
             ifLogin:false,
-            userID:-1,
             order:{
                 checkindate:"",
                 checkoutdate:"",
@@ -188,7 +187,7 @@
                     },
                     success: function (result) {
                         if (result.code === 0) {
-                            admin.userInfoList = result.data.list;
+                            manage.userInfoList = result.data.list;
                         }
                     },
                     error: function (request, status, error) {
@@ -210,7 +209,7 @@
                     dataType: "json",
                     success: function (result) {
                         if (result.code === 0) {
-                            admin.orderInfoList = result.data.list;
+                            manage.orderInfoList = result.data.list;
                         }
                     },
                     error: function (request, status, error) {
@@ -232,7 +231,7 @@
                     dataType: "json",
                     success: function (result) {
                         if (result.code === 0) {
-                            admin.roomInfoList = result.data.list;
+                            manage.roomInfoList = result.data.list;
                         }
                     },
                     error: function (request, status, error) {
@@ -254,7 +253,247 @@
                     dataType: "json",
                     success: function (result) {
                         if (result.code === 0) {
-                            admin.commentInfoList = result.data.list;
+                            manage.commentInfoList = result.data.list;
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                })
+            },
+            resetUser:function(userId){
+                $.ajax({
+                    url: "../admin/resetUser",
+                    type: "GET",
+                    data: {
+                        userId:userId
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            alert("修改成功！");
+                        }
+                        else{
+                            alert("修改失败！");
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                })
+            },
+            deleteUser:function(userId){
+                $.ajax({
+                    url: "../admin/deleteUser",
+                    type: "GET",
+                    data: {
+                        userId:userId
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            alert("修改成功！");
+                        }
+                        else{
+                            alert("修改失败！");
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                })
+            },
+            resetOrder:function(orderId){
+                $.ajax({
+                    url: "../admin/resetOrder",
+                    type: "GET",
+                    data: {
+                        orderId:orderId
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            alert("修改成功！");
+                        }
+                        else{
+                            alert("修改失败！");
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                })
+            },
+            deleteOrder:function(orderId){
+                $.ajax({
+                    url: "../admin/deleteOrder",
+                    type: "GET",
+                    data: {
+                        orderId:orderId
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            alert("修改成功！");
+                        }
+                        else{
+                            alert("修改失败！");
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                })
+            },
+            disableRoom:function(roomId){
+                $.ajax({
+                    url: "../owner/disableRoom",
+                    type: "GET",
+                    data:{
+                        roomId:roomId
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            alert("修改成功！");
+                        }
+                        else{
+                            alert("修改失败！");
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                })
+            },
+            enableRoom:function(roomId){
+                $.ajax({
+                    url: "../owner/enableRoom",
+                    type: "GET",
+                    data:{
+                        roomId:roomId
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            alert("修改成功！");
+                        }
+                        else{
+                            alert("修改失败！");
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                })
+            },
+            resetRoom:function(roomId){
+                $.ajax({
+                    url: "../admin/resetRoom",
+                    type: "GET",
+                    data:{
+                        roomId:roomId
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            alert("修改成功！");
+                        }
+                        else{
+                            alert("修改失败！");
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                })
+            },
+            deleteRoom:function(roomId){
+                $.ajax({
+                    url: "../admin/deleteRoom",
+                    type: "GET",
+                    data:{
+                        roomId:roomId
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            alert("修改成功！");
+                        }
+                        else{
+                            alert("修改失败！");
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                })
+            },
+            resetComment:function(commentId){
+                $.ajax({
+                    url: "../admin/resetComment",
+                    type: "GET",
+                    data:{
+                        commentId:commentId
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            alert("修改成功！");
+                        }
+                        else{
+                            alert("修改失败！");
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                })
+            },
+            deleteComment:function(commentId){
+                $.ajax({
+                    url: "../admin/deleteComment",
+                    type: "GET",
+                    data:{
+                        commentId:commentId
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            alert("修改成功！");
+                        }
+                        else{
+                            alert("修改失败！");
                         }
                     },
                     error: function (request, status, error) {
@@ -273,10 +512,10 @@
                     dataType: "json",
                     success: function (result) {
                         if (result.code === 1) {
-                            admin.ifLogin = false;
+                            manage.ifLogin = false;
                             location.href="login.html";
                         }else if(result.code === 0){
-                            admin.ifLogin = true;
+                            manage.ifLogin = true;
                         }
                     },
                     error: function (request, status, error) {
